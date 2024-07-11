@@ -1,7 +1,7 @@
 ####Repositorio destinado a la gestión del proyecto SGDA####
 
 -- Requerimientos tecnológicos para el entorno de desarrollo 
-Tomcat 10
+Tomcat 9
 JDK 17
 IntelliJ IDEA última versión
 
