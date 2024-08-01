@@ -23,6 +23,7 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         List<BeanUser> users = null;
         try {
             users = new ArrayList<>();
+            conn = new MySQLConnection().getConnection();
             String query = "SELECT * FROM users;";
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -32,8 +33,8 @@ public class DaoUser implements DaoTemplate<BeanUser>{
                 user.setName(rs.getString("name"));
                 user.setSurname(rs.getString("surname"));
                 user.setLastname(rs.getString("lastname"));
-                user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
                 user.setStatus(rs.getString("status"));
@@ -50,7 +51,7 @@ public class DaoUser implements DaoTemplate<BeanUser>{
     @Override
     public BeanUser listOne(Long id) {
         try {
-            String query = ";";
+            String query = "SELECT * FROM users WHERE id_user = ?;";
             ps = conn.prepareStatement(query);
             ps.setLong(1, id);
             rs = ps.executeQuery();

@@ -15,13 +15,13 @@ public class BeanUser {
 
     }
 
-    public BeanUser(Long id, String name, String surname, String lastname, String email, String phone, String password, String role, String status) {
+    public BeanUser(Long id, String name, String surname, String lastname, String phone, String email, String password, String role, String status) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.lastname = lastname;
-        this.email = email;
         this.phone = phone;
+        this.email = email;
         this.password = password;
         this.role = role;
         this.status = status;
