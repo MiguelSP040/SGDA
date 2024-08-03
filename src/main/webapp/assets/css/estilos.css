@@ -1,0 +1,450 @@
+/* General Styles */
+
+/* ///////////////////////////////////////////////////////////// */
+/* SweetAlerts */
+.red{
+    color: #F27474;
+    font-weight: bold;
+}
+.coffe{
+    color: #88675a!important;
+    font-weight: bold;
+}
+.green{
+    color: #A5DC86;
+    font-weight: bold;
+}
+.yellow{
+    color: #F8BB86;
+    font-weight: bold;
+}
+
+.no-select-popup .swal2-title,
+.no-select-popup .swal2-content {
+    user-select: none;
+}
+
+.no-select {
+    user-select: none;
+}
+
+/* ///////////////////////////////////////////////////////////// */
+/* Interactive items*/
+@keyframes jump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px) scale(1.1); }
+    100% { transform: translateY(0); }
+}
+
+img {
+    height: 65px;
+    width: 65px;
+    text-align: right;
+    user-select: none;
+}
+
+#boxContainer {
+    position: relative;
+}
+#boxContainer img {
+    position: absolute;
+}
+
+#boxClosed.fade-out {
+    animation: jump 1s ease-in-out;
+    opacity: 0;
+}
+
+#boxClosed.fade-in {
+    display: block;
+    opacity: 1;
+    animation: jump 0.4s ease-in-out;
+}
+
+#boxOpen {
+    display: block;
+    opacity: 0;
+    animation: jump 0.4s ease-in-out;
+}
+
+#boxOpen.fade-in {
+    opacity: 1;
+}
+
+
+.botonCafe, .botonLogin {
+    background-color: #88675a!important;
+    color: #FFFFFF!important;
+    align-items: center!important;
+    border-color: gray!important;
+}
+.botonCafe:hover, .botonLogin:hover {
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+}
+.botonCafe:active, .botonLogin:active {
+    transform: scale(0.95);
+}
+
+.botonGris {
+    background-color: #6C757D!important;
+    color: #FFFFFF!important;
+    align-items: center!important;
+}
+.botonGris:hover{
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+}
+.botonGris:active {
+    transform: scale(0.95);
+}
+
+.botonRojo {
+    background-color: rgba(242, 116, 116, 0) !important;
+    border-color: #F27474!important;
+    color: #F27474!important;
+    align-items: center!important;
+}
+.botonRojo:hover{
+    color: #FFFFFF!important;
+    background-color: #F27474 !important;
+}
+.botonRojo:active {
+    transform: scale(0.95);
+}
+
+.botonEditar {
+    background-color: rgba(63, 195, 238, 0) !important;
+    border-color: #3fc3ee!important;
+    color: #3fc3ee!important;
+    align-items: center!important;
+}
+.botonEditar:hover{
+    color: #FFFFFF!important;
+    background-color: #3fc3ee !important;
+
+}
+.botonEditar:active {
+    transform: scale(0.95);
+}
+
+.botonCheckbox {
+    background-color: #8D5B47!important;
+    color: #FFFFFF!important;
+}
+
+.botonVerMas {
+    background-color: rgba(52, 200, 99, 0) !important;
+    border-color: #34c863!important;
+    color: #34c863!important;
+    align-items: center!important;
+}
+.botonVerMas:hover{
+    background-color: #34c863!important;
+    color: #FFFFFF!important;
+    transition: 0.2s;
+
+}
+.botonVerMas:active {
+    transform: scale(0.95);
+}
+
+
+
+#esconderBTN {
+    background-color: #f8f8f8;
+    color: #111;
+    cursor: pointer;
+    border-radius: 10%;
+    display: block;
+    user-select: none;
+}
+
+#esconderBTN:hover {
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+}
+
+#esconderBTN:active {
+    transform: scale(0.95);
+}
+
+.nuevoProductoBoton {
+    justify-content: end;
+    display: flex;
+    align-items: center;
+}
+
+#linkPassword{
+    color: #8D5B47!important;
+}
+
+input, select{
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ///////////////////////////////////////////////////////////// */
+/* Navigation bar */
+
+#barraNavegacion {
+    height: 5rem;
+    background-color: #4E6166;
+    user-select: none;
+}
+
+/* Container */
+
+.card, .card-footer {
+    background-color: #F4F5F5 !important;
+}
+
+.circle-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 10px solid #DDDDDB;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: lightgray;
+
+}
+
+.circle-container img {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+}
+
+.contenidoTotal {
+    background-color: #F4F5F5 !important;
+    margin-top: 5%;
+    padding: 2.5% 2.5% 2.5% 2.5%;
+    margin: 5% 3% 0 15%;
+}
+
+#tituloContactoExterno {
+    display: fixed;
+}
+
+#formularioContacto {
+    padding-left: 20%;
+}
+
+#anadirContacto {
+    display: block;
+    padding: 3% 0% 0% 0%;
+    border-top: 1px solid #cecccc;
+}
+
+#dataRegister {
+    padding-left: 20%;
+    padding-bottom: 2%;
+}
+
+#tableTitle {
+    background-color: #4E6166;
+    color: white;
+}
+
+#thead {
+    background-color: #839093;
+    color: white;
+}
+
+#resultTable {
+    text-align: center;
+    margin-top: 5%;
+}
+
+#titleForms {
+    background-color: #f3f3f3;
+    color: #000000;
+    padding-left: 2%;
+}
+
+.Inputs {
+    text-indent: 5%;
+    margin-top: 8%;
+    background-color: #f3f3f3;
+    color: black;
+    padding: 0%;
+}
+
+#containerRecoverPass {
+    width: 800px;
+    height: 400px;
+    margin: 15% 0% 15% 0%;
+}
+
+.datosProveedor {
+    padding: 0% 0% 0% 0%;
+}
+
+
+
+/* ///////////////////////////////////////////////////////////// */
+/* Sidebar Left */
+
+#sidebarCerrado, #sidebarAbierto {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f8f8f8;
+    padding-top: 20px;
+    margin-top: 5%;
+    border-right: 1px solid #cecccc;
+    transition: 0.2s;
+}
+
+#iconsSidebar {
+    align-items: center;
+}
+
+#sidebarCerrado {
+    width: 2.9%;
+    text-align: center;
+    display: block;
+}
+
+#userLogged {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+#userLogged:hover{
+    background-color: #f8f8f8!important;
+    cursor: default;
+}
+
+#sidebarAbierto {
+    width: 13%;
+    text-indent: 2%;
+    display: none;
+}
+
+#sidebarCerrado a, #sidebarAbierto a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: rgb(7, 7, 7);
+    display: block;
+    cursor: pointer;
+}
+
+#sidebarCerrado a:hover, #sidebarAbierto a:hover {
+    background-color: #A59B92;
+    color: white;
+}
+
+#sidebarAbierto a:hover {
+    border-right: 3px solid #88675a;
+}
+
+#sidebarAbierto .submenu a {
+    font-size: 16px;
+    padding-left: 30px;
+}
+
+.submenu {
+    display: none;
+    text-indent: 10%;
+}
+
+#sidebarAbierto .submenu a:hover {
+    background-color: #a59b9297;
+    border-right: 3px solid #88675a;
+}
+
+.toggle-btn {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 20px;
+    left: 20px;
+    color: #111;
+    z-index: 1;
+}
+
+/* ///////////////////////////////////////////////////////////// */
+/* Media Queries for Responsiveness */
+
+/* Adjustments for tablets and smaller screens 
+@media (max-width: 768px) {
+    #barraNavegacion {
+        height: 7%;
+        font-size: 100%;
+        /*display: fixed;
+        font-weight: 500;
+        font-size: 24px;
+        border-bottom: 1px solid #A59B92;
+        background-color: #4E6166;
+        color: #FFFFFF;
+        user-select: none;
+    }
+
+    #sidebarCerrado {
+        width: 5%;
+    }
+
+    #sidebarAbierto {
+        width: 25%;
+    }
+
+    .toggle-btn {
+        font-size: 18px;
+        top: 15px;
+        left: 15px;
+    }
+
+    #formularioContacto, #dataRegister {
+        padding-left: 10%;
+    }
+
+    #userLogged {
+        bottom: 50px;
+    }
+}
+
+/* Adjustments for mobile screens 
+@media (max-width: 480px) {
+    #sidebarCerrado {
+        width: 10%;
+    }
+
+    #sidebarAbierto {
+        width: 50%;
+    }
+
+    .toggle-btn {
+        font-size: 16px;
+        top: 10px;
+        left: 10px;
+    }
+
+    #sidebarAbierto a {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    .contenidoTotal {
+        margin: 5% 2% 0 2%;
+        padding: 2.5%;
+    }
+
+    #dataRegister {
+        padding-left: 5%;
+    }
+
+    #containerRecoverPass {
+        width: 100%;
+        height: auto;
+        margin: 5% 0;
+    }
+}
+*/

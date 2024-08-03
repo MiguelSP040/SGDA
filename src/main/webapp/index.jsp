@@ -1,13 +1,95 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>Inicio de sesión</title>
+    <link href="/assets/css/estilos.css" rel="stylesheet">
+    <jsp:include page="/layouts/header.jsp"/>
+    <style>
+        body {
+            background-image: url('/assets/img/loginBG.jpg');
+            background-size: cover; /* Ajusta el tamaño de la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-position: center; /* Centra la imagen en la página */
+            background-attachment: fixed; /* Fija la imagen de fondo */
+        }
+    </style>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<section class="h-100">
+
+    <!-- Sección Banner -->
+    <div id="barraNavegacion" class="fixed-top text-light d-flex">
+        <nav class="container-fluid navbar navbar-expand-lg navbar-light p-0">
+            <div class="row w-100 align-items-center">
+                <div class="col-5 ps-5 fs-4 fs-md-3 fs-lg-2 fw-bold">Inicio de sesión</div>
+                <div class="col-6 text-end fs-4 fs-md-3 fs-lg-2 fw-bold">Sistema Gestor de Almacén</div>
+                <div class="col-1 text-end pe-2">
+                    <img src="/assets/img/logoSGDA.svg" loading="lazy" style="width: 80%; height: 80%;" alt="SGDA">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="text-center my-5">
+                    <br>
+                </div>
+
+                <!-- Card -->
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center">
+                            <div id="boxContainer" class="circle-container">
+                                <img id="boxClosed" src="/assets/img/logoSGDAClosed.svg" loading="lazy" style="width: 120%; height: 120%; " alt="SGDA">
+                                <img id="boxOpen" src="/assets/img/logoSGDA.svg" loading="lazy" style="width: 120%; height: 120%; display: none;" alt="SGDA">
+                            </div>
+                        </div>
+                        <h1 class="fs-4 text-center card-title fw-bold mb-4 my-3">Inicio de sesión</h1>
+                        <form class="needs-validation" autocomplete="off" method="post" action="/ServletLogin">
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="email">Correo Electrónico</label>
+                                <input id="email" type="email" class="form-control" name="email" required autofocus>
+                                <div class="invalid-feedback">
+                                    Correo electrónico no registrado
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="mb-2 w-100">
+                                    <label class="text-muted" for="password">Contraseña</label>
+                                </div>
+                                <input id="password" type="password" class="form-control" name="password" required>
+                                <div class="invalid-feedback">
+                                    Ingrese su contraseña
+                                </div>
+                            </div>
+                            <!-- Botón -->
+                            <div class="d-flex justify-content-center my-4">
+                                <button type="submit" class="btn botonLogin btn-primary" id="botonLogin">
+                                    Iniciar sesión
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer coffe text-center py-3 border-0">
+                    <a href="/recoverPassword.jsp" id="linkPassword">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+                <div class="text-center mt-2 text-muted mb-3" style="user-select: none">
+                    Copyright &copy; 2024 &mdash; SGA Sistema Gestor de Almacén
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/assets/js/funciones.js"></script>
+<jsp:include page="/layouts/footer.jsp"/>
 </body>
 </html>

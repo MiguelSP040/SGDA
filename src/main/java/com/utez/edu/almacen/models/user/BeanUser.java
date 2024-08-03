@@ -1,35 +1,37 @@
 package com.utez.edu.almacen.models.user;
 
 public class BeanUser {
-    private int id;
+    private Long id;
     private String name;
+    private String surname;
     private String lastname;
     private String phone;
     private String email;
     private String password;
-    private int role;
-    private boolean status;
+    private String role;
+    private String status;
 
     public BeanUser(){
 
     }
 
-    public BeanUser(int id, String name, String lastname, String email, String phone, String password, int role, boolean status) {
+    public BeanUser(Long id, String name, String surname, String lastname, String phone, String email, String password, String role, String status) {
         this.id = id;
         this.name = name;
+        this.surname = surname;
         this.lastname = lastname;
-        this.email = email;
         this.phone = phone;
+        this.email = email;
         this.password = password;
         this.role = role;
         this.status = status;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,6 +41,14 @@ public class BeanUser {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getLastname() {
@@ -73,19 +83,19 @@ public class BeanUser {
         this.password = password;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
