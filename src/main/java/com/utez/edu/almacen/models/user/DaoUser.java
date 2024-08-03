@@ -17,6 +17,21 @@ public class DaoUser implements DaoTemplate<BeanUser>{
     private PreparedStatement ps;
     private ResultSet rs;
 
+    public boolean validationByCredentials (String email, String password){
+        try {
+            String query = "SELECT * FROM users WHERE email = ? AND password = ?;";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            return rs.next();
+        }catch (SQLException e){
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error loading user" + e.getMessage());
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
 
     @Override
     public List<BeanUser> listAll() {
