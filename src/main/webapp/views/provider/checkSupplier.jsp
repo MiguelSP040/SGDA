@@ -123,9 +123,11 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary botonCafe" onclick="registerSupplier()">Registrar
+                                    <button type="submit" class="btn btn-secondary botonCafe" onclick="registerSupplier()">
+                                        Registrar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                        Cancelar
                                     </button>
                                 </div>
                             </form>
@@ -153,7 +155,7 @@
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar Datos</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar información de proveedor</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -218,10 +220,10 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary botonCafe" onclick="updateSupplier()">
+                                    <button type="submit" class="btn btn-secondary botonCafe" onclick="updateSupplier()">
                                         Modificar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
                                         Cancelar
                                     </button>
                                 </div>
@@ -261,8 +263,7 @@
                         </div>
 
                         <!--Botones -->
-                        <div class="grid gap-2"
-                             style="justify-content: end; display: flex; margin-top: 50px;padding-left:5%;">
+                        <div class="grid gap-2 d-flex justify-content-end mt-5">
                             <button class="btn botonCafe mb-3" onsubmit="search()" id="">Buscar</button>
                             <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">Limpiar</button>
                         </div>
@@ -290,9 +291,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="provider" items="${provider}">
+                        <c:forEach var="provider" items="${providers}">
                             <tr>
-                                <th scope="row"><c:out value="${provider.id_provider}"/></th>
+                                <th scope="row"><c:out value="${provider.id}"/></th>
                                 <td><c:out value="${provider.name}"/></td>
                                 <td><c:out value="${provider.rfc}"/></td>
                                 <td><c:out value="${provider.phone}"/></td>

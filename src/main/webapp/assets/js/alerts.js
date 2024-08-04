@@ -158,7 +158,6 @@ const showMetricConfirmation = async () => {
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
-
         stopKeydownPropagation: true,
         customClass: {
             confirmButton: 'btn botonCafe',
@@ -168,6 +167,8 @@ const showMetricConfirmation = async () => {
     });
 
     if (result.isConfirmed) {
+        closeModal('#registerMetric');
+        closeModal('#updateMetric');
         Swal.fire({
             icon: 'success',
             title: '¡Hecho!',
@@ -532,6 +533,39 @@ const deleteMetric = async () => {
     }
 }
 
+
+// Función para desactivar usuario
+const deleteArea = async () => {
+    const { value: decision } = await Swal.fire({
+        icon: 'warning',
+        title: '¡Cuidado!',
+        text: 'Estás a punto de desactivar un área de destino del sistema. ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
+        cancelButtonText: 'Cancelar',
+        showCancelButton: true,
+        footer: '<span class="red">Nota: Si aceptas, no podrás recuperarla</span>',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        stopKeydownPropagation: true,
+        customClass: {
+            confirmButton: 'btn botonCafe',
+            cancelButton: 'btn botonGris',
+            popup: 'no-select-popup',
+        }
+    });
+
+    if (decision) {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Hecho!',
+            text: 'La unidad de medida ha sido eliminada correctamente.',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+    }
+}
 
 
 // Función para cerrar sesión

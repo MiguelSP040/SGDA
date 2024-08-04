@@ -24,7 +24,7 @@
         <div class="card contenidoTotal shadow-lg p-5">
             <!--Titulo de Formulario-->
             <div class="position-relative">
-                <h3>Filtro de búsqueda</h3>
+                <h3>Consulta de productos</h3>
             </div>
 
             <!--BOTON AGREGAR NUEVO PRODUCTO -->
@@ -61,6 +61,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="newProductForm" method="post" action="/product/save">
+                                <h5>Datos de Producto</h5>
                                 <div class="mb-3">
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
                                     <input type="text" class="form-control" name="name" id="name" required>
@@ -86,10 +87,12 @@
                                               required></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe"
-                                            onclick="registerProduct()">Registrar</button>
-                                    <button type="button" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn botonCafe" onclick="registerProduct()">
+                                        Registrar
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                        Cancelar
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -102,12 +105,13 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar información del Producto</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar información de producto</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="updateProductForm" method="post" action="/product/update">
+                                <h5>Datos de Producto</h5>
                                 <div class="mb-3">
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
                                     <input type="text" class="form-control" name="name" id="name" required>
@@ -129,14 +133,15 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="description" id="description"
-                                              required></textarea>
+                                    <textarea class="form-control" name="description" id="description" required></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe"
-                                            onclick="updateProduct()">Actualizar</button>
-                                    <button type="button" class="btn botonGris btn-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn botonCafe" onclick="updateProduct()">
+                                        Modificar
+                                    </button>
+                                    <button type="button" class="btn botonGris btn-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                        Cancelar
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -190,8 +195,7 @@
                         </div>
 
                         <!--Botones -->
-                        <div class="grid gap-2"
-                             style="justify-content: end; display: flex; margin-top: 50px;padding-left:5%;">
+                        <div class="grid gap-2 d-flex justify-content-end mt-5">
                             <button class="btn botonCafe mb-3" onsubmit="search()" id="">Buscar</button>
                             <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">Limpiar</button>
                         </div>
@@ -217,9 +221,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="product" items="${product}">
+                        <c:forEach var="product" items="${products}">
                             <tr>
-                                <th scope="row"><c:out value="${product.id_product}"/></th>
+                                <th scope="row"><c:out value="${product.id}"/></th>
                                 <td><c:out value="${product.code}"/></td>
                                 <td><c:out value="${product.name}"/></td>
                                 <td><c:out value="${product.id_metric}"/></td>

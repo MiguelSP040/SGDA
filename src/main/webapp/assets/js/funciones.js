@@ -66,7 +66,6 @@ document.querySelectorAll('.dropdown-btn').forEach(button => {
 
 
 // Función para validar que todos los campos obligatorios estén llenos
-
 function validateForm(formId) {
     //'use strict';
     const form = document.getElementById(formId);
@@ -80,7 +79,6 @@ function validateForm(formId) {
             input.classList.remove('is-invalid');
         }
     });
-
     return isValid;
 }
 
@@ -105,6 +103,8 @@ const registerUser = async (formId) => {
     if (isValidUser) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showUserConfirmation();
+
+
     } else {
         // Muestra alerta si hay campos incompletos
         showWarningAlert();
@@ -185,9 +185,9 @@ async function updateSupplier() {
 
 
 // Función de validación y registro de area en destinationAreas.html
+// Función para manejar el registro de area de destino
 async function registerDestinationArea() {
-    const isValidArea = validateForm('destinationAreasForm');
-
+    const isValidArea = validateForm('newAreaForm');
     if (isValidArea) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showAreaConfirmation();
@@ -197,12 +197,22 @@ async function registerDestinationArea() {
     }
 }
 
-
+// Función para actualizar área
+async function updateDestinationArea() {
+    const isValidArea = validateForm('updateAreaForm');
+    if (isValidArea) {
+        // Llama a la función en alerts.js para mostrar la alerta de confirmación
+        showAreaConfirmation();
+    } else {
+        // Llama a la función en alerts.js para mostrar la alerta de advertencia
+        showWarningAlert();
+    }
+}
 
 // Función de validación y registro de unidad de medida metrics.html
+// Función para manejar el registro de unidad de medida
 async function registerMetrics() {
     const isValidMetric = validateForm('registerMetricsForm');
-
     if (isValidMetric) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showMetricConfirmation();
@@ -212,7 +222,18 @@ async function registerMetrics() {
     }
 }
 
+// Función para actualizar unidad de medida
+async function updateMetrics() {
+    const isValidMetric = validateForm('updateMetricForm');
 
+    if (isValidMetric) {
+        // Llama a la función en alerts.js para mostrar la alerta de confirmación
+        showMetricConfirmation();
+    } else {
+        // Llama a la función en alerts.js para mostrar la alerta de advertencia
+        showWarningAlert();
+    }
+}
 
 // FUNCIONES PARA EL REGISTRO DE MOVIMIENTOS EN movement.html
 // Función para validar los campos del formulario de entrada
