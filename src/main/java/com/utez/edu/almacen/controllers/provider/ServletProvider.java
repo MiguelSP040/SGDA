@@ -24,7 +24,7 @@ public class ServletProvider extends HttpServlet {
     private String action;
     private String redirect = "/provider/list-providers";
     private BeanProvider provider;
-    private String id_provider, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, status;
+    private String id_provider, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,7 +86,8 @@ public class ServletProvider extends HttpServlet {
                 email = request.getParameter("email");
                 contactName = request.getParameter("contactName");
                 contactPhone = request.getParameter("contactPhone");
-                provider = new BeanProvider(0L, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, "active");
+                contactEmail = request.getParameter("contactEmail");
+                provider = new BeanProvider(0L, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, "active");
                 boolean result = new DaoProvider().save(provider);
                 if (result) {
                     redirect = "/provider/list-providers?result=" + true + "&message="
@@ -109,8 +110,9 @@ public class ServletProvider extends HttpServlet {
                 email = request.getParameter("email");
                 contactName = request.getParameter("contactName");
                 contactPhone = request.getParameter("contactPhone");
+                contactEmail = request.getParameter("contactEmail");
                 status = request.getParameter("status");
-                provider = new BeanProvider(Long.parseLong(id_provider), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, status);
+                provider = new BeanProvider(Long.parseLong(id_provider), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status);
                 if (new DaoProvider().update(provider)){
                     redirect = "/provider/list-providers?result=" + true + "&message="
                             + URLEncoder.encode("Éxito! Usuario actualizado correctamente",

@@ -38,6 +38,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setEmail(rs.getString("email"));
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
+                provider.setContactEmail(rs.getString("contactEmail"));
                 provider.setStatus(rs.getString("status"));
                 providers.add(provider);
             }
@@ -68,6 +69,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setEmail(rs.getString("email"));
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
+                provider.setContactEmail(rs.getString("contactEmail"));
                 provider.setStatus(rs.getString("status"));
             }
             return provider;
@@ -82,8 +84,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
     @Override
     public boolean save(BeanProvider object) {
         try {
-            String query = "INSERT INTO providers(name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, status)" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO providers(name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSocialCase());
@@ -94,7 +96,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(7, object.getEmail());
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
-            ps.setString(10, object.getStatus());
+            ps.setString(10, object.getContactEmail());
+            ps.setString(11, object.getStatus());
             return  ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -108,7 +111,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
     public boolean update(BeanProvider object) {
         try {
             String query = "UPDATE providers SET name = ?, socialCase = ?, rfc = ?, postCode = ?, address = ?," +
-                    "phone = ?, email = ?, contactName = ?, contactPhone = ?, status = ? WHERE id_provider = ?";
+                    "phone = ?, email = ?, contactName = ?, contactPhone = ?, contactEmail = ?, status = ? WHERE id_provider = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSocialCase());
@@ -119,8 +122,9 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(7, object.getEmail());
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
-            ps.setString(10, object.getStatus());
-            ps.setLong(11, object.getId_provider());
+            ps.setString(10, object.getContactEmail());
+            ps.setString(11, object.getStatus());
+            ps.setLong(12, object.getId_provider());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
