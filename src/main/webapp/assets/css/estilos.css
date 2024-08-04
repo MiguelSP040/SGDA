@@ -97,6 +97,18 @@ img {
     transform: scale(0.95);
 }
 
+.statusGreen {
+    background-color: #34c863!important;
+    color: #FFFFFF!important;
+    cursor: default!important;
+}
+
+.statusRed {
+    background-color: #F27474!important;
+    color: #FFFFFF!important;
+    cursor: default!important;
+}
+
 .botonRojo {
     background-color: rgba(242, 116, 116, 0) !important;
     border-color: #F27474!important;
@@ -192,7 +204,12 @@ input, select{
 
 /* Container */
 
-.card, .card-footer {
+.table-container {
+    max-height: 15rem; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto; /* Aplica scrollbar vertical */
+}
+
+.card, .card-footer, .modal-content {
     background-color: #F4F5F5 !important;
 }
 
@@ -218,10 +235,8 @@ input, select{
 }
 
 .contenidoTotal {
-    background-color: #F4F5F5 !important;
-    margin-top: 5%;
-    padding: 2.5% 2.5% 2.5% 2.5%;
-    margin: 5% 3% 0 15%;
+    width: 100rem;
+    max-width: 100rem;
 }
 
 #tituloContactoExterno {
@@ -243,19 +258,14 @@ input, select{
     padding-bottom: 2%;
 }
 
-#tableTitle {
-    background-color: #4E6166;
-    color: white;
+.tableTitle {
+    background-color: #4E6166!important;
+    color: white!important;
 }
 
-#thead {
-    background-color: #839093;
-    color: white;
-}
-
-#resultTable {
-    text-align: center;
-    margin-top: 5%;
+.thead {
+    background-color: #839093!important;
+    color: white!important;
 }
 
 #titleForms {
@@ -371,10 +381,15 @@ input, select{
     z-index: 1;
 }
 
+/* STATUS DESABILITADO*/
+
+#statusDisabled {
+    cursor: none;
+}
 /* ///////////////////////////////////////////////////////////// */
 /* Media Queries for Responsiveness */
 
-/* Adjustments for tablets and smaller screens 
+/* Adjustments for tablets and smaller screens
 @media (max-width: 768px) {
     #barraNavegacion {
         height: 7%;
@@ -411,7 +426,7 @@ input, select{
     }
 }
 
-/* Adjustments for mobile screens 
+/* Adjustments for mobile screens
 @media (max-width: 480px) {
     #sidebarCerrado {
         width: 10%;
