@@ -94,10 +94,10 @@ public class ServletUser extends HttpServlet {
                     user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", "active");
                     boolean result = new DaoUser().save(user);
                     if (result){
-                        redirect = "/user/list-users?result= " + true + "&message=" +
+                        redirect = "/user/list-users?result=" + true + "&message=" +
                                 URLEncoder.encode("¡Exito!",StandardCharsets.UTF_8);
                     }else {
-                        redirect = "/user/list-users?result= " + false + "&message=" +
+                        redirect = "/user/list-users?result=" + false + "&message=" +
                                 URLEncoder.encode("¡ERROR!",StandardCharsets.UTF_8);
                     }
                     break;
@@ -123,5 +123,6 @@ public class ServletUser extends HttpServlet {
                         }
                         break;
         }
+        response.sendRedirect(request.getContextPath() + redirect);
     }
 }
