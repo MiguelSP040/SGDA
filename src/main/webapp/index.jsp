@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Inicio de sesión</title>
-    <link href="/assets/css/estilos.css" rel="stylesheet">
+    <link href="../assets/css/estilos.css" rel="stylesheet">
     <jsp:include page="/layouts/header.jsp"/>
     <style>
         body {

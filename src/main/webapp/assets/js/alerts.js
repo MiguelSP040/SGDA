@@ -81,7 +81,7 @@ const showSupplierConfirmation = async () => {
         confirmButtonText: 'Sí, registrar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        footer: '<span class="green">Nota: Puedes eliminarlo después</span>',
+        footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
@@ -119,7 +119,7 @@ const showAreaConfirmation = async () => {
         confirmButtonText: 'Sí, registrar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        footer: '<span class="red">Nota: Si aceptas, no podrás eliminarlo</span>',
+        footer: '<span class="red">Nota: Si aceptas, no podrás desactivarla</span>',
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
@@ -154,11 +154,11 @@ const showMetricConfirmation = async () => {
         confirmButtonText: 'Sí, registrar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        footer: '<span class="green">Nota: Puedes eliminarlo después</span>',
+        footer: '<span class="green">Nota: Puedes desactivarla después</span>',
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
-        
+
         stopKeydownPropagation: true,
         customClass: {
             confirmButton: 'btn botonCafe',
@@ -190,7 +190,7 @@ const showEntryConfirmation = async () => {
         confirmButtonText: 'Sí, registrar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        footer: '<span class="green">Nota: Puedes eliminarla después</span>',
+        footer: '<span class="green">Nota: Puedes desactivarla después</span>',
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
@@ -227,7 +227,7 @@ const showOutboundConfirmation = async () => {
         confirmButtonText: 'Sí, registrar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        footer: '<span class="green">Nota: Puedes eliminarla después</span>',
+        footer: '<span class="green">Nota: Puedes desactivarla después</span>',
         reverseButtons: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
@@ -256,11 +256,7 @@ const showOutboundConfirmation = async () => {
 };
 
 // Función para registrar usuario
-const registerUser = async (formId) => {
-    if (validateForm(formId)) {
-        var modalElement = document.getElementById(formId === 'newUserForm' ? 'newUser' : 'updateUser');
-        var modal = bootstrap.Modal.getInstance(modalElement);
-
+const showUserConfirmation = async () => {
         const result = await Swal.fire({
             icon: 'warning',
             title: '¡Cuidado!',
@@ -268,7 +264,7 @@ const registerUser = async (formId) => {
             showCancelButton: true,
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Sí, registrar',
-            footer: '<span class="green">Nota: Puedes eliminarlo después</span>',
+            footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
             reverseButtons: false,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -295,18 +291,10 @@ const registerUser = async (formId) => {
             reset()
             // Enviar el formulario o realizar el registro
         }
-    } else {
-        showWarningAlert(); // Muestra alerta si hay campos incompletos
-    }
 }
 
 // Función para registrar producto
-const registerProduct = async (formId) => {
-    if (validateForm(formId)) {
-        var modalId = formId === 'newProductForm' ? 'newProduct' : 'updateProduct';
-        var modalElement = document.getElementById(modalId);
-        var modal = bootstrap.Modal.getInstance(modalElement);
-
+const showProductConfirmation = async () => {
         const result = await Swal.fire({
             icon: 'warning',
             title: '¡Cuidado!',
@@ -314,7 +302,7 @@ const registerProduct = async (formId) => {
             showCancelButton: true,
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Sí, registrar',
-            footer: '<span class="green">Nota: Puedes eliminarlo después</span>',
+            footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
             reverseButtons: false,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -341,21 +329,18 @@ const registerProduct = async (formId) => {
             reset();
             // Enviar el formulario o realizar el registro
         }
-    } else {
-        showWarningAlert(); // Muestra alerta si hay campos incompletos
-    }
 }
 
 
 
 
-// Función para eliminar usuario
+// Función para desactivar usuario
 const deleteUser = async () => {
     const { value: decision } = await Swal.fire({
         icon: 'warning',
         title: '¡Cuidado!',
-        text: 'Estás a punto de eliminar un usuario del sistema ¿Deseas continuar?',
-        confirmButtonText: 'Sí, eliminar',
+        text: 'Estás a punto de desactivar un usuario del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
         cancelButtonText: 'Cancelar',
         showCancelButton: true,
         footer: '<span class="red">Nota: Si aceptas, no podrás recuperarlo</span>',
@@ -382,13 +367,13 @@ const deleteUser = async () => {
     }
 }
 
-// Función para eliminar producto
+// Función para desactivar producto
 const deleteProduct = async () => {
     const { value: decision } = await Swal.fire({
         icon: 'warning',
         title: '¡Cuidado!',
-        text: 'Estás a punto de eliminar un producto del sistema ¿Deseas continuar?',
-        confirmButtonText: 'Sí, eliminar',
+        text: 'Estás a punto de desactivar un producto del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
         cancelButtonText: 'Cancelar',
         showCancelButton: true,
         footer: '<span class="red">Nota: Si aceptas, no podrás recuperarlo</span>',
@@ -415,13 +400,46 @@ const deleteProduct = async () => {
     }
 }
 
-// Función para eliminar entrada
+// Función para desactivar producto
+const deleteProvider = async () => {
+    const { value: decision } = await Swal.fire({
+        icon: 'warning',
+        title: '¡Cuidado!',
+        text: 'Estás a punto de desactivar un proveedor del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
+        cancelButtonText: 'Cancelar',
+        showCancelButton: true,
+        footer: '<span class="red">Nota: Si aceptas, no podrás recuperarlo</span>',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        stopKeydownPropagation: true,
+        customClass: {
+            confirmButton: 'btn botonCafe',
+            cancelButton: 'btn botonGris',
+            popup: 'no-select-popup',
+        }
+    });
+
+    if (decision) {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Hecho!',
+            text: 'El producto ha sido eliminado correctamente.',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+    }
+}
+
+// Función para desactivar entrada
 const deleteEntry = async () => {
     const { value: decision } = await Swal.fire({
         icon: 'warning',
         title: '¡Cuidado!',
-        text: 'Estás a punto de eliminar una entrada del sistema ¿Deseas continuar?',
-        confirmButtonText: 'Sí, eliminar',
+        text: 'Estás a punto de desactivar una entrada del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
         cancelButtonText: 'Cancelar',
         showCancelButton: true,
         footer: '<span class="red">Nota: Si aceptas, no podrás recuperarlo</span>',
@@ -448,13 +466,13 @@ const deleteEntry = async () => {
     }
 }
 
-// Función para eliminar salida
+// Función para desactivar salida
 const deleteOutbound = async () => {
     const { value: decision } = await Swal.fire({
         icon: 'warning',
         title: '¡Cuidado!',
-        text: 'Estás a punto de eliminar una salida del sistema ¿Deseas continuar?',
-        confirmButtonText: 'Sí, eliminar',
+        text: 'Estás a punto de desactivar una salida del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
         cancelButtonText: 'Cancelar',
         showCancelButton: true,
         footer: '<span class="red">Nota: Si aceptas, no podrás recuperarlo</span>',
@@ -481,13 +499,13 @@ const deleteOutbound = async () => {
     }
 }
 
-// Función para eliminar usuario
+// Función para desactivar usuario
 const deleteMetric = async () => {
     const { value: decision } = await Swal.fire({
         icon: 'warning',
         title: '¡Cuidado!',
-        text: 'Estás a punto de eliminar una unidad de medida del sistema ¿Deseas continuar?',
-        confirmButtonText: 'Sí, eliminar',
+        text: 'Estás a punto de desactivar una unidad de medida del sistema ¿Deseas continuar?',
+        confirmButtonText: 'Sí, desactivar',
         cancelButtonText: 'Cancelar',
         showCancelButton: true,
         footer: '<span class="red">Nota: Si aceptas, no podrás recuperarla</span>',
