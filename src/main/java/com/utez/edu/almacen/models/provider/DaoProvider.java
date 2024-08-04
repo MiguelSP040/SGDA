@@ -28,7 +28,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             rs = ps.executeQuery();
             while (rs.next()){
                 BeanProvider provider = new BeanProvider();
-                provider.setId_provider(rs.getLong("id_provider"));
+                provider.setId(rs.getLong("id_provider"));
                 provider.setName(rs.getString("name"));
                 provider.setSocialCase(rs.getString("socialCase"));
                 provider.setRfc(rs.getString("rfc"));
@@ -59,7 +59,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             rs = ps.executeQuery();
             BeanProvider provider = new BeanProvider();
             if (rs.next()){
-                provider.setId_provider(rs.getLong("id_provider"));
+                provider.setId(rs.getLong("id_provider"));
                 provider.setName(rs.getString("name"));
                 provider.setSocialCase(rs.getString("socialCase"));
                 provider.setRfc(rs.getString("rfc"));
@@ -124,7 +124,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(9, object.getContactPhone());
             ps.setString(10, object.getContactEmail());
             ps.setString(11, object.getStatus());
-            ps.setLong(12, object.getId_provider());
+            ps.setLong(12, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());

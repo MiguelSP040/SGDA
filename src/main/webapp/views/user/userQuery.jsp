@@ -246,9 +246,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="user" items="${users}">
+                    <c:forEach var="user" items="${users}" varStatus="s">
                         <tr>
-                            <th scope="row"><c:out value="${user.id}"/></th>
+                            <th scope="row"><c:out value="${s.count}"/></th>
                             <td><c:out value="${user.name}"/>&nbsp;<c:out value="${user.surname}"/>&nbsp;<c:out value="${user.lastname}"/></td>
                             <td><c:out value="${user.role}"/></td>
                             <td><c:out value="${user.email}"/></td>

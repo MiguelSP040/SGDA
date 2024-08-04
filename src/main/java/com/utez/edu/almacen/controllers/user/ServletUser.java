@@ -89,8 +89,6 @@ public class ServletUser extends HttpServlet {
                     phone = request.getParameter("phone");
                     email = request.getParameter("email");
                     password = request.getParameter("email");
-                    role = request.getParameter("role");
-                    status = request.getParameter("status");
                     user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", "active");
                     boolean result = new DaoUser().save(user);
                     if (result){
