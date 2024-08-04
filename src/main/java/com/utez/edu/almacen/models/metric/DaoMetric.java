@@ -31,6 +31,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
                 metric.setId(rs.getLong("id_metric"));
                 metric.setName(rs.getString("name"));
                 metric.setShortName(rs.getString("shortName"));
+                metric.setStatus(rs.getString("status"));
                 metrics.add(metric);
             }
         }catch (SQLException e){
@@ -53,6 +54,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
                 metric.setId(rs.getLong("id_metric"));
                 metric.setName(rs.getString("name"));
                 metric.setShortName(rs.getString("shortName"));
+                metric.setStatus(rs.getString("status"));
             }
             return metric;
         }catch (SQLException e){
@@ -66,10 +68,11 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
     @Override
     public boolean save(BeanMetric object) {
         try{
-            String query = "INSERT INTO metrics(name, shortName) VALUES(?, ?);";
+            String query = "INSERT INTO metrics(name, shortName, status) VALUES(?, ?, ?);";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getShortName());
+            ps.setString(3, object.getStatus());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -82,11 +85,12 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
     @Override
     public boolean update(BeanMetric object) {
         try{
-            String query = "UPDATE metrics SET name = ?, shortName = ? WHERE id_metric = ?;";
+            String query = "UPDATE metrics SET name = ?, shortName = ?, status = ? WHERE id_metric = ?;";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getShortName());
-            ps.setLong(3, object.getId());
+            ps.setString(3, object.getStatus());
+            ps.setLong(4, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());

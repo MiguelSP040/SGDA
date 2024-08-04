@@ -5,15 +5,17 @@ public class BeanArea {
     private String name;
     private String description;
     private String shortName;
+    private String status;
 
     public BeanArea() {
     }
 
-    public BeanArea(Long id, String name, String description, String shortName) {
+    public BeanArea(Long id, String name, String description, String shortName, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.shortName = shortName;
+        this.status = status;
     }
 
     public Long getId() {
@@ -46,5 +48,13 @@ public class BeanArea {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

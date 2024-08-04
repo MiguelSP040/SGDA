@@ -88,10 +88,10 @@ public class ServletUser extends HttpServlet {
                     lastname = request.getParameter("lastname");
                     phone = request.getParameter("phone");
                     email = request.getParameter("email");
-                    password = request.getParameter("password");
+                    password = request.getParameter("email");
                     role = request.getParameter("role");
                     status = request.getParameter("status");
-                    user = new BeanUser(0L, name, surname, lastname, phone, email, "utez123", "user", "active");
+                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", "active");
                     boolean result = new DaoUser().save(user);
                     if (result){
                         redirect = "/user/list-users?result= " + true + "&message=" +

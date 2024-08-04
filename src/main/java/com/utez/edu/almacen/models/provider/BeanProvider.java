@@ -11,21 +11,23 @@ public class BeanProvider {
     private String email;
     private String contactName;
     private String contactPhone;
+    private String status;
 
     public BeanProvider() {
     }
 
-    public BeanProvider(Long id_provider, String socialCase, String name, String rfc, String postCode, String address, String phone, String email, String contactPhone, String contactName) {
+    public BeanProvider(Long id_provider, String name, String socialCase, String rfc, String postCode, String address, String phone, String email, String contactName, String contactPhone, String status) {
         this.id_provider = id_provider;
-        this.socialCase = socialCase;
         this.name = name;
+        this.socialCase = socialCase;
         this.rfc = rfc;
         this.postCode = postCode;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.contactPhone = contactPhone;
         this.contactName = contactName;
+        this.contactPhone = contactPhone;
+        this.status = status;
     }
 
     public Long getId_provider() {
@@ -92,6 +94,14 @@ public class BeanProvider {
         this.email = email;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     public String getContactPhone() {
         return contactPhone;
     }
@@ -100,11 +110,11 @@ public class BeanProvider {
         this.contactPhone = contactPhone;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getStatus() {
+        return status;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
