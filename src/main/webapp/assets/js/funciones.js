@@ -235,7 +235,8 @@ async function updateMetrics() {
     }
 }
 
-// FUNCIONES PARA EL REGISTRO DE MOVIMIENTOS EN movement.html
+
+// FUNCIONES PARA EL REGISTRO DE MOVIMIENTOS EN entrys.html
 // Función para validar los campos del formulario de entrada
 function validateEntryForm() {
     var form = document.getElementById('registerEntryMovementForm');
@@ -244,9 +245,9 @@ function validateEntryForm() {
     return valid;
 }
 
-// Función para validar los campos del formulario de salida
+// Función para validar los campos del formulario de salida en outbounds.html
 function validateOutboundForm() {
-    var form = document.getElementById('registerOutboundMovementForm');
+    var form = document.getElementById('registerOutboundForm');
     var valid = form.checkValidity();
     form.classList.add('was-validated');
     return valid;
@@ -300,6 +301,67 @@ function updateOutbound() {
         showWarningAlert();
     }
 }
+
+
+
+
+// Función para añadir una fila de la tabla
+function addRow(button) {
+    // Obtener la fila actual (donde se hizo clic en el botón)
+    const currentRow = button.closest('tr');
+    // Obtener el cuerpo de la tabla
+    const tableBody = currentRow.parentElement;
+
+    // Clonar la fila actual para crear una nueva fila vacía
+    const newRow = currentRow.cloneNode(true);
+
+    // Limpiar los valores de los campos en la nueva fila
+    const inputs = newRow.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        if (input.type === 'text' || input.type === 'number') {
+            input.value = '';
+        } else if (input.tagName === 'SELECT') {
+            input.selectedIndex = 0;
+        }
+    });
+
+    // Insertar la nueva fila después de la fila actual
+    currentRow.insertAdjacentElement('afterend', newRow);
+
+    // Actualizar los índices de todas las filas
+    updateRowIndices();
+}
+
+// Función para eliminar una fila de la tabla
+function removeRow(button) {
+    // Obtener la fila actual y el cuerpo de la tabla
+    const row = button.closest('tr');
+    const tableBody = row.parentElement;
+
+    // Eliminar la fila si no es la única
+    if (tableBody.children.length > 1) {
+        row.remove();
+        // Actualizar los índices de todas las filas
+        updateRowIndices();
+    } else {
+        alert('No se puede eliminar la única fila.');
+    }
+}
+
+// Función para actualizar los índices de la tabla
+function updateRowIndices() {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach((row, index) => {
+        const indexCell = row.querySelector('th');
+        if (indexCell) {
+            indexCell.textContent = index + 1; // Actualizar el índice de la fila
+        }
+    });
+}
+
+
+
+
 
 // Función para cerrar modales
 function closeModal(modalId) {
