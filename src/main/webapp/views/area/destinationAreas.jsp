@@ -24,7 +24,7 @@
         <div class="card contenidoTotal shadow-lg p-5">
             <!--Título del contenido-->
             <div>
-                <h3>Consulta de Área de destino</h3>
+                <h3>Consulta de área de destino</h3>
             </div>
 
             <!--BOTON PARA AGREGAR NUEVA AREA DE DESTINO -->
@@ -159,8 +159,8 @@
                     </tr>
                     <tr>
                     <th scope="col" class="thead">#</th>
-                    <th scope="col" class="thead">Nombre</th>
                     <th scope="col" class="thead">Acrónimo</th>
+                    <th scope="col" class="thead">Nombre</th>
                     <th scope="col" class="thead">Descripción</th>
                     <th scope="col" class="thead">Estado</th>
                     <th scope="col" class="thead">Acciones</th>
@@ -170,8 +170,8 @@
                     <c:forEach var="area" items="${area}">
                         <tr>
                             <th scope="row"><c:out value="${area.id}"/></th>
-                            <td><c:out value="${area.name}"/></td>
                             <td><c:out value="${area.shortName}"/></td>
+                            <td><c:out value="${area.name}"/></td>
                             <td><c:out value="${area.description}"/></td>
                             <td><c:out value="${user.status}"/></td>
                             <td>
@@ -193,11 +193,11 @@
                     </c:forEach>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Almacen Sur</td>
                         <td>A-SUR</td>
+                        <td>Almacen Sur</td>
                         <td>Sección Sur</td>
                         <td>
-                            <button class="btn statusRed w-100 " id="">Inactivo</button>
+                            <h4><span class="badge badge-pill statusRed" id="statusActivo">Inactivo</span></h4>
                         </td>
                         <td>
                             <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateArea" onclick="update()">

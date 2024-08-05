@@ -152,8 +152,8 @@
                     </tr>
 
                     <th scope="col" class="thead">#</th>
-                    <th scope="col" class="thead">Nombre</th>
                     <th scope="col" class="thead">Abreviatura</th>
+                    <th scope="col" class="thead">Nombre</th>
                     <th scope="col" class="thead">Estado</th>
                     <th scope="col" class="thead">Acciones</th>
 
@@ -162,8 +162,8 @@
                         <c:forEach var="metric" items="${metrics}">
                             <tr>
                                 <th scope="row"><c:out value="${metric.id}"/></th>
-                                <td><c:out value="${metric.name}"/></td>
                                 <td><c:out value="${metric.shortName}"/></td>
+                                <td><c:out value="${metric.name}"/></td>
                                 <td><c:out value="${metric.status}"/></td>
                                 <td>
                                     <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"
@@ -185,10 +185,10 @@
                         </c:forEach>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Paquete</td>
                         <td>Paq</td>
+                        <td>Paquete</td>
                         <td>
-                            <button class="btn statusRed w-100 " id="status">Inactivo</button>
+                            <h4><span class="badge badge-pill statusRed" id="statusActivo">Inactivo</span></h4>
                         </td>
                         <td>
                             <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"

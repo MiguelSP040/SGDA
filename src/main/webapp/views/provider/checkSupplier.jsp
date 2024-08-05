@@ -335,7 +335,7 @@
                         <td>Maped B2B</td>
 
                         <td>
-                            <button class="btn statusGreen w-100" id="statusActivo">Activo</button>
+                            <h4><span class="badge badge-pill statusGreen" id="statusActivo">Activo</span></h4>
                         </td>
 
                         <!--Botones de acciones de Proveedor-->
