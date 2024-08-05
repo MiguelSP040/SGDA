@@ -70,7 +70,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
     @Override
     public boolean save(BeanArea object) {
         try {
-            String query = "INSERT INTO areas(name, description, shortName, ) VALUES(?, ?, ?, ?);";
+            String query = "INSERT INTO areas(name, description, shortName, status) VALUES(?, ?, ?, ?);";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());

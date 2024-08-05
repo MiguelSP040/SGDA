@@ -13,13 +13,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "ServletArea", urlPatterns = {
-
+        "/area/list-areas",
+        "/area/delete",
+        "/area/save",
+        "/area/update"
 })
+
 public class ServletArea extends HttpServlet {
     private String action;
     private String redirect = "/area/list-areas";
     private BeanArea area;
-    private String id_area, name, description, shortName, status;
+    private String id, name, description, shortName, status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,19 +33,19 @@ public class ServletArea extends HttpServlet {
             case "/area/list-areas":
                 List<BeanArea> areas = new DaoArea().listAll();
                 request.setAttribute("areas", areas);
-                redirect = "";
+                redirect = "/views/area/destinationAreas.jsp";
                 break;
             case "/area/register":
                 redirect = "";
                 break;
             case "/area/update-view":
-                id_area = request.getParameter("id");
-                area = new DaoArea().listOne((id_area != null) ? (Long.parseLong(id_area)): (0));
+                id = request.getParameter("id");
+                area = new DaoArea().listOne((id != null) ? (Long.parseLong(id)): (0));
                 if (area != null){
                     request.setAttribute("area", area);
                     redirect = "";
                 } else{
-                    redirect = "/area/list-areas?result= " + false + "&message="
+                    redirect = "/area/list-areas?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
@@ -60,13 +64,13 @@ public class ServletArea extends HttpServlet {
         action = request.getServletPath();
         switch (action){
             case "/area/delete":
-                id_area = request.getParameter("id");
-                if (new DaoArea().delete(Long.parseLong(id_area))){
+                id = request.getParameter("id");
+                if (new DaoArea().delete(Long.parseLong(id))){
                     redirect = "/area/list-areas?result= " + true + "&message="
                             + URLEncoder.encode("¡Éxito! Usuario eliminado correctamente",
                             StandardCharsets.UTF_8);
                 } else {
-                    redirect = "/area/list-areas?result= " + false + "&message="
+                    redirect = "/area/list-areas?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
@@ -82,24 +86,24 @@ public class ServletArea extends HttpServlet {
                             + URLEncoder.encode("Éxito! Usuario registrado correctamente",
                             StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/area/list-areas?result= " + false + "&message="
+                    redirect = "/area/list-areas?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
                 break;
             case "/area/update":
-                id_area = request.getParameter("id");
+                id = request.getParameter("id");
                 name = request.getParameter("name");
                 description = request.getParameter("description");
                 shortName = request.getParameter("shortName");
                 status = request.getParameter("status");
-                area = new BeanArea(Long.parseLong(id_area), name, description, shortName, status);
+                area = new BeanArea(Long.parseLong(id), name, description, shortName, status);
                 if (new DaoArea().update(area)){
                     redirect = "/area/list-areas?result=" + true + "&message="
                             + URLEncoder.encode("Éxito! Usuario actualizado correctamente",
                             StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/area/list-areas?result= " + false + "&message="
+                    redirect = "/area/list-areas?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }

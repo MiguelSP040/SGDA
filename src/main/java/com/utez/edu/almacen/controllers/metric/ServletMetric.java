@@ -13,13 +13,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "ServletMetric", urlPatterns = {
-
+        "/metric/list-metrics",
+        "/metric/delete",
+        "/metric/save",
+        "/metric/update"
 })
 public class ServletMetric extends HttpServlet {
     private String action;
     private String redirect = "/metric/list-metrics";
     private BeanMetric metric;
-    private String id_metric, name, shortName, status;
+    private String id, name, shortName, status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,19 +32,19 @@ public class ServletMetric extends HttpServlet {
             case "/metric/list-metrics":
                 List<BeanMetric> metrics = new DaoMetric().listAll();
                 request.setAttribute("metrics", metrics);
-                redirect = "";
+                redirect = "/views/metric/metrics.jsp";
                 break;
             case "/metric/register":
                 redirect = "";
                 break;
             case "/metric/update-view":
-                id_metric = request.getParameter("id");
-                metric = new DaoMetric().listOne((id_metric != null) ? (Long.parseLong(id_metric)) : (0));
+                id = request.getParameter("id");
+                metric = new DaoMetric().listOne((id != null) ? (Long.parseLong(id)) : (0));
                 if (metric != null){
                     request.setAttribute("metric", metric);
                     redirect = "";
                 } else{
-                    redirect = "/metric/list-metrics?result= " + false + "&message="
+                    redirect = "/metric/list-metrics?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
@@ -60,13 +63,13 @@ public class ServletMetric extends HttpServlet {
         action = request.getServletPath();
         switch (action){
             case "/metric/delete":
-                id_metric = request.getParameter("id");
-                if (new DaoMetric().delete(Long.parseLong(id_metric))){
-                    redirect = "/metric/list-metrics?result= " + true + "&message="
+                id = request.getParameter("id");
+                if (new DaoMetric().delete(Long.parseLong(id))){
+                    redirect = "/metric/list-metrics?result=" + true + "&message="
                             + URLEncoder.encode("¡Éxito! Usuario eliminado correctamente",
                             StandardCharsets.UTF_8);
                 } else {
-                    redirect = "/metric/list-metrics?result= " + false + "&message="
+                    redirect = "/metric/list-metrics?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
@@ -81,23 +84,23 @@ public class ServletMetric extends HttpServlet {
                             + URLEncoder.encode("Éxito! Usuario registrado correctamente",
                             StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/metric/list-metrics?result= " + false + "&message="
+                    redirect = "/metric/list-metrics?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
                 break;
             case "/metric/update":
-                id_metric = request.getParameter("id");
+                id = request.getParameter("id");
                 name = request.getParameter("name");
                 shortName = request.getParameter("shortName");
                 status = request.getParameter("status");
-                metric = new BeanMetric(Long.parseLong(id_metric), name, shortName, status);
+                metric = new BeanMetric(Long.parseLong(id), name, shortName, status);
                 if (new DaoMetric().update(metric)){
                     redirect = "/metric/list-metrics?result=" + true + "&message="
                             + URLEncoder.encode("Éxito! Usuario actualizado correctamente",
                             StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/metric/list-metrics?result= " + false + "&message="
+                    redirect = "/metric/list-metrics?result=" + false + "&message="
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }

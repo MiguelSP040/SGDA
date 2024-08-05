@@ -252,7 +252,9 @@
                             <td><c:out value="${user.name}"/>&nbsp;<c:out value="${user.surname}"/>&nbsp;<c:out value="${user.lastname}"/></td>
                             <td><c:out value="${user.role}"/></td>
                             <td><c:out value="${user.email}"/></td>
-                            <td><c:out value="${user.status}"/></td>
+                            <td>
+                                <button class="btn statusGreen w-100"><c:out value="${user.status}"/></button>
+                            </td>
                             <td>
                                 <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()">
                                     <svg

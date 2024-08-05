@@ -291,9 +291,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="provider" items="${providers}">
+                        <c:forEach var="provider" items="${providers}" varStatus="s">
                             <tr>
-                                <th scope="row"><c:out value="${provider.id}"/></th>
+                                <th scope="row"><c:out value="${s.count}"/></th>
                                 <td><c:out value="${provider.name}"/></td>
                                 <td><c:out value="${provider.rfc}"/></td>
                                 <td><c:out value="${provider.phone}"/></td>
