@@ -1,10 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String context = request.getContextPath();
+    if (request.getSession(false).getAttribute("user") != null){
+        response.sendRedirect(context+"/views/product/checkStock.jsp");
+    }
+    boolean errorMessage = request.getAttribute("errorMessage") != null && !(boolean) request.getAttribute("errorMessage");
+%>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Inicio de sesión</title>
-    <link href="../assets/css/estilos.css" rel="stylesheet">
+    <link href="/assets/css/estilos.css" rel="stylesheet">
     <jsp:include page="/layouts/header.jsp"/>
     <style>
         body {
@@ -49,7 +56,7 @@
                             </div>
                         </div>
                         <h1 class="fs-4 text-center card-title fw-bold mb-4 my-3">Inicio de sesión</h1>
-                        <form class="needs-validation" autocomplete="off" method="post" action="/ServletLogin">
+                        <form class="needs-validation" autocomplete="off" method="post" action="/LoginServlet">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="email">Correo Electrónico</label>
                                 <input id="email" type="email" class="form-control" name="email" required autofocus>
@@ -72,6 +79,11 @@
                                     Iniciar sesión
                                 </button>
                             </div>
+                            <%if (errorMessage) {%>
+                            <div class="col-12">
+                                <div class="alert alert-danger mb-0">Contraseña y/o Usuario incorrectos</div>
+                            </div>
+                            <%}%>
                         </form>
                     </div>
                     <div class="card-footer coffe text-center py-3 border-0">
