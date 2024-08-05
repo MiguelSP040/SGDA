@@ -302,9 +302,6 @@ function updateOutbound() {
     }
 }
 
-
-
-
 // Función para añadir una fila de la tabla
 function addRow(button) {
     // Obtener la fila actual (donde se hizo clic en el botón)
@@ -344,7 +341,7 @@ function removeRow(button) {
         // Actualizar los índices de todas las filas
         updateRowIndices();
     } else {
-        alert('No se puede eliminar la única fila.');
+        showErrorAlert('No se puede eliminar la única fila.');
     }
 }
 
@@ -358,9 +355,6 @@ function updateRowIndices() {
         }
     });
 }
-
-
-
 
 
 // Función para cerrar modales
