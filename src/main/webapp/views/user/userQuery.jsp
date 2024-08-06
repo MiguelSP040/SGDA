@@ -10,10 +10,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") != null){
-        response.sendRedirect(context+"/views/user/userQuery.jsp");
+    if (request.getSession(false).getAttribute("user") == null){
+        response.sendRedirect(context+"/index.jsp");
     }
-    boolean errorMessage = request.getAttribute("errorMessage") != null && !(boolean) request.getAttribute("errorMessage");
 %>
 <html>
 <head>
