@@ -171,7 +171,7 @@
                                 <td><c:out value="${metric.name}"/></td>
                                 <td><c:out value="${metric.shortName}"/></td>
                                 <td>
-                                    <button class="btn statusGreen w-100" id="status"><c:out value="${metric.status}"/></button>
+                                    <h4><span class="badge badge-pill statusGreen"><c:out value="${metric.status}"/></span></h4>
                                 </td>
                                 <td>
                                     <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"

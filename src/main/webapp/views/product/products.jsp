@@ -234,7 +234,9 @@
                                 <td><c:out value="${product.name}"/></td>
                                 <td><c:out value="${product.id_metric}"/></td>
                                 <td><c:out value="${product.description}"/></td>
-                                <td><c:out value="${product.status}"/></td>
+                                <td>
+                                    <h4><span class="badge badge-pill statusGreen"><c:out value="${product.status}"/></span></h4>
+                                </td>
                                 <td>
                                     <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()"><svg
                                             xmlns="http://www.w3.org/2000/svg" width="16" height="16"

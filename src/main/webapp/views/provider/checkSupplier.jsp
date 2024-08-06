@@ -306,7 +306,7 @@
                                 <td><c:out value="${provider.email}"/></td>
                                 <td><c:out value="${provider.contactName}"/></td>
                                 <td>
-                                    <button class="btn statusGreen w-100"><c:out value="${provider.status}"/></button>
+                                    <h4><span class="badge badge-pill statusGreen"><c:out value="${provider.status}"/></span></h4>
                                 </td>
                                 <td>
                                     <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()"><svg

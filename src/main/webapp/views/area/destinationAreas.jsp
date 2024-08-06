@@ -180,7 +180,7 @@
                             <td><c:out value="${area.shortName}"/></td>
                             <td><c:out value="${area.description}"/></td>
                             <td>
-                                <button class="btn statusGreen w-100"><c:out value="${area.status}"/></button>
+                                <h4><span class="badge badge-pill statusGreen"><c:out value="${area.status}"/></span></h4>
                             </td>
                             <td>
                                 <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateArea" onclick="update()">

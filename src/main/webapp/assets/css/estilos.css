@@ -298,44 +298,23 @@ input, select{
 /* Sidebar Left */
 
 #sidebarCerrado, #sidebarAbierto {
-    height: 100%;
     position: fixed;
-    top: 0;
-    left: 0;
     background-color: #f8f8f8;
-    padding-top: 20px;
-    margin-top: 5%;
     border-right: 1px solid #cecccc;
     transition: 0.2s;
 }
 
-#iconsSidebar {
-    align-items: center;
-}
-
 #sidebarCerrado {
-    width: 2.9%;
-    text-align: center;
     display: block;
 }
 
-#userLogged {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-}
-
-#userLogged:hover{
-    background-color: #f8f8f8!important;
-    cursor: default;
-}
-
 #sidebarAbierto {
-    width: 13%;
     text-indent: 2%;
     display: none;
+}
+
+#iconsSidebar {
+    align-items: center;
 }
 
 #sidebarCerrado a, #sidebarAbierto a {
@@ -386,6 +365,7 @@ input, select{
 #statusDisabled {
     cursor: none;
 }
+
 /* ///////////////////////////////////////////////////////////// */
 /* Media Queries for Responsiveness */
 
