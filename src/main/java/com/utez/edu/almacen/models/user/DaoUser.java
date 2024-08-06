@@ -35,14 +35,12 @@ public class DaoUser implements DaoTemplate<BeanUser>{
 
     @Override
     public List<BeanUser> listAll() {
-        List<BeanUser> users = null;
+        List<BeanUser> users = new ArrayList<>();
         try {
-            users = new ArrayList<>();
-            conn = new MySQLConnection().getConnection();
             String query = "SELECT * FROM users;";
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 BeanUser user = new BeanUser();
                 user.setId(rs.getLong("id_user"));
                 user.setName(rs.getString("name"));
@@ -52,16 +50,18 @@ public class DaoUser implements DaoTemplate<BeanUser>{
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
-                user.setStatus(rs.getString("status"));
+                // Convertir el valor booleano a cadena
+                user.setStatus(rs.getBoolean("status") ? true : false);
                 users.add(user);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed" + e.getMessage());
-        }finally {
+        } finally {
             closeConnection();
         }
         return users;
     }
+
 
     @Override
     public BeanUser listOne(Long id) {
@@ -80,7 +80,7 @@ public class DaoUser implements DaoTemplate<BeanUser>{
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
-                user.setStatus(rs.getString("status"));
+                user.setStatus(rs.getBoolean("status"));
             }
             return user;
         }catch (SQLException e){
@@ -104,7 +104,7 @@ public class DaoUser implements DaoTemplate<BeanUser>{
             ps.setString(5, object.getEmail());
             ps.setString(6, object.getPassword());
             ps.setString(7, object.getRole());
-            ps.setString(8, object.getStatus());
+            ps.setBoolean(8, object.getStatus());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -113,6 +113,21 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         }
         return false;
     }
+
+    public boolean changeStatus(Long userId){
+        try {
+            String query = "UPDATE users SET status = NOT status WHERE id_user = ?;";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, userId);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            return false;
+        } finally {
+            closeConnection();
+        }
+    }
+
 
     @Override
     public boolean update(BeanUser object) {
@@ -127,7 +142,7 @@ public class DaoUser implements DaoTemplate<BeanUser>{
             ps.setString(5, object.getEmail());
             ps.setString(6, object.getPassword());
             ps.setString(7, object.getRole());
-            ps.setString(8, object.getStatus());
+            ps.setBoolean(8, object.getStatus());
             ps.setLong(9, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
@@ -153,13 +168,13 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         return false;
     }
 
-    public void closeConnection(){
+    public void closeConnection() {
         try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
             if (conn != null) conn.close();
-            if (ps != null) conn.close();
-            if (rs != null) conn.close();
-        }catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection" + e.getMessage());
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection: " + e.getMessage());
         }
     }
 }

@@ -29,7 +29,8 @@ public class ServletUser extends HttpServlet {
     private String action;
     private String redirect = "/user/list-users";
     private BeanUser user;
-    private String id, name, surname, lastname, phone, email, password, role, status;
+    private String id, name, surname, lastname, phone, email, password, role;
+    private boolean status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,26 +71,28 @@ public class ServletUser extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
         action = request.getServletPath();
-        switch (action){
+        switch (action) {
             case "/user/delete":
                 id = request.getParameter("id");
-                if (new DaoUser().delete(Long.parseLong(id))){
-                    redirect = "/user/list-users?result= " + true + "&message=" +
-                            URLEncoder.encode("¡Exito!",StandardCharsets.UTF_8);
-                }else {
-                    redirect = "/user/list-users?result= " + false + "&message=" +
-                            URLEncoder.encode("¡ERROR!",StandardCharsets.UTF_8);
+                // Cambiar el estado
+                if (new DaoUser().changeStatus(Long.parseLong(id))) {
+                    redirect = "/user/list-users?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
+                } else {
+                    redirect = "/user/list-users?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
                 }
                 break;
 
-                case "/user/save":
+
+            case "/user/save":
                     name = request.getParameter("name");
                     surname = request.getParameter("surname");
                     lastname = request.getParameter("lastname");
                     phone = request.getParameter("phone");
                     email = request.getParameter("email");
                     password = request.getParameter("email");
-                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", "active");
+                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", true);
                     boolean result = new DaoUser().save(user);
                     if (result){
                         redirect = "/user/list-users?result=" + true + "&message=" +
@@ -109,7 +112,7 @@ public class ServletUser extends HttpServlet {
                         email = request.getParameter("email");
                         password = request.getParameter("password");
                         role = request.getParameter("role");
-                        status = request.getParameter("status");
+                        status = Boolean.parseBoolean(request.getParameter("status"));
                         user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
                                 password, role, status);
                         if (new DaoUser().update(user)){

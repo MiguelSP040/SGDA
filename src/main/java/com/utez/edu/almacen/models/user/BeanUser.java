@@ -9,13 +9,13 @@ public class BeanUser {
     private String email;
     private String password;
     private String role;
-    private String status;
+    private Boolean status;
 
     public BeanUser(){
 
     }
 
-    public BeanUser(Long id, String name, String surname, String lastname, String phone, String email, String password, String role, String status) {
+    public BeanUser(Long id, String name, String surname, String lastname, String phone, String email, String password, String role, Boolean status) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -91,11 +91,11 @@ public class BeanUser {
         this.role = role;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 }
