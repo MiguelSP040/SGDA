@@ -28,7 +28,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             rs = ps.executeQuery();
             while (rs.next()){
                 BeanProvider provider = new BeanProvider();
-                provider.setId_provider(rs.getLong("id_provider"));
+                provider.setId(rs.getLong("id_provider"));
                 provider.setName(rs.getString("name"));
                 provider.setSocialCase(rs.getString("socialCase"));
                 provider.setRfc(rs.getString("rfc"));
@@ -38,6 +38,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setEmail(rs.getString("email"));
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
+                provider.setContactEmail(rs.getString("contactEmail"));
+                provider.setStatus(rs.getString("status"));
                 providers.add(provider);
             }
         }catch (SQLException e){
@@ -57,7 +59,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             rs = ps.executeQuery();
             BeanProvider provider = new BeanProvider();
             if (rs.next()){
-                provider.setId_provider(rs.getLong("id_provider"));
+                provider.setId(rs.getLong("id_provider"));
                 provider.setName(rs.getString("name"));
                 provider.setSocialCase(rs.getString("socialCase"));
                 provider.setRfc(rs.getString("rfc"));
@@ -67,6 +69,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setEmail(rs.getString("email"));
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
+                provider.setContactEmail(rs.getString("contactEmail"));
+                provider.setStatus(rs.getString("status"));
             }
             return provider;
         }catch (SQLException e){
@@ -80,8 +84,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
     @Override
     public boolean save(BeanProvider object) {
         try {
-            String query = "INSERT INTO providers(name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone)" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO providers(name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSocialCase());
@@ -92,6 +96,8 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(7, object.getEmail());
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
+            ps.setString(10, object.getContactEmail());
+            ps.setString(11, object.getStatus());
             return  ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -105,7 +111,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
     public boolean update(BeanProvider object) {
         try {
             String query = "UPDATE providers SET name = ?, socialCase = ?, rfc = ?, postCode = ?, address = ?," +
-                    "phone = ?, email = ?, contactName = ?, contactPhone = ? WHERE id_provider = ?";
+                    "phone = ?, email = ?, contactName = ?, contactPhone = ?, contactEmail = ?, status = ? WHERE id_provider = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSocialCase());
@@ -116,7 +122,9 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(7, object.getEmail());
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
-            ps.setLong(10, object.getId_provider());
+            ps.setString(10, object.getContactEmail());
+            ps.setString(11, object.getStatus());
+            ps.setLong(12, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());

@@ -32,6 +32,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
                 area.setName(rs.getString("name"));
                 area.setDescription(rs.getString("description"));
                 area.setShortName(rs.getString("shortName"));
+                area.setStatus(rs.getString("status"));
                 areas.add(area);
             }
         }catch (SQLException e){
@@ -55,6 +56,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
                 area.setName(rs.getString("name"));
                 area.setDescription(rs.getString("description"));
                 area.setShortName(rs.getString("shortName"));
+                area.setStatus(rs.getString("status"));
             }
             return area;
         }catch (SQLException e){
@@ -68,12 +70,12 @@ public class DaoArea implements DaoTemplate<BeanArea> {
     @Override
     public boolean save(BeanArea object) {
         try {
-            String query = "INSERT INTO areas(name, description, shortName) VALUES(?, ?, ?);";
+            String query = "INSERT INTO areas(name, description, shortName, status) VALUES(?, ?, ?, ?);";
             ps = conn.prepareStatement(query);
-            //Modificar BD para establecer AUTO_INCREMENT en id
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             ps.setString(3, object.getShortName());
+            ps.setString(4, object.getStatus());
             return ps.executeUpdate() > 0;
         }catch (SQLException e) {
             Logger.getLogger(DaoArea.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -86,12 +88,13 @@ public class DaoArea implements DaoTemplate<BeanArea> {
     @Override
     public boolean update(BeanArea object) {
         try {
-            String query = "UPDATE areas SET name = ?, description = ?, shortName = ? WHERE id_area = ?;";
+            String query = "UPDATE areas SET name = ?, description = ?, shortName = ?, status = ? WHERE id_area = ?;";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             ps.setString(3, object.getShortName());
-            ps.setLong(4, object.getId());
+            ps.setString(4, object.getStatus());
+            ps.setLong(5, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoArea.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());

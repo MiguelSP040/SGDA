@@ -8,6 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Entradas de almacén"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String context = request.getContextPath();
+    if (request.getSession(false).getAttribute("user") == null){
+        response.sendRedirect(context+"/index.jsp");
+    }
+%>
 <html>
 <head>
     <title>Entradas de almacén</title>

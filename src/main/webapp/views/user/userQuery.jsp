@@ -10,10 +10,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") != null){
-        response.sendRedirect(context+"/views/user/userQuery.jsp");
+    if (request.getSession(false).getAttribute("user") == null){
+        response.sendRedirect(context+"/index.jsp");
     }
-    boolean errorMessage = request.getAttribute("errorMessage") != null && !(boolean) request.getAttribute("errorMessage");
 %>
 <html>
 <head>
@@ -246,13 +245,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="user" items="${users}">
+                    <c:forEach var="user" items="${users}" varStatus="s">
                         <tr>
-                            <th scope="row"><c:out value="${user.id}"/></th>
+                            <th scope="row"><c:out value="${s.count}"/></th>
                             <td><c:out value="${user.name}"/>&nbsp;<c:out value="${user.surname}"/>&nbsp;<c:out value="${user.lastname}"/></td>
                             <td><c:out value="${user.role}"/></td>
                             <td><c:out value="${user.email}"/></td>
-                            <td><c:out value="${user.status}"/></td>
+                            <td>
+                                <button class="btn statusGreen w-100"><c:out value="${user.status}"/></button>
+                            </td>
                             <td>
                                 <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()">
                                     <svg

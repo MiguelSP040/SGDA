@@ -1,13 +1,19 @@
 <%--
   Created by IntelliJ IDEA.
-  User: PC
-  Date: 03/08/2024
-  Time: 10:12 p. m.
+  User: migue
+  Date: 05/08/2024
+  Time: 10:05 a. m.
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Stock"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String context = request.getContextPath();
+    if (request.getSession(false).getAttribute("user") == null){
+        response.sendRedirect(context+"/index.jsp");
+    }
+%>
 <html>
 <head>
     <title>Stock</title>

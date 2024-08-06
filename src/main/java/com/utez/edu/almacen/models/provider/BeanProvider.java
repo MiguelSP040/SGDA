@@ -1,7 +1,7 @@
 package com.utez.edu.almacen.models.provider;
 
 public class BeanProvider {
-    private Long id_provider;
+    private Long id;
     private String name;
     private String socialCase;
     private String rfc;
@@ -11,29 +11,33 @@ public class BeanProvider {
     private String email;
     private String contactName;
     private String contactPhone;
+    private String contactEmail;
+    private String status;
 
     public BeanProvider() {
     }
 
-    public BeanProvider(Long id_provider, String socialCase, String name, String rfc, String postCode, String address, String phone, String email, String contactPhone, String contactName) {
-        this.id_provider = id_provider;
-        this.socialCase = socialCase;
+    public BeanProvider(Long id, String name, String socialCase, String rfc, String postCode, String address, String phone, String email, String contactName, String contactPhone, String contactEmail, String status) {
+        this.id = id;
         this.name = name;
+        this.socialCase = socialCase;
         this.rfc = rfc;
         this.postCode = postCode;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.contactPhone = contactPhone;
         this.contactName = contactName;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+        this.status = status;
     }
 
-    public Long getId_provider() {
-        return id_provider;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_provider(Long id_provider) {
-        this.id_provider = id_provider;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -92,6 +96,14 @@ public class BeanProvider {
         this.email = email;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     public String getContactPhone() {
         return contactPhone;
     }
@@ -100,11 +112,19 @@ public class BeanProvider {
         this.contactPhone = contactPhone;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

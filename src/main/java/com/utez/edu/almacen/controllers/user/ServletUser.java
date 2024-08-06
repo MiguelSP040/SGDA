@@ -88,16 +88,14 @@ public class ServletUser extends HttpServlet {
                     lastname = request.getParameter("lastname");
                     phone = request.getParameter("phone");
                     email = request.getParameter("email");
-                    password = request.getParameter("password");
-                    role = request.getParameter("role");
-                    status = request.getParameter("status");
-                    user = new BeanUser(0L, name, surname, lastname, phone, email, "utez123", "user", "active");
+                    password = request.getParameter("email");
+                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", "active");
                     boolean result = new DaoUser().save(user);
                     if (result){
-                        redirect = "/user/list-users?result= " + true + "&message=" +
+                        redirect = "/user/list-users?result=" + true + "&message=" +
                                 URLEncoder.encode("¡Exito!",StandardCharsets.UTF_8);
                     }else {
-                        redirect = "/user/list-users?result= " + false + "&message=" +
+                        redirect = "/user/list-users?result=" + false + "&message=" +
                                 URLEncoder.encode("¡ERROR!",StandardCharsets.UTF_8);
                     }
                     break;
@@ -123,5 +121,6 @@ public class ServletUser extends HttpServlet {
                         }
                         break;
         }
+        response.sendRedirect(request.getContextPath() + redirect);
     }
 }
