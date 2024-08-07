@@ -1,4 +1,3 @@
-
 /* General Styles */
 
 /* ///////////////////////////////////////////////////////////// */
@@ -240,13 +239,17 @@ input, select{
     max-width: 100rem;
 }
 
+#tituloContactoExterno {
+    display: fixed;
+}
+
 #formularioContacto {
     padding-left: 20%;
 }
 
 #anadirContacto {
     display: block;
-    padding: 3%;
+    padding: 3% 0% 0% 0%;
     border-top: 1px solid #cecccc;
 }
 
@@ -276,16 +279,17 @@ input, select{
     margin-top: 8%;
     background-color: #f3f3f3;
     color: black;
+    padding: 0%;
 }
 
 #containerRecoverPass {
     width: 800px;
     height: 400px;
-    margin: 15% 0 15% 0;
+    margin: 15% 0% 15% 0%;
 }
 
 .datosProveedor {
-    padding: 0 0 0 0;
+    padding: 0% 0% 0% 0%;
 }
 
 
@@ -299,8 +303,22 @@ input, select{
     transition: 0.2s;
 }
 
+#iconsSidebar {
+    align-items: center;
+}
+
 #sidebarCerrado {
+    text-align: center;
     display: block;
+}
+
+#userLogged {
+    text-align: center;
+}
+
+#userLogged:hover{
+    background-color: #f8f8f8!important;
+    cursor: default;
 }
 
 #sidebarAbierto {
@@ -308,12 +326,16 @@ input, select{
 }
 
 #sidebarCerrado a, #sidebarAbierto a {
+    padding: 10px 15px;
     text-decoration: none;
     font-size: 18px;
+    color: rgb(7, 7, 7);
+    display: block;
+    cursor: pointer;
 }
 
 #sidebarCerrado a:hover, #sidebarAbierto a:hover {
-    background-color: black;
+    background-color: #A59B92;
     color: white;
 }
 
@@ -335,8 +357,91 @@ input, select{
     border-right: 3px solid #88675a;
 }
 
+.toggle-btn {
+    font-size: 20px;
+    cursor: pointer;
+    color: #111;
+}
+
 /* STATUS DESABILITADO*/
 
 #statusDisabled {
     cursor: none;
 }
+/* ///////////////////////////////////////////////////////////// */
+/* Media Queries for Responsiveness */
+
+/* Adjustments for tablets and smaller screens
+@media (max-width: 768px) {
+    #barraNavegacion {
+        height: 7%;
+        font-size: 100%;
+        /*display: fixed;
+        font-weight: 500;
+        font-size: 24px;
+        border-bottom: 1px solid #A59B92;
+        background-color: #4E6166;
+        color: #FFFFFF;
+        user-select: none;
+    }
+
+    #sidebarCerrado {
+        width: 5%;
+    }
+
+    #sidebarAbierto {
+        width: 25%;
+    }
+
+    .toggle-btn {
+        font-size: 18px;
+        top: 15px;
+        left: 15px;
+    }
+
+    #formularioContacto, #dataRegister {
+        padding-left: 10%;
+    }
+
+    #userLogged {
+        bottom: 50px;
+    }
+}
+
+/* Adjustments for mobile screens
+@media (max-width: 480px) {
+    #sidebarCerrado {
+        width: 10%;
+    }
+
+    #sidebarAbierto {
+        width: 50%;
+    }
+
+    .toggle-btn {
+        font-size: 16px;
+        top: 10px;
+        left: 10px;
+    }
+
+    #sidebarAbierto a {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    .contenidoTotal {
+        margin: 5% 2% 0 2%;
+        padding: 2.5%;
+    }
+
+    #dataRegister {
+        padding-left: 5%;
+    }
+
+    #containerRecoverPass {
+        width: 100%;
+        height: auto;
+        margin: 5% 0;
+    }
+}
+*/

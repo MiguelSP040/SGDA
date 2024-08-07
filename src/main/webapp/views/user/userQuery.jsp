@@ -19,6 +19,8 @@
         <title>Usuarios</title>
         <link href="../../assets/css/estilos.css" rel="stylesheet">
         <jsp:include page="../../layouts/header.jsp"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <jsp:include page="../../layouts/menu.jsp"/>
@@ -308,7 +310,38 @@
         </div>
     </div>
 </div>
+<script>
+    // Función para mostrar la alerta
+    function changeSuccess(message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: message,
+            confirmButtonText: 'Aceptar'
+        });
+    }
 
+    function changeError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    // Obtener parámetros de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const result = urlParams.get('result');
+    const message = urlParams.get('message');
+
+    // Mostrar la alerta en función del resultado
+    if (result === 'true') {
+        changeSuccess(decodeURIComponent(message));
+    } else if (result === 'false') {
+        changeError(decodeURIComponent(message));
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/funciones.js"></script>
