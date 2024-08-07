@@ -2,6 +2,7 @@ package com.utez.edu.almacen.controllers.area;
 
 import com.utez.edu.almacen.models.area.BeanArea;
 import com.utez.edu.almacen.models.area.DaoArea;
+import com.utez.edu.almacen.models.metric.DaoMetric;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,7 +24,8 @@ public class ServletArea extends HttpServlet {
     private String action;
     private String redirect = "/area/list-areas";
     private BeanArea area;
-    private String id, name, description, shortName, status;
+    private String id, name, description, shortName;
+    private boolean status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,21 +67,20 @@ public class ServletArea extends HttpServlet {
         switch (action){
             case "/area/delete":
                 id = request.getParameter("id");
-                if (new DaoArea().delete(Long.parseLong(id))){
-                    redirect = "/area/list-areas?result= " + true + "&message="
-                            + URLEncoder.encode("¡Éxito! Usuario eliminado correctamente",
-                            StandardCharsets.UTF_8);
+                // Cambiar el estado
+                if (new DaoArea().changeStatus(Long.parseLong(id))) {
+                    redirect = "/area/list-areas?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
                 } else {
-                    redirect = "/area/list-areas?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/area/list-areas?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
                 }
                 break;
             case "/area/save":
                 name = request.getParameter("name");
                 description = request.getParameter("description");
                 shortName = request.getParameter("shortName");
-                area = new BeanArea(0L, name, description, shortName, "active");
+                area = new BeanArea(0L, name, description, shortName, true);
                 boolean result = new DaoArea().save(area);
                 if (result) {
                     redirect = "/area/list-areas?result=" + true + "&message="
@@ -96,7 +97,7 @@ public class ServletArea extends HttpServlet {
                 name = request.getParameter("name");
                 description = request.getParameter("description");
                 shortName = request.getParameter("shortName");
-                status = request.getParameter("status");
+                status = Boolean.parseBoolean(request.getParameter("status"));
                 area = new BeanArea(Long.parseLong(id), name, description, shortName, status);
                 if (new DaoArea().update(area)){
                     redirect = "/area/list-areas?result=" + true + "&message="

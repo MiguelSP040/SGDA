@@ -32,7 +32,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
                 area.setName(rs.getString("name"));
                 area.setDescription(rs.getString("description"));
                 area.setShortName(rs.getString("shortName"));
-                area.setStatus(rs.getString("status"));
+                area.setStatus(rs.getBoolean("status"));
                 areas.add(area);
             }
         }catch (SQLException e){
@@ -56,7 +56,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
                 area.setName(rs.getString("name"));
                 area.setDescription(rs.getString("description"));
                 area.setShortName(rs.getString("shortName"));
-                area.setStatus(rs.getString("status"));
+                area.setStatus(rs.getBoolean("status"));
             }
             return area;
         }catch (SQLException e){
@@ -75,7 +75,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             ps.setString(3, object.getShortName());
-            ps.setString(4, object.getStatus());
+            ps.setBoolean(4, object.getStatus());
             return ps.executeUpdate() > 0;
         }catch (SQLException e) {
             Logger.getLogger(DaoArea.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -93,7 +93,7 @@ public class DaoArea implements DaoTemplate<BeanArea> {
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             ps.setString(3, object.getShortName());
-            ps.setString(4, object.getStatus());
+            ps.setBoolean(4, object.getStatus());
             ps.setLong(5, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
@@ -117,6 +117,20 @@ public class DaoArea implements DaoTemplate<BeanArea> {
             closeConnection();
         }
         return false;
+    }
+
+    public boolean changeStatus(Long areaId){
+        try {
+            String query = "UPDATE areas SET status = NOT status WHERE id_area = ?;";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, areaId);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            return false;
+        } finally {
+            closeConnection();
+        }
     }
 
     public void closeConnection(){

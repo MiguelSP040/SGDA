@@ -92,7 +92,7 @@ public class ServletUser extends HttpServlet {
                     phone = request.getParameter("phone");
                     email = request.getParameter("email");
                     password = request.getParameter("email");
-                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "user", true);
+                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "Administrador", true);
                     boolean result = new DaoUser().save(user);
                     if (result){
                         redirect = "/user/list-users?result=" + true + "&message=" +

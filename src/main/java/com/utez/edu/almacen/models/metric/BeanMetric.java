@@ -4,12 +4,12 @@ public class BeanMetric {
     private Long id;
     private String name;
     private String shortName;
-    private String status;
+    private Boolean status;
 
     public BeanMetric() {
     }
 
-    public BeanMetric(Long id, String name, String shortName, String status) {
+    public BeanMetric(Long id, String name, String shortName, boolean status) {
         this.id = id;
         this.name = name;
         this.shortName = shortName;
@@ -40,11 +40,11 @@ public class BeanMetric {
         this.shortName = shortName;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 }

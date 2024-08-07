@@ -31,7 +31,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
                 metric.setId(rs.getLong("id_metric"));
                 metric.setName(rs.getString("name"));
                 metric.setShortName(rs.getString("shortName"));
-                metric.setStatus(rs.getString("status"));
+                metric.setStatus(rs.getBoolean("status"));
                 metrics.add(metric);
             }
         }catch (SQLException e){
@@ -54,7 +54,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
                 metric.setId(rs.getLong("id_metric"));
                 metric.setName(rs.getString("name"));
                 metric.setShortName(rs.getString("shortName"));
-                metric.setStatus(rs.getString("status"));
+                metric.setStatus(rs.getBoolean("status"));
             }
             return metric;
         }catch (SQLException e){
@@ -72,7 +72,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getShortName());
-            ps.setString(3, object.getStatus());
+            ps.setBoolean(3, object.getStatus());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -89,7 +89,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getShortName());
-            ps.setString(3, object.getStatus());
+            ps.setBoolean(3, object.getStatus());
             ps.setLong(4, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
@@ -113,6 +113,20 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             closeConnection();
         }
         return false;
+    }
+
+    public boolean changeStatus(Long metricId){
+        try {
+            String query = "UPDATE metrics SET status = NOT status WHERE id_metric = ?;";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, metricId);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            return false;
+        } finally {
+            closeConnection();
+        }
     }
 
     public void closeConnection(){

@@ -12,12 +12,12 @@ public class BeanProvider {
     private String contactName;
     private String contactPhone;
     private String contactEmail;
-    private String status;
+    private Boolean status;
 
     public BeanProvider() {
     }
 
-    public BeanProvider(Long id, String name, String socialCase, String rfc, String postCode, String address, String phone, String email, String contactName, String contactPhone, String contactEmail, String status) {
+    public BeanProvider(Long id, String name, String socialCase, String rfc, String postCode, String address, String phone, String email, String contactName, String contactPhone, String contactEmail, boolean status) {
         this.id = id;
         this.name = name;
         this.socialCase = socialCase;
@@ -120,11 +120,11 @@ public class BeanProvider {
         this.contactEmail = contactEmail;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 }

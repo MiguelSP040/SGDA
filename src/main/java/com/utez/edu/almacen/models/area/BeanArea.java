@@ -5,12 +5,12 @@ public class BeanArea {
     private String name;
     private String description;
     private String shortName;
-    private String status;
+    private Boolean status;
 
     public BeanArea() {
     }
 
-    public BeanArea(Long id, String name, String description, String shortName, String status) {
+    public BeanArea(Long id, String name, String description, String shortName, boolean status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -50,11 +50,11 @@ public class BeanArea {
         this.shortName = shortName;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 }

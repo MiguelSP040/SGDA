@@ -39,7 +39,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
                 provider.setContactEmail(rs.getString("contactEmail"));
-                provider.setStatus(rs.getString("status"));
+                provider.setStatus(rs.getBoolean("status"));
                 providers.add(provider);
             }
         }catch (SQLException e){
@@ -70,7 +70,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 provider.setContactName(rs.getString("contactName"));
                 provider.setContactPhone(rs.getString("contactPhone"));
                 provider.setContactEmail(rs.getString("contactEmail"));
-                provider.setStatus(rs.getString("status"));
+                provider.setStatus(rs.getBoolean("status"));
             }
             return provider;
         }catch (SQLException e){
@@ -97,7 +97,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
             ps.setString(10, object.getContactEmail());
-            ps.setString(11, object.getStatus());
+            ps.setBoolean(11, true);
             return  ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
@@ -123,7 +123,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
             ps.setString(10, object.getContactEmail());
-            ps.setString(11, object.getStatus());
+            ps.setBoolean(11, object.getStatus());
             ps.setLong(12, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
@@ -147,6 +147,20 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             closeConnection();
         }
         return false;
+    }
+
+    public boolean changeStatus(Long providerId){
+        try {
+            String query = "UPDATE providers SET status = NOT status WHERE id_provider = ?;";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, providerId);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            return false;
+        } finally {
+            closeConnection();
+        }
     }
 
     public void closeConnection(){

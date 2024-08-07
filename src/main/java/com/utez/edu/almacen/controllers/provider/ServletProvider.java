@@ -2,6 +2,7 @@ package com.utez.edu.almacen.controllers.provider;
 
 import com.utez.edu.almacen.models.provider.BeanProvider;
 import com.utez.edu.almacen.models.provider.DaoProvider;
+import com.utez.edu.almacen.models.user.DaoUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,7 +25,8 @@ public class ServletProvider extends HttpServlet {
     private String action;
     private String redirect = "/provider/list-providers";
     private BeanProvider provider;
-    private String id, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status;
+    private String id, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail;
+    private boolean status;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -63,14 +65,13 @@ public class ServletProvider extends HttpServlet {
         switch (action){
             case "/provider/delete":
                 id = request.getParameter("id");
-                if (new DaoProvider().delete(Long.parseLong(id))){
-                    redirect = "/provider/list-providers?result= " + true + "&message="
-                            + URLEncoder.encode("¡Éxito! Usuario eliminado correctamente",
-                            StandardCharsets.UTF_8);
+                // Cambiar el estado
+                if (new DaoProvider().changeStatus(Long.parseLong(id))) {
+                    redirect = "/provider/list-providers?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
                 } else {
-                    redirect = "/provider/list-providers?result= " + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/provider/list-providers?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
                 }
                 break;
             case "/provider/save":
@@ -84,7 +85,7 @@ public class ServletProvider extends HttpServlet {
                 contactName = request.getParameter("contactName");
                 contactPhone = request.getParameter("contactPhone");
                 contactEmail = request.getParameter("contactEmail");
-                provider = new BeanProvider(0L, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, "active");
+                provider = new BeanProvider(0L, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, true);
                 boolean result = new DaoProvider().save(provider);
                 if (result) {
                     redirect = "/provider/list-providers?result=" + true + "&message="
@@ -106,7 +107,7 @@ public class ServletProvider extends HttpServlet {
                 contactName = request.getParameter("contactName");
                 contactPhone = request.getParameter("contactPhone");
                 contactEmail = request.getParameter("contactEmail");
-                status = request.getParameter("status");
+                status = Boolean.parseBoolean(request.getParameter("status"));
                 provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status);
                 if (new DaoProvider().update(provider)){
                     redirect = "/provider/list-providers?result=" + true + "&message="
