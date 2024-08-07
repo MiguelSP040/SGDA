@@ -75,7 +75,7 @@
                             </div>
                             <!-- Botón -->
                             <div class="d-flex justify-content-center my-4">
-                                <button type="submit" class="btn botonLogin btn-primary" id="botonLogin">
+                                <button type="submit" class="btn botonLogin btn-primary" id="botonLogin" onclick="handleLogin()">
                                     Iniciar sesión
                                 </button>
                             </div>
