@@ -182,7 +182,7 @@
                             <td>
                                 <h4>
                                    <span class="badge badge-pill <c:out value="${area.status == true ? 'statusGreen' : 'statusRed'}"/>">
-                                    <c:out value="${area.status}"/>
+                                    <c:out value="${area.status == true ? 'Activo' : 'Inactivo'}"/>
                                     </span>
                                 </h4>
                             </td>

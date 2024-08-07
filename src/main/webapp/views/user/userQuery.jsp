@@ -254,7 +254,7 @@
                             <td>
                                 <h4>
                                     <span class="badge badge-pill <c:out value="${user.status == true ? 'statusGreen' : 'statusRed'}"/>">
-                                    <c:out value="${user.status}"/>
+                                    <c:out value="${user.status == true ? 'Activo' : 'Inactivo'}"/>
                                     </span>
                                 </h4>
                             </td>

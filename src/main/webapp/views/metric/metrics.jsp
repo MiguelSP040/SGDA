@@ -173,7 +173,7 @@
                                 <td>
                                     <h4>
                                         <span class="badge badge-pill <c:out value="${metric.status == true ? 'statusGreen' : 'statusRed'}"/>">
-                                        <c:out value="${metric.status}"/>
+                                        <c:out value="${metric.status == true ? 'Activo' : 'Inactivo'}"/>
                                     </span>
                                     </h4>
                                 </td>
