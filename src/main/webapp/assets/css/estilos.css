@@ -240,17 +240,13 @@ input, select{
     max-width: 100rem;
 }
 
-#tituloContactoExterno {
-    display: fixed;
-}
-
 #formularioContacto {
     padding-left: 20%;
 }
 
 #anadirContacto {
     display: block;
-    padding: 3% 0% 0% 0%;
+    padding: 3%;
     border-top: 1px solid #cecccc;
 }
 
@@ -280,17 +276,16 @@ input, select{
     margin-top: 8%;
     background-color: #f3f3f3;
     color: black;
-    padding: 0%;
 }
 
 #containerRecoverPass {
     width: 800px;
     height: 400px;
-    margin: 15% 0% 15% 0%;
+    margin: 15% 0 15% 0;
 }
 
 .datosProveedor {
-    padding: 0% 0% 0% 0%;
+    padding: 0 0 0 0;
 }
 
 

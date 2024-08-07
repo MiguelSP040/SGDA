@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class MySQLConnection {
-    final String DBNAME = "almacen4",
+    final String DBNAME = "almacen7",
             USER = "root", PASSWORD = "root",
             TIMEZONE = "America/Mexico_City",
             USESSL = "false", PUBLICKEY = "true",
