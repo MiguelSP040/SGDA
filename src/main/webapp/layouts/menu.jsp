@@ -24,8 +24,9 @@
 </div>
 
 <!--SideBar Cerrado-->
-<div id="sidebarCerrado" class="d-flex flex-column h-100">
-    <div class="pt-5 mt-4" >
+<div id="sidebarCerrado" class="d-flex flex-column h-100 position-fixed" style="z-index: 1000;">
+    <div class="mt-2">
+    <div class="pt-5 mt-4">
     <!--Consulta de Stock-->
     <a class="toggle-menu">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house"
@@ -78,6 +79,7 @@
             <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
         </svg>
     </a>
+    </div>
         <div class="text-center mb-3">
             <!--Icono Usuario Logeado-->
             <a class="position-absolute w-100 bottom-0 mb-1">
@@ -92,7 +94,7 @@
 </div>
 
 <!--sidebarAbierto*-->
-<div id="sidebarAbierto" class="flex-column h-100">
+<div id="sidebarAbierto" class="flex-column h-100 position-fixed" style="z-index: 1000;">
     <div class="pt-5 mt-4">
     <!--Stock-->
     <a href="<%=context%>/views/product/checkStock.jsp">

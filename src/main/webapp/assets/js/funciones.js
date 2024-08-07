@@ -493,11 +493,6 @@ function handleLogin() {
         boxClosed.classList.add("fade-out");
         boxOpen.style.display = "block";
         boxOpen.classList.add("fade-in");
-
-        setTimeout(function() {
-            window.location.href = "/checkStock.html";
-        }, 1500);
-
     }
 }
 
