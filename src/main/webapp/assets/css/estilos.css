@@ -280,7 +280,6 @@ input, select{
     margin-top: 8%;
     background-color: #f3f3f3;
     color: black;
-    padding: 0%;
 }
 
 #containerRecoverPass {
@@ -429,6 +428,83 @@ input, select{
         font-size: 16px;
         padding: 8px 12px;
     }
+/* ///////////////////////////////////////////////////////////// */
+/* Media Queries for Responsiveness */
+
+/* Adjustments for tablets and smaller screens
+@media (max-width: 768px) {
+    #barraNavegacion {
+        height: 7%;
+        font-size: 100%;
+        /*display: fixed;
+        font-weight: 500;
+        font-size: 24px;
+        border-bottom: 1px solid #A59B92;
+        background-color: #4E6166;
+        color: #FFFFFF;
+        user-select: none;
+    }
+
+    #sidebarCerrado {
+        width: 5%;
+    }
+
+    #sidebarAbierto {
+        width: 25%;
+    }
+
+    .toggle-btn {
+        font-size: 18px;
+        top: 15px;
+        left: 15px;
+    }
+
+    #formularioContacto, #dataRegister {
+        padding-left: 10%;
+    }
+
+    #userLogged {
+        bottom: 50px;
+    }
+}
+
+/* Adjustments for mobile screens
+@media (max-width: 480px) {
+    #sidebarCerrado {
+        width: 10%;
+    }
+
+    #sidebarAbierto {
+        width: 50%;
+    }
+
+    .toggle-btn {
+        font-size: 16px;
+        top: 10px;
+        left: 10px;
+    }
+
+    #sidebarAbierto a {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    .contenidoTotal {
+        margin: 5% 2% 0 2%;
+        padding: 2.5%;
+    }
+
+    #dataRegister {
+        padding-left: 5%;
+    }
+
+    #containerRecoverPass {
+        width: 100%;
+        height: auto;
+        margin: 5% 0;
+    }
+}
+*/
 
     .contenidoTotal {
         margin: 5% 2% 0 2%;
