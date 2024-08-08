@@ -168,6 +168,83 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         return false;
     }
 
+    public List<BeanUser> search(String name, String role, String email, String status){
+        List<BeanUser> users = new ArrayList<>();
+        int count = 1;
+        try {
+            Boolean status2 = false;
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                if (status.equals("Activo")){
+                    status2 = true;
+                } else if (status.equals("Inactivo")){
+                    status2 = false;
+                }
+            }
+            conn = new MySQLConnection().getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM users WHERE 1=1");
+
+            if (name != null && !name.isEmpty()) {
+                query.append(" AND (name LIKE ? OR surname LIKE ? OR lastname LIKE ?)");
+            }
+            if (role != null && (role.equals("Almacenista") || role.equals("Administrador"))) {
+                query.append(" AND role = ?");
+            }
+            if (email != null && !email.isEmpty()) {
+                query.append(" AND email LIKE ?");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                query.append(" AND status = ?");
+            }else {
+                query.append(" AND (status = ? OR status = ?)");
+            }
+
+
+
+            ps = conn.prepareStatement(query.toString());
+
+            if (name != null && !name.isEmpty()) {
+                ps.setString(count++, "%" + name + "%");
+                ps.setString(count++, "%" + name + "%");
+                ps.setString(count++, "%" + name + "%");
+            }
+            if (role != null && (role.equals("Almacenista") || role.equals("Administrador"))) {
+                ps.setString(count++, role);
+            }
+            if (email != null && !email.isEmpty()) {
+                ps.setString(count++, "%" + email + "%");
+            }
+
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                ps.setBoolean(count++, status2);
+            }else {
+                ps.setBoolean(count++, true);
+                ps.setBoolean(count++, false);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanUser user = new BeanUser();
+                user.setId(rs.getLong(1));
+                user.setName(rs.getString(2));
+                user.setSurname(rs.getString(3));
+                user.setLastname(rs.getString(4));
+                user.setPhone(rs.getString(5));
+                user.setEmail(rs.getString(6));
+                user.setPassword(rs.getString(7));
+                user.setRole(rs.getString(8));
+                user.setStatus(rs.getBoolean(9));
+
+                users.add(user);
+            }
+        }catch(SQLException e){
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function search failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return users;
+    }
+
     public void closeConnection() {
         try {
             if (rs != null) rs.close();

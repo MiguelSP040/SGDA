@@ -58,6 +58,19 @@ public class ServletUser extends HttpServlet {
                                     URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
                         }
                         break;
+            case "/user/search":
+                name = request.getParameter("name");
+                surname = request.getParameter("name");
+                lastname = request.getParameter("name");
+                role = request.getParameter("role");
+                email = request.getParameter("email");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchEmail", email);
+                users = new DaoUser().search(name, role, email, status2);
+                request.setAttribute("users", users);
+
+                break;
 
             default:
                 System.out.println(action);

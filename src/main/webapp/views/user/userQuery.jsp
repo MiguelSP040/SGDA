@@ -172,7 +172,7 @@
 
             <!--FILTRO DE BUSQUEDA DE PRODUCTO-->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/user/search" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">Nombre completo</div>
                         <div class="col-3">Rol</div>
@@ -184,43 +184,43 @@
                     <div class="row d-flex justify-content-center">
                         <!--Nombre Completo-->
                         <div class="col-3">
-                            <input id="nombreCompleto" type="text" class="form-control" placeholder="Nombre(s) Apellidos">
+                            <input id="nombreCompleto" name="name" type="text" class="form-control" placeholder="Nombre(s) Apellidos">
                         </div>
                         <!--Rol-->
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar opción">
+                            <select class="form-select" name="role" aria-label="Seleccionar opción">
                                 <option disabled selected value>
                                     Seleccionar opción
                                 </option>
-                                <option value="admin">Administrador</option>
-                                <option value="user">Almacenista</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Almacenista">Almacenista</option>
                             </select>
                         </div>
                         <!--Correo Electrónico-->
                         <div class="col-3">
-                            <input  type="text" class="form-control"
+                            <input  type="text" name="email" class="form-control"
                                     placeholder="alguien@example.com">
                         </div>
                         <!--Estado-->
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar opción">
+                            <select class="form-select" name="status" aria-label="Seleccionar opción">
                                 <option disabled selected value>
                                     Seleccionar opción
                                 </option>
-                                <option value="1">Activo</option>
-                                <option value="2">Inactivo</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
 
                         <!--Botones -->
                         <div class="grid gap-2 d-flex justify-content-end mt-5">
                             <!-- Botón Buscar -->
-                            <button class="btn botonCafe mb-3" onsubmit="search()">
+                            <button type="submit" class="btn botonCafe mb-3">
                                 Buscar
                             </button>
 
                             <!-- Botón Limpiar -->
-                            <button class="btn botonGris btn-light mb-3" onclick="reset()">
+                            <button type="reset" class="btn botonGris btn-light mb-3">
                                 Limpiar
                             </button>
                         </div>
