@@ -68,7 +68,7 @@ public class ServletProvider extends HttpServlet {
                 // Cambiar el estado
                 if (new DaoProvider().changeStatus(Long.parseLong(id))) {
                     redirect = "/provider/list-providers?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡Estado del proveedor cambiado con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/provider/list-providers?result=" + false + "&message=" +
                             URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
@@ -88,11 +88,11 @@ public class ServletProvider extends HttpServlet {
                 provider = new BeanProvider(0L, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, true);
                 boolean result = new DaoProvider().save(provider);
                 if (result) {
-                    redirect = "/provider/list-providers?result=" + true + "&message="
-                            + URLEncoder.encode("Éxito!", StandardCharsets.UTF_8);
+                    redirect = "/provider/list-providers?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Proveedor registrado con éxito!", StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/provider/list-providers?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error!", StandardCharsets.UTF_8);
+                    redirect = "/provider/list-providers?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al crear el registro de este proveedor!", StandardCharsets.UTF_8);
                 }
                 break;
             case "/provider/update":
@@ -110,13 +110,11 @@ public class ServletProvider extends HttpServlet {
                 status = Boolean.parseBoolean(request.getParameter("status"));
                 provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status);
                 if (new DaoProvider().update(provider)){
-                    redirect = "/provider/list-providers?result=" + true + "&message="
-                            + URLEncoder.encode("Éxito! Usuario actualizado correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/provider/list-providers?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Modificación al proveedor realizada con éxito!", StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/provider/list-providers?result= " + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/provider/list-providers?result= " + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al modificar este proveedor!", StandardCharsets.UTF_8);
                 }
                 break;
         }
