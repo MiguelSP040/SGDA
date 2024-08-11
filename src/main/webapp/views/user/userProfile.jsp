@@ -183,10 +183,8 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe"
-                                            onclick="registerUser('updateUserForm')">Registrar</button>
-                                    <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn botonCafe" onclick="updateUser()">Registrar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 </div>
                             </form>
                         </div>

@@ -102,10 +102,10 @@
                                     <input type="text" class="form-control mb-4" name="shortName" id="shortName" required>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe">
+                                    <button type="submit" class="btn botonCafe" onclick="registerMetrics(event)">
                                         Registrar
                                     </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         Cancelar
                                     </button>
                                 </div>
@@ -136,10 +136,10 @@
                                     <input type="text" class="form-control mb-4" name="shortName" id="shortName" required>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe" onclick="updateMetrics()">
+                                    <button type="submit" class="btn botonCafe" onclick="updateMetrics(event)">
                                         Modificar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         Cancelar
                                     </button>
                                 </div>
@@ -222,63 +222,170 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../assets/js/funciones.js"></script>
 <script>
-    // Función para mostrar la alerta
-    function changeSuccess(message) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Hecho!',
-            text: message,
-            showConfirmButton: true,
-            focusConfirm: false,
-            confirmButtonText: `<span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                                </svg>
-                                </span> ¡Genial!`,
-            confirmButtonAriaLabel: "Thumbs up, great!",
-            timer: 2000,
-            timerProgressBar: true,
-            customClass: {
-                confirmButton: 'btn botonCafe',
-                popup: 'no-select-popup'
-            }
-        });
-    }
-
-    function changeError(message) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: message,
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
-            customClass: {
-                confirmButton: 'btn botonCafe',
-                cancelButton: 'btn botonGris',
-                popup: 'no-select-popup'
-            }
-        });
-    }
-
     // Obtener parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const result = urlParams.get('result');
     const message = urlParams.get('message');
+    // Función de validación del formulario
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        const cancelButton = document.querySelector('button[data-bs-dismiss="modal"]');
+        let isValid = true;
 
-    // Mostrar la alerta en función del resultado
+        if (cancelButton && cancelButton.matches(':focus')) {
+            // Si el botón de cancelar está enfocado, quitamos el estado 'was-validated'
+            form.classList.remove('was-validated');
+        }
+
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.required && (input.tagName === 'SELECT' && input.value === '' || !input.value.trim())) {
+                isValid = false;
+                form.classList.add('was-validated');
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+
+    // Función para mostrar alerta de éxito
+    function changeSuccess(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'success',
+            title: '¡Hecho!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar alerta de error
+    function changeError(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'error',
+            title: '¡Error!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar confirmación antes de enviar el formulario
+    function showMetricConfirmation(message, form) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Cuidado!',
+            text: message,
+            showCancelButton: true,
+            cancelButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                      <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591"/>
+                                    </svg>
+                                </span> Cancelar.`,
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Sí, registrar.`,
+            footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
+            reverseButtons: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            stopKeydownPropagation: true,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Envía el formulario si se confirma
+            }
+        });
+    }
+
+    // Mostrar alerta en función del resultado
     if (result === 'true') {
         changeSuccess(decodeURIComponent(message));
     } else if (result === 'false') {
         changeError(decodeURIComponent(message));
     }
+
+    // Función para manejar el registro de area de destino
+    function registerMetrics(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const form = document.getElementById('registerMetricsForm');
+        if (validateForm('registerMetricsForm')) { // Asegúrate de usar el ID correcto
+            showMetricConfirmation("¿Estás seguro de que deseas registrar esta unidad de medida?",form);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campos incompletos',
+                text: 'Por favor llena todos los campos obligatorios del formulario.',
+                confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido.`,
+                footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn botonCafe',
+                    cancelButton: 'btn botonGris',
+                    popup: 'no-select-popup'
+                }
+            });
+        }
+    }
+
+    // Función para manejar la actualización de area de destino
+    function updateMetrics(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const form = document.getElementById('updateMetricForm');
+        if (validateForm('updateMetricForm')) {
+            showMetricConfirmation("¿Estás seguro de que deseas actualizar esta unidad de medida?",form);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campos incompletos',
+                text: 'Por favor llena todos los campos obligatorios del formulario.',
+                confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido.`,
+                footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn botonCafe',
+                    cancelButton: 'btn botonGris',
+                    popup: 'no-select-popup'
+                }
+            });
+        }
+    }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../../assets/js/funciones.js"></script>
-<script src="../../assets/js/alerts.js"></script>
-
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>

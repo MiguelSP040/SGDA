@@ -122,7 +122,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             ps.setLong(1, metricId);
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
             return false;
         } finally {
             closeConnection();

@@ -71,7 +71,7 @@ const duplicatedData = (message) => {
     });
 }
 
-
+/*
 // Función para registrar un proveedor y contacto
 const showSupplierConfirmation = async () => {
     const result = await Swal.fire({
@@ -108,8 +108,8 @@ const showSupplierConfirmation = async () => {
         reset()
         // Enviar el formulario o realizar el registro
     }
-}
-
+}*/
+/*
 // Función para registrar un area de destino
 const showAreaConfirmation = async () => {
     const result = await Swal.fire({
@@ -144,7 +144,8 @@ const showAreaConfirmation = async () => {
         // Enviar el formulario o realizar el registro
     }
 }
-
+*/
+/*
 // Función para registrar una unidad de medida
 const showMetricConfirmation = async () => {
     const result = await Swal.fire({
@@ -180,7 +181,7 @@ const showMetricConfirmation = async () => {
         reset()
         // Enviar el formulario o realizar el registro
     }
-}
+}*/
 
 // Función para registrar un movimiento de entrada
 const showEntryConfirmation = async () => {
@@ -293,7 +294,7 @@ const showUserConfirmation = async () => {
             // Enviar el formulario o realizar el registro
         }
 }
-
+/*
 // Función para registrar producto
 const showProductConfirmation = async () => {
         const result = await Swal.fire({
@@ -331,7 +332,7 @@ const showProductConfirmation = async () => {
             // Enviar el formulario o realizar el registro
         }
 }
-
+*/
 
 
 

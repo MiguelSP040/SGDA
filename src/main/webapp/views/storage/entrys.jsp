@@ -99,7 +99,7 @@
                                         <thead class="thead-dark">
                                         <tr>
                                             <th scope="col" style="width: 3%" class="tableTitle">#</th>
-                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="id_product">Producto*</label></th>
+                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="id">Producto*</label></th>
                                             <th scope="col" style="width: 13%" class="tableTitle"><label for="id_metric">Medida*</label></th>
                                             <th scope="col" style="width: 15%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="quantity">Cantidad*</label></th>
@@ -111,7 +111,7 @@
                                             <tr>
                                                 <th scope="row">1</th>
                                                 <td>
-                                                    <select class="form-select" name="id_product" id="id_product" required>
+                                                    <select class="form-select" name="id" id="id" required>
                                                         <option value="" disabled selected>Seleccionar un producto</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -244,8 +244,8 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="id_product" class="form-label">Productos*</label>
-                                        <select class="form-select" aria-label="Default select example" name="id_product" id="id_product" required>
+                                        <label for="id" class="form-label">Productos*</label>
+                                        <select class="form-select" aria-label="Default select example" name="id" id="id" required>
                                             <option value="" disabled selected>Seleccionar un producto</option>
                                             <option value="1">One</option>
                                             <option value="2">Two</option>
@@ -377,7 +377,7 @@
                                 <td><c:out value="${entry.changeDate}"/></td>
                                 <td><c:out value="${entry.folioNumber}"/></td>
                                 <td><c:out value="${entry.invoiceNumber}"/></td>
-                                <td><c:out value="${entry.id_product}"/></td>
+                                <td><c:out value="${entry.id}"/></td>
                                 <td><c:out value="${entry.quantity}"/></td>
                                 <td><c:out value="${entry.total_price}"/></td>
                                 <td><c:out value="${entry.id_provider}"/></td>

@@ -75,7 +75,11 @@
                             </div>
                             <!-- Botón -->
                             <div class="d-flex justify-content-center my-4">
-                                <button type="submit" class="btn botonLogin btn-primary" id="botonLogin" onclick="handleLogin()">
+                                <button type="submit" class="btn botonLogin btn-primary" id="botonLogin" onclick="handleLogin(event)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
+                                        <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                                        <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"/>
+                                    </svg>
                                     Iniciar sesión
                                 </button>
                             </div>
@@ -102,6 +106,46 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/assets/js/funciones.js"></script>
+<script>
+    // BOTÓN DE LOGIN EN login.html
+    // Función para validar campos vacíos y redirigir al usuario en el login
+    function handleLogin(event) {
+        'use strict';
+        event.preventDefault(); // Evitar el envío inmediato del formulario
+
+        var email = document.getElementById("email");
+        var password = document.getElementById("password");
+        var isValid = true;
+
+        if (!email.value || !password.value) {
+            var boxClosed = document.getElementById("boxClosed");
+            boxClosed.classList.add("fade-out");
+            boxClosed.style.display = "block";
+            boxClosed.classList.add("fade-in");
+            email.classList.add("is-invalid");
+            password.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            email.classList.remove("is-invalid");
+            password.classList.remove("is-invalid");
+        }
+        if (isValid) {
+            var boxClosed = document.getElementById("boxClosed");
+            var boxOpen = document.getElementById("boxOpen");
+
+            boxClosed.style.display = "none";
+            boxClosed.classList.add("fade-out");
+            boxOpen.style.display = "block";
+            boxOpen.classList.add("fade-in");
+
+            // Esperar 2 segundos antes de enviar el formulario
+            setTimeout(function() {
+                document.querySelector("form").submit(); // Enviar el formulario después de un ligero retraso
+            }, 1000); // 1000 ms = 1 segundo
+        }
+    }
+
+</script>
 <jsp:include page="/layouts/footer.jsp"/>
 </body>
 </html>
