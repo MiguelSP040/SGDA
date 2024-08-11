@@ -18,6 +18,8 @@
 <head>
     <title>Productos</title>
     <link href="../../assets/css/estilos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
@@ -39,10 +41,8 @@
                         data-bs-target="#newProduct">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-cart-plus" viewBox="0 0 16 16">
-                        <path
-                                d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
-                        <path
-                                d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
+                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                     </svg> Nuevo Producto
                 </button>
             </div>
@@ -93,10 +93,10 @@
                                               required></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe" onclick="registerProduct()">
+                                    <button type="submit" class="btn botonCafe">
                                         Registrar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
                                         Cancelar
                                     </button>
                                 </div>
@@ -286,12 +286,16 @@
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                 </svg>
                             </button>
-                            <button onclick="deleteProduct()" class="btn botonRojo" id="# ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                     fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                                </svg>
-                            </button>
+                            <form action="${pageContext.request.contextPath}/product/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="${product.id}"/>
+                                <button type="submit" class="btn btn-lg botonRojo">
+                                    <svg class="bi bi-pencil-square" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
+                                    </svg>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     </tbody>
@@ -316,8 +320,58 @@
         </div>
     </div>
 </div>
-</div>
 
+<script>
+    // Función para mostrar la alerta
+    function changeSuccess(message) {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Hecho!',
+            text: message,
+            showConfirmButton: true,
+            focusConfirm: false,
+            confirmButtonText: `<span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                </svg>
+                                </span> ¡Genial!`,
+            confirmButtonAriaLabel: "Thumbs up, great!",
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                popup: 'no-select-popup'
+            }
+        });
+    }
+
+    function changeError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup'
+            }
+        });
+    }
+
+    // Obtener parámetros de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const result = urlParams.get('result');
+    const message = urlParams.get('message');
+
+    // Mostrar la alerta en función del resultado
+    if (result === 'true') {
+        changeSuccess(decodeURIComponent(message));
+    } else if (result === 'false') {
+        changeError(decodeURIComponent(message));
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/funciones.js"></script>

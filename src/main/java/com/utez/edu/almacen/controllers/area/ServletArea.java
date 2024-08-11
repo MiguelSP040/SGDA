@@ -70,7 +70,7 @@ public class ServletArea extends HttpServlet {
                 // Cambiar el estado
                 if (new DaoArea().changeStatus(Long.parseLong(id))) {
                     redirect = "/area/list-areas?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡Estado del área cambiado con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/area/list-areas?result=" + false + "&message=" +
                             URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
@@ -83,13 +83,11 @@ public class ServletArea extends HttpServlet {
                 area = new BeanArea(0L, name, description, shortName, true);
                 boolean result = new DaoArea().save(area);
                 if (result) {
-                    redirect = "/area/list-areas?result=" + true + "&message="
-                            + URLEncoder.encode("Éxito! Usuario registrado correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/area/list-areas?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Área registrada con éxito!", StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/area/list-areas?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/area/list-areas?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al crear el registro de esta área!", StandardCharsets.UTF_8);
                 }
                 break;
             case "/area/update":
@@ -100,13 +98,11 @@ public class ServletArea extends HttpServlet {
                 status = Boolean.parseBoolean(request.getParameter("status"));
                 area = new BeanArea(Long.parseLong(id), name, description, shortName, status);
                 if (new DaoArea().update(area)){
-                    redirect = "/area/list-areas?result=" + true + "&message="
-                            + URLEncoder.encode("Éxito! Usuario actualizado correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/area/list-areas?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Modificación al área realizada con éxito!", StandardCharsets.UTF_8);
                 }else {
-                    redirect = "/area/list-areas?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
+                    redirect = "/area/list-areas?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al modificar esta área!", StandardCharsets.UTF_8);
                 }
                 break;
         }

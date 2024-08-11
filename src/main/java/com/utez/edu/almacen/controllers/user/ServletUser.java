@@ -40,8 +40,36 @@ public class ServletUser extends HttpServlet {
                 request.setAttribute("users", users);
                 redirect = "/views/user/userQuery.jsp";
                 break;
-            case "/user/update":
-                request.getRequestDispatcher(redirect).forward(request, response);
+
+            case "/user/register":
+                redirect = "/views/user/userRegistration.jsp";
+                break;
+
+            case "/user/update-view":
+                id = request.getParameter("id");
+                user = new DaoUser().listOne((id != null) ? (Long.parseLong(id)) : (0));
+                if (user != null){
+                    request.setAttribute("user", user);
+                    redirect = "/user/list-users";
+                }else {
+                    redirect = "/user/list-users?result= " + false + "&message=" +
+                            URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
+                }
+                break;
+            case "/user/search":
+                name = request.getParameter("name");
+                surname = request.getParameter("name");
+                lastname = request.getParameter("name");
+                role = request.getParameter("role");
+                email = request.getParameter("email");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchEmail", email);
+                users = new DaoUser().search(name, role, email, status2);
+                request.setAttribute("users", users);
+
+                break;
+
             default:
                 System.out.println(action);
         }
@@ -60,7 +88,7 @@ public class ServletUser extends HttpServlet {
                 // Cambiar el estado
                 if (new DaoUser().changeStatus(Long.parseLong(id))) {
                     redirect = "/user/list-users?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Estado cambiado con éxito!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡Estado del usuario cambiado con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/user/list-users?result=" + false + "&message=" +
                             URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
@@ -68,43 +96,43 @@ public class ServletUser extends HttpServlet {
                 break;
 
             case "/user/save":
-                name = request.getParameter("name");
-                surname = request.getParameter("surname");
-                lastname = request.getParameter("lastname");
-                phone = request.getParameter("phone");
-                email = request.getParameter("email");
-                password = request.getParameter("email");
-                user = new BeanUser(0L, name, surname, lastname, phone, email, password, "Administrador", true);
-                boolean result = new DaoUser().save(user);
-                if (result) {
-                    redirect = "/user/list-users?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Exito!", StandardCharsets.UTF_8);
-                } else {
-                    redirect = "/user/list-users?result=" + false + "&message=" +
-                            URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
-                }
-                break;
+                    name = request.getParameter("name");
+                    surname = request.getParameter("surname");
+                    lastname = request.getParameter("lastname");
+                    phone = request.getParameter("phone");
+                    email = request.getParameter("email");
+                    password = request.getParameter("email");
+                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "Administrador", true);
+                    boolean result = new DaoUser().save(user);
+                    if (result){
+                        redirect = "/user/list-users?result=" + true + "&message=" +
+                                URLEncoder.encode("¡Usuario registrado con éxito!", StandardCharsets.UTF_8);
+                    }else {
+                        redirect = "/user/list-users?result=" + false + "&message=" +
+                                URLEncoder.encode("¡ERROR al crear el registro de este usuario!", StandardCharsets.UTF_8);
+                    }
+                    break;
 
-            case "/user/update":
-                id = request.getParameter("id");
-                name = request.getParameter("name");
-                surname = request.getParameter("surname");
-                lastname = request.getParameter("lastname");
-                phone = request.getParameter("phone");
-                email = request.getParameter("email");
-                password = request.getParameter("password");
-                role = request.getParameter("role");
-                status = Boolean.parseBoolean(request.getParameter("status"));
-                user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
-                        password, role, status);
-                if (new DaoUser().update(user)) {
-                    redirect = "/user/list-users?result= " + true + "&message=" +
-                            URLEncoder.encode("¡Exito!", StandardCharsets.UTF_8);
-                } else {
-                    redirect = "/user/list-users?result= " + false + "&message=" +
-                            URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
-                }
-                break;
+                    case "/user/update":
+                        id = request.getParameter("id");
+                        name = request.getParameter("name");
+                        surname = request.getParameter("surname");
+                        lastname = request.getParameter("lastname");
+                        phone = request.getParameter("phone");
+                        email = request.getParameter("email");
+                        password = request.getParameter("password");
+                        role = request.getParameter("role");
+                        status = Boolean.parseBoolean(request.getParameter("status"));
+                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
+                                password, role, status);
+                        if (new DaoUser().update(user)){
+                            redirect = "/user/list-users?result= " + true + "&message=" +
+                                    URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
+                        }else {
+                            redirect = "/user/list-users?result= " + false + "&message=" +
+                                    URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
+                        }
+                        break;
         }
         response.sendRedirect(request.getContextPath() + redirect);
     }
