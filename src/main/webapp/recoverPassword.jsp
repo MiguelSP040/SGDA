@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: migue
-  Date: 01/08/2024
-  Time: 11:56 p. m.
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -15,17 +8,18 @@
     <style>
         body {
             background-image: url('/assets/img/loginBG.jpg');
-            background-size: cover; /* Ajusta el tamaño de la imagen */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: center; /* Centra la imagen en la página */
-            background-attachment: fixed; /* Fija la imagen de fondo */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 </head>
 <body>
 <section>
     <div class="container">
-        <!-- Sección Banner -->
         <div id="barraNavegacion" class="fixed-top text-light d-flex">
             <nav class="container-fluid navbar navbar-expand-lg navbar-light p-0">
                 <div class="row w-100 align-items-center">
@@ -38,19 +32,15 @@
             </nav>
         </div>
 
-        <!-- Contenedor Principal -->
         <div class="container d-flex justify-content-center align-items-center min-vh-100">
-            <!-- Fila para centrar horizontalmente -->
             <div class="row justify-content-center w-100">
-                <!-- Columna que define el ancho del card -->
                 <div class="col-md-8 col-lg-6">
-                    <!-- Card -->
                     <div class="card shadow-lg mb-5">
                         <div class="card-body">
                             <h5 class="card-header h3 text-black mb-5">
                                 Restablecer contraseña
                             </h5>
-                            <form id="recoverPasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="">
+                            <form id="recoverPasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="resetPassword">
                                 <div class="mb-5 text-center">
                                     <label class="mb-4" for="email">
                                         Introduzca su correo electrónico registrado y le enviaremos un mensaje con instrucciones para restablecer su contraseña. Recuerda revisar la bandeja de SPAM.
@@ -61,18 +51,16 @@
                                     </div>
                                 </div>
 
-                                <!-- Botones -->
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <!-- Regresa a Vista Login -->
                                     <button type="button" class="btn botonGris btn-outline-secondary me-md-2" onclick="redirectToLogin()">
                                         Cancelar
                                     </button>
-                                    <!-- Envia correo para obtener un código de verificación -->
-                                    <button type="button" class="btn botonCafe me-md-2" onclick="sendEmail()">
+                                    <button type="submit" class="btn botonCafe me-md-2">
                                         Enviar correo
                                     </button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -80,6 +68,34 @@
         </div>
     </div>
 </section>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#recoverPasswordForm").validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                email: {
+                    required: "Por favor, ingrese su correo electrónico",
+                    email: "Por favor, ingrese una dirección de correo electrónico válida"
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                error.insertAfter(element);
+            }
+        });
+    });
+
+    function redirectToLogin() {
+        window.location.href = '/login'; // Ajusta la URL según la ruta de tu página de inicio de sesión
+    }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/assets/js/funciones.js"></script>
 <jsp:include page="/layouts/footer.jsp"/>

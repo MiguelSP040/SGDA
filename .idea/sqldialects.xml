@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$USER_HOME$/Descargas/almacen7.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/utez/edu/almacen/models/user/DaoUser.java" dialect="GenericSQL" />
+  </component>
+</project>
