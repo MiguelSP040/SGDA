@@ -1,3 +1,6 @@
+<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%--
   Created by IntelliJ IDEA.
   User: PC
@@ -13,6 +16,7 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
+    List<BeanMetric> metrics = new DaoMetric().listAll();
 %>
 <html>
 <head>
@@ -79,11 +83,12 @@
                                 <div class="mb-3">
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
                                     <select class="form-select" name="id_metric" id="id_metric" required>
-                                        <option value="" disabled selected>Seleccionar una medida</option>
-                                            <option value="HJS">HJS</option>
-                                        <c:forEach var="metric" items="${metrics}">
-                                            <option value="${metric.code}">${metric.shortName}</option>
-                                        </c:forEach>
+                                        <option disabled selected value>Seleccionar opción</option>
+                                        <% for (BeanMetric m : metrics) { %>
+                                        <% if (m.getStatus()) { %>
+                                        <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                        <% } %>
+                                        <% } %>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -126,11 +131,13 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
-                                    <select class="form-select" name="id_metric" id="id_metric">
-                                        <option value="" disabled selected>Seleccionar una medida</option>
-                                        <c:forEach var="metric" items="${metrics}">
-                                            <option value="${metric.code}">${metric.shortName}</option>
-                                        </c:forEach>
+                                    <select class="form-select" name="id_metric" id="id_metric" required>
+                                        <option disabled selected value>Seleccionar opción</option>
+                                        <% for (BeanMetric m : metrics) { %>
+                                        <% if (m.getStatus()) { %>
+                                        <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                        <% } %>
+                                        <% } %>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -153,41 +160,54 @@
 
             <!--FILTRO DE BUSQUEDA DE PRODUCTO-->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/product/search" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">Nombre del producto</div>
                         <div class="col-3">Clave del producto</div>
                         <div class="col-3">Unidad de medida</div>
+                        <div class="col-3">Estado</div>
                     </div>
 
                     <!--Clave del producto-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar opción">
-                                <option disabled selected value>Seleccionar
-                                    opción</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <input id="nombreProducto" type="text" class="form-control" name="name" placeholder="Nombre del Producto">
                         </div>
                         <div class="col-3">
-                            <input id="claveProducto" type="text" class="form-control" placeholder="E2024XXXX">
+                            <input id="claveProducto" type="text" class="form-control" name="code" placeholder="Acrónimo">
                         </div>
                         <!--Unidad de medida-->
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar una opción">
-                                <option disabled selected value>Seleccionar una opción</option>
-                                <c:forEach var="metric" items="${metrics}">
-                                    <option value="${metric.code}">${metric.shortName}</option>
-                                </c:forEach>
+                            <select class="form-select" name="id_metric" id="id_metric">
+                                <option disabled selected value>Seleccionar opción</option>
+                                <% for (BeanMetric m : metrics) { %>
+                                <% if (m.getStatus()) { %>
+                                <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                <% } %>
+                                <% } %>
                             </select>
                         </div>
-
+                        <!--Estado-->
+                        <div class="col-3">
+                            <select class="form-select" name="status" aria-label="Seleccionar opción">
+                                <option disabled selected value>
+                                    Seleccionar opción
+                                </option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
                         <!--Botones -->
                         <div class="grid gap-2 d-flex justify-content-end mt-5">
-                            <button class="btn botonCafe mb-3" onsubmit="search()" id="">Buscar</button>
-                            <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">Limpiar</button>
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -210,50 +230,50 @@
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
-                        <c:forEach var="product" items="${products}">
-                            <tr>
-                                <th scope="row"><c:out value="${product.id}"/></th>
-                                <td><c:out value="${product.code}"/></td>
-                                <td><c:out value="${product.name}"/></td>
-                                <td><c:out value="${product.id_metric}"/></td>
-                                <td><c:out value="${product.description}"/></td>
-                                <td>
-                                    <h4>
+                    <tbody class="align-middle">
+                    <c:forEach var="product" items="${products}" varStatus="s">
+                        <tr>
+                            <th scope="row"><c:out value="${s.count}"/></th>
+                            <td><c:out value="${product.code}"/></td>
+                            <td><c:out value="${product.name}"/></td>
+                            <td><c:out value="${product.id_metric}"/></td>
+                            <td><c:out value="${product.description}"/></td>
+                            <td>
+                                <h4>
                                     <span class="badge badge-pill <c:out value="${product.status == true ? 'statusGreen' : 'statusRed'}"/>">
                                     <c:out value="${product.status == true ? 'Activo' : 'Inactivo'}"/>
                                     </span>
-                                    </h4>
-                                </td>
-                                <td>
-                                    <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-                                    </svg></button>
+                                </h4>
+                            </td>
+                            <td>
+                                <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+                                </svg></button>
 
-                                    <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"
-                                            data-bs-target="#updateProduct">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"
+                                        data-bs-target="#updateProduct">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </button>
+                                <form action="${pageContext.request.contextPath}/product/delete" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="${product.id}"/>
+                                    <button type="submit" class="btn btn-lg botonRojo">
+                                        <svg class="bi bi-pencil-square" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
                                         </svg>
                                     </button>
-                                    <form action="${pageContext.request.contextPath}/product/delete" method="post" style="display:inline;">
-                                        <input type="hidden" name="id" value="${product.id}"/>
-                                        <button type="submit" class="btn btn-lg botonRojo">
-                                            <svg class="bi bi-pencil-square" aria-hidden="true"
-                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                 fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>

@@ -112,7 +112,7 @@
                         <th scope="col" class="thead">Proveedor</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                     <c:forEach var="stock" items="${stocks}">
                         <tr>
                             <th scope="row"><c:out value="${product.id}"/></th>

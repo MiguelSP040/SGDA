@@ -2,6 +2,7 @@ package com.utez.edu.almacen.controllers.metric;
 
 import com.utez.edu.almacen.models.metric.BeanMetric;
 import com.utez.edu.almacen.models.metric.DaoMetric;
+import com.utez.edu.almacen.models.product.DaoProduct;
 import com.utez.edu.almacen.models.user.DaoUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +18,8 @@ import java.util.List;
         "/metric/list-metrics",
         "/metric/delete",
         "/metric/save",
-        "/metric/update"
+        "/metric/update",
+        "/metric/search"
 })
 public class ServletMetric extends HttpServlet {
     private String action;
@@ -50,6 +52,15 @@ public class ServletMetric extends HttpServlet {
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
+                break;
+            case "/metric/search":
+                shortName = request.getParameter("shortName");
+                name = request.getParameter("name");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchShortName", shortName);
+                request.setAttribute("searchName", name);
+                metrics = new DaoMetric().search(name, shortName, status2);
+                request.setAttribute("metrics", metrics);
                 break;
             default:
                 System.out.println(action);

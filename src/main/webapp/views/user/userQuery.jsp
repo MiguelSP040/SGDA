@@ -246,7 +246,7 @@
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                     <c:forEach var="user" items="${users}" varStatus="s">
                         <tr>
                             <th scope="row"><c:out value="${s.count}"/></th>

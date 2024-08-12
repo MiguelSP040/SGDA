@@ -1,5 +1,6 @@
 package com.utez.edu.almacen.models.product;
 
+import com.utez.edu.almacen.models.user.BeanUser;
 import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
@@ -135,6 +136,80 @@ public class DaoProduct implements DaoTemplate<BeanProduct> {
         } finally {
             closeConnection();
         }
+    }
+
+    public List<BeanProduct> search(String name, String code, String id_metric, String status){
+        List<BeanProduct> products = new ArrayList<>();
+        int count = 1;
+        try {
+            Boolean status2 = false;
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                if (status.equals("Activo")){
+                    status2 = true;
+                } else if (status.equals("Inactivo")){
+                    status2 = false;
+                }
+            }
+            conn = new MySQLConnection().getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM products WHERE 1=1");
+
+
+            if (code != null && !code.isEmpty()) {
+                query.append(" AND code = ?");
+            }
+            if (name != null && !name.isEmpty()) {
+                query.append(" AND name LIKE ?");
+            }
+            if (id_metric != null && !id_metric.isEmpty()) {
+                query.append(" AND id_metric LIKE ?");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                query.append(" AND status = ?");
+            }else {
+                query.append(" AND (status = ? OR status = ?)");
+            }
+
+
+
+            ps = conn.prepareStatement(query.toString());
+
+            if (code != null && !code.isEmpty()) {
+                ps.setString(count++, code);
+            }
+            if (name != null && !name.isEmpty()) {
+                ps.setString(count++, "%" + name + "%");
+            }
+
+            if (id_metric != null && !id_metric.isEmpty()) {
+                ps.setString(count++, "%" + id_metric + "%");
+            }
+
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                ps.setBoolean(count++, status2);
+            }else {
+                ps.setBoolean(count++, true);
+                ps.setBoolean(count++, false);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanProduct product = new BeanProduct();
+                product.setId(rs.getLong(1));
+                product.setCode(rs.getString(2));
+                product.setName(rs.getString(3));
+                product.setId_metric(rs.getString(4));
+                product.setDescription(rs.getString(5));
+                product.setStatus(rs.getBoolean(6));
+
+                products.add(product);
+            }
+        }catch(SQLException e){
+            Logger.getLogger(DaoProduct.class.getName()).log(Level.SEVERE, "ERROR. Function search failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return products;
     }
 
     public void closeConnection() {

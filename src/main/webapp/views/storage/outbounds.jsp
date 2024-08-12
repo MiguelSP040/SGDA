@@ -315,7 +315,7 @@
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         <c:forEach var="exit" items="${exits}">
                             <tr>
                                 <th scope="row"><c:out value="${exit.id}"/></th>

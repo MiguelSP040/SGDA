@@ -370,7 +370,7 @@
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         <c:forEach var="entry" items="${entries}">
                             <tr>
                                 <th scope="row"><c:out value="${entry.id}"/></th>

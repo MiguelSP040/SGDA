@@ -51,31 +51,45 @@
                 Correo electronico* - Alfanumérico
             -->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/metric/search" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5 ms-3">Nombre</div>
-                        <div class="col-5 ms-1">Abreviatura</div>
+                        <div class="col-3 ms-3">Nombre</div>
+                        <div class="col-3 ms-1">Abreviatura</div>
+                        <div class="col-3 ms-1">Estado</div>
                     </div>
 
-                    <!--Nombre-->
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5">
-                            <input id="nameSupplier" type="text" class="form-control" placeholder="Nombre de la unidad de medida">
+                        <!--Nombre-->
+                        <div class="col-3">
+                            <input class="form-control" type="text" id="nameArea" name="name" placeholder="Nombre de la unidad de medida">
                         </div>
                         <!--Abreviatura-->
-                        <div class="col-5">
-                            <input id="rfc" type="text" class="form-control" placeholder="Abreviatura de la unidad de medida">
+                        <div class="col-3">
+                            <input class="form-control" type="text" id="shortNameArea" name="shortName" placeholder="Abreviatura de la unidad de medida">
                         </div>
-                    </div>
+                        <!--Estado-->
+                        <div class="col-3">
+                            <select class="form-select" name="status" aria-label="Seleccionar opción">
+                                <option disabled selected value>
+                                    Seleccionar opción
+                                </option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
 
-                    <!--Botones -->
-                    <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <button class="btn botonCafe mb-3" onsubmit="search()" id="">
-                            Buscar
-                        </button>
-                        <button class="btn botonGris btn-light mb-3" onreset="reset()">
-                            Limpiar
-                        </button>
+                        <!--Botones -->
+                        <div class="grid gap-2 d-flex justify-content-end mt-5">
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -166,7 +180,7 @@
                     <th scope="col" class="thead">Acciones</th>
 
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         <c:forEach var="metric" items="${metrics}" varStatus="s">
                             <tr>
                                 <th scope="row"><c:out value="${s.count}"/></th>

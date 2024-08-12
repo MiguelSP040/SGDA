@@ -16,7 +16,8 @@ import java.util.List;
         "/product/list-products",
         "/product/delete",
         "/product/save",
-        "/product/update"
+        "/product/update",
+        "/product/search"
 })
 public class ServletProduct extends HttpServlet {
     private String action;
@@ -49,6 +50,18 @@ public class ServletProduct extends HttpServlet {
                             URLEncoder.encode("¡Error! Acción no realizada correctamente", StandardCharsets.UTF_8);
                 }
                 break;
+            case "/product/search":
+                code = request.getParameter("code");
+                name = request.getParameter("name");
+                id_metric = request.getParameter("id_metric");
+                description = request.getParameter("description");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchCode", code);
+                request.setAttribute("searchName", name);
+                products = new DaoProduct().search(name, code, id_metric, status2);
+                request.setAttribute("products", products);
+
+                break;
             default:
                 System.out.println(action);
         }
@@ -77,8 +90,7 @@ public class ServletProduct extends HttpServlet {
                 code = request.getParameter("code");
                 description = request.getParameter("description");
                 id_metric = request.getParameter("id_metric");
-                status = Boolean.parseBoolean(request.getParameter("status"));
-                product = new BeanProduct(0L, name, code, description, id_metric, status);
+                product = new BeanProduct(0L, name, code, description, id_metric, true);
                 boolean result = new DaoProduct().save(product);
                 if (result) {
                     redirect = "/product/list-products?result=" + true + "&message=" +
@@ -94,8 +106,7 @@ public class ServletProduct extends HttpServlet {
                 code = request.getParameter("code");
                 description = request.getParameter("description");
                 id_metric = request.getParameter("id_metric");
-                status = Boolean.parseBoolean(request.getParameter("status"));
-                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, status);
+                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, true);
                 if (new DaoProduct().update(product)) {
                     redirect = "/product/list-products?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación del producto realizada con éxito!", StandardCharsets.UTF_8);

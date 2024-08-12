@@ -17,7 +17,8 @@ import java.util.List;
         "/area/list-areas",
         "/area/delete",
         "/area/save",
-        "/area/update"
+        "/area/update",
+        "/area/search"
 })
 
 public class ServletArea extends HttpServlet {
@@ -51,6 +52,16 @@ public class ServletArea extends HttpServlet {
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
+                break;
+            case "/area/search":
+                shortName = request.getParameter("shortName");
+                name = request.getParameter("name");
+                description = request.getParameter("description");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchShortName", shortName);
+                request.setAttribute("searchName", name);
+                areas = new DaoArea().search(name, shortName, status2);
+                request.setAttribute("areas", areas);
                 break;
             default:
                 System.out.println(action);

@@ -298,7 +298,7 @@
 
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         <c:forEach var="provider" items="${providers}" varStatus="s">
                             <tr>
                                 <th scope="row"><c:out value="${s.count}"/></th>
