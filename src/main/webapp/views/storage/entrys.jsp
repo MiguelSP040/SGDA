@@ -1,3 +1,12 @@
+<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
+<%@ page import="com.utez.edu.almacen.models.product.DaoProduct" %>
+<%@ page import="com.utez.edu.almacen.models.product.BeanProduct" %>
+<%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
+<%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
+<%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
 <%--
   Created by IntelliJ IDEA.
   User: PC
@@ -13,6 +22,10 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
+    List<BeanMetric> metrics = new DaoMetric().listAll();
+    List<BeanProduct> products = new DaoProduct().listAll();
+    List<BeanProvider> providers = new DaoProvider().listAll();
+    List<BeanUser> users = new DaoUser().listAll();
 %>
 <html>
 <head>
@@ -76,18 +89,22 @@
                                     </div>
                                     <div class="col me-2">
                                         <select class="form-select" name="id_provider" id="id_provider" required>
-                                            <option value="" disabled selected>Seleccionar un proveedor</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanProvider pr : providers) { %>
+                                            <% if (pr.getStatus()) { %>
+                                            <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                            <% } %>
+                                            <% } %>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <select class="form-select" name="id_user" id="id_user" required>
-                                            <option value="" disabled selected>Seleccionar un almacenista</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanUser u : users) { %>
+                                            <% if (u.getStatus()) { %>
+                                            <option value="<%= u.getId() %>"><%= u.getName() %></option>
+                                            <% } %>
+                                            <% } %>
                                         </select>
                                     </div>
                                 </div>
@@ -95,27 +112,29 @@
                                 <!-- Campos para Entrada -->
 
                                 <div class="table-responsive table-container">
-                                    <table class="table table-bordered table-striped mt-0 text-center">
+                                    <table class="table table-bordered table-striped mt-0 text-center" id="entryTable">
                                         <thead class="thead-dark">
                                         <tr>
                                             <th scope="col" style="width: 3%" class="tableTitle">#</th>
                                             <th scope="col" style="width: 25%" class="tableTitle"><label for="id">Producto*</label></th>
-                                            <th scope="col" style="width: 13%" class="tableTitle"><label for="id_metric">Medida*</label></th>
-                                            <th scope="col" style="width: 15%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
+                                            <th scope="col" style="width: 18%" class="tableTitle"><label for="id_metric">Medida*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="quantity">Cantidad*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="total_price">Precio total*</label></th>
                                             <th scope="col" style="width: 3%" class="tableTitle">Acciones*</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="align-middle">
                                             <tr>
                                                 <th scope="row">1</th>
                                                 <td>
                                                     <select class="form-select" name="id" id="id" required>
-                                                        <option value="" disabled selected>Seleccionar un producto</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
+                                                        <option disabled selected value>Seleccionar opción</option>
+                                                        <% for (BeanProduct p : products) { %>
+                                                        <% if (p.getStatus()) { %>
+                                                        <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                        <% } %>
+                                                        <% } %>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -124,15 +143,13 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input class="form-control w-100" type="number" name="unitPrice" id="unitPrice" min="0" step="0.5"
-                                                           placeholder="$0.00" required>
+                                                    <input class="form-control unit-price" type="number" name="unitPrice" min="0" step="0.01" placeholder="$0.00" required>
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" type="number" name="quantity" id="quantity" min="1" step="1" placeholder="0"
-                                                           required>
+                                                    <input class="form-control quantity" type="number" name="quantity" min="1" step="1" placeholder="0" required>
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" type="number" name="total_price" id="total_price" placeholder="$0.00" disabled>
+                                                    <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled>
                                                 </td>
                                                 <td class="d-flex justify-content-end">
                                                     <div class="btn-group">
@@ -195,6 +212,17 @@
                                 <h5>Datos de la Entrada</h5>
                                 <div class="row">
                                     <!-- Campos para Entrada -->
+                                    <div class="mb-3">
+                                        <label for="id" class="form-label">Productos*</label>
+                                        <select class="form-select" name="id" id="id" required>
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanProduct p : products) { %>
+                                            <% if (p.getStatus()) { %>
+                                            <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="changeDate" class="form-label">Fecha del movimiento*</label>
@@ -207,19 +235,23 @@
                                         <div class="mb-3">
                                             <label for="id_provider" class="form-label">Proveedor*</label>
                                             <select class="form-select" name="id_provider" id="id_provider" required>
-                                                <option value="" disabled selected>Seleccionar un proveedor</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanProvider pr : providers) { %>
+                                                <% if (pr.getStatus()) { %>
+                                                <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                                <% } %>
+                                                <% } %>
                                             </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="id_user" class="form-label">Almacenista*</label>
                                             <select class="form-select" name="id_user" id="id_user" required>
-                                                <option value="" disabled selected>Seleccionar un almacenista</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanUser u : users) { %>
+                                                <% if (u.getStatus()) { %>
+                                                <option value="<%= u.getId() %>"><%= u.getName() %></option>
+                                                <% } %>
+                                                <% } %>
                                             </select>
                                         </div>
                                     </div>
@@ -231,27 +263,17 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="unitPrice" class="form-label">Precio*</label>
-                                            <input type="number" class="form-control" name="unitPrice" id="unitPrice" min="0" step="0.5" placeholder="$0.00" required>
+                                            <label for="modalUnitPrice" class="form-label">Precio*</label>
+                                            <input type="number" class="form-control" name="modalUnitPrice" id="modalUnitPrice" min="0" step="0.01" placeholder="$0.00" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="quantity" class="form-label">Cantidad*</label>
-                                            <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" placeholder="0" required>
+                                            <label for="modalQuantity" class="form-label">Cantidad*</label>
+                                            <input type="number" class="form-control" name="modalQuantity" id="modalQuantity" min="1" step="1" placeholder="0" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="total_price" class="form-label">Precio total*</label>
-                                            <input type="number" class="form-control" name="total_price" id="total_price" placeholder="$0.00" disabled>
+                                            <label for="modalTotalPrice" class="form-label">Precio total*</label>
+                                            <input type="number" class="form-control" name="modalTotalPrice" id="modalTotalPrice" placeholder="$0.00" disabled>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="id" class="form-label">Productos*</label>
-                                        <select class="form-select" aria-label="Default select example" name="id" id="id" required>
-                                            <option value="" disabled selected>Seleccionar un producto</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <!-- Opciones aquí -->
-                                        </select>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -275,11 +297,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="registerProductLabel">Nuevo Producto</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="newProductForm" method="post" action="/product/save">
+                            <form id="newProductForm" method="post" action="/product/saveout">
                                 <h5>Datos de Producto</h5>
                                 <div class="mb-3">
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
@@ -287,29 +309,28 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="code" class="col-form-label">Acrónimo*</label>
-                                    <input type="text" class="form-control" name="code" id="code"
-                                           required>
+                                    <input type="text" class="form-control" name="code" id="code" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
                                     <select class="form-select" name="id_metric" id="id_metric" required>
-                                        <option value="" disabled selected>Seleccionar una medida</option>
-                                        <option value="Paq">Paquete</option>
-                                        <option value="Caj">Caja</option>
-                                        <option value="lt">Litro</option>
-                                        <option value="Kg">Kilogramo</option>
+                                        <option disabled selected value>Seleccionar opción</option>
+                                        <% for (BeanMetric m : metrics) { %>
+                                        <% if (m.getStatus()) { %>
+                                        <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                        <% } %>
+                                        <% } %>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="description" id="description"
-                                              required></textarea>
+                                    <textarea class="form-control" name="description" id="description" required></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe" onclick="registerProduct()">
+                                    <button type="submit" class="btn botonCafe" onclick="registerProduct(event)">
                                         Registrar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         Cancelar
                                     </button>
                                 </div>
@@ -453,57 +474,175 @@
 </div>
 </div>
 <script>
-    // Función para mostrar la alerta
-    function changeSuccess(message) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Hecho!',
-            text: message,
-            showConfirmButton: true,
-            focusConfirm: false,
-            confirmButtonText: `<span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                                </svg>
-                                </span> ¡Genial!`,
-            confirmButtonAriaLabel: "Thumbs up, great!",
-            timer: 2000,
-            timerProgressBar: true,
-            customClass: {
-                confirmButton: 'btn botonCafe',
-                popup: 'no-select-popup'
-            }
-        });
-    }
-
-    function changeError(message) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: message,
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
-            customClass: {
-                confirmButton: 'btn botonCafe',
-                cancelButton: 'btn botonGris',
-                popup: 'no-select-popup'
-            }
-        });
-    }
-
     // Obtener parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const result = urlParams.get('result');
     const message = urlParams.get('message');
+    // Función de validación del formulario
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        const cancelButton = document.querySelector('button[data-bs-dismiss="modal"]');
+        let isValid = true;
 
-    // Mostrar la alerta en función del resultado
+        if (cancelButton && cancelButton.matches(':focus')) {
+            // Si el botón de cancelar está enfocado, quitamos el estado 'was-validated'
+            form.classList.remove('was-validated');
+        }
+
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.required && (input.tagName === 'SELECT' && input.value === '' || !input.value.trim())) {
+                isValid = false;
+                form.classList.add('was-validated');
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+
+    // Función para mostrar alerta de éxito
+    function changeSuccess(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'success',
+            title: '¡Hecho!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar alerta de error
+    function changeError(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'error',
+            title: '¡Error!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar confirmación antes de enviar el formulario
+    function showProductConfirmation(message, form) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Cuidado!',
+            text: message,
+            showCancelButton: true,
+            cancelButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                      <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591"/>
+                                    </svg>
+                                </span> Cancelar.`,
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Sí, registrar.`,
+            footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
+            reverseButtons: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            stopKeydownPropagation: true,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Envía el formulario si se confirma
+            }
+        });
+    }
+
+    // Mostrar alerta en función del resultado
     if (result === 'true') {
         changeSuccess(decodeURIComponent(message));
     } else if (result === 'false') {
         changeError(decodeURIComponent(message));
     }
+
+    // Función para manejar el registro de un producto
+    function registerProduct(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const form = document.getElementById('newProductForm');
+        if (validateForm('newProductForm')) { // Asegúrate de usar el ID correcto
+            showProductConfirmation("¿Estás seguro de que deseas registrar este producto?",form);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campos incompletos',
+                text: 'Por favor llena todos los campos obligatorios del formulario.',
+                confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido`,
+                footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn botonCafe',
+                    cancelButton: 'btn botonGris',
+                    popup: 'no-select-popup'
+                }
+            });
+        }
+    }
 </script>
 <script>
+    // Script  para realizar el calculo de precio unitario, cantidad y precio total
+    document.addEventListener('DOMContentLoaded', () => {
+        // Función para actualizar el precio total en una fila de la tabla
+        function updateTableTotalPrice(row) {
+            const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
+            const quantity = parseInt(row.querySelector('.quantity').value, 10) || 0;
+            const totalPrice = unitPrice * quantity;
+            row.querySelector('.total-price').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+        }
+
+        // Función para actualizar el precio total en el modal
+        function updateModalTotalPrice() {
+            const unitPrice = parseFloat(document.getElementById('modalUnitPrice').value) || 0;
+            const quantity = parseInt(document.getElementById('modalQuantity').value, 10) || 0;
+            const totalPrice = unitPrice * quantity;
+            document.getElementById('modalTotalPrice').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+        }
+
+        // Event listeners para inputs en la tabla
+        document.querySelector('#entryTable tbody').addEventListener('input', (event) => {
+            if (event.target.classList.contains('unit-price') || event.target.classList.contains('quantity')) {
+                // Encuentra la fila actual
+                const row = event.target.closest('tr');
+                updateTableTotalPrice(row);
+            }
+        });
+
+        // Event listeners para inputs en el modal
+        document.getElementById('modalUnitPrice').addEventListener('input', updateModalTotalPrice);
+        document.getElementById('modalQuantity').addEventListener('input', updateModalTotalPrice);
+    });
+</script>
+<script>
+    // Script para mostrar el modal de registrar Producto
     document.addEventListener('DOMContentLoaded', function () {
         // Obtener referencias a los modales
         var registerMovementModal = new bootstrap.Modal(document.getElementById('registerMovement'));

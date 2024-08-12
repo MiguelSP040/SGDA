@@ -16,6 +16,7 @@ import java.util.List;
         "/product/list-products",
         "/product/delete",
         "/product/save",
+        "/product/saveout",
         "/product/update",
         "/product/search"
 })
@@ -97,6 +98,23 @@ public class ServletProduct extends HttpServlet {
                             URLEncoder.encode("¡Producto registrado con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/product/list-products?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al crear el registro del producto!", StandardCharsets.UTF_8);
+                }
+                break;
+            case "/product/saveout":
+                name = request.getParameter("name");
+                code = request.getParameter("code");
+                description = request.getParameter("description");
+                id_metric = request.getParameter("id_metric");
+                product = new BeanProduct(0L, name, code, description, id_metric, true);
+                result = new DaoProduct().save(product);
+                if (result) {
+                    //redirect = "/storage/list-entrys?result=" + true + "&message=" +
+                    redirect = "/views/storage/entrys.jsp?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Producto registrado con éxito!", StandardCharsets.UTF_8);
+                } else {
+                    //redirect = "/storage/list-entrys?result=" + false + "&message=" +
+                    redirect = "/views/storage/entrys.jsp?result=" + false + "&message=" +
                             URLEncoder.encode("¡ERROR al crear el registro del producto!", StandardCharsets.UTF_8);
                 }
                 break;
