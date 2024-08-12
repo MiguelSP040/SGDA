@@ -9,7 +9,6 @@ const getProviderInformation = async id => {
         }
     }).then(response => response.json()).then(response => {
         data = response;
-        console.log(data);
     }).catch(error => {
         console.log(error);
     })

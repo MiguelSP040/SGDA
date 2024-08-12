@@ -36,21 +36,6 @@ public class ServletMetric extends HttpServlet {
                 request.setAttribute("metrics", metrics);
                 redirect = "/views/metric/metrics.jsp";
                 break;
-            case "/metric/register":
-                redirect = "";
-                break;
-            case "/metric/update-view":
-                id = request.getParameter("id");
-                metric = new DaoMetric().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (metric != null){
-                    request.setAttribute("metric", metric);
-                    redirect = "";
-                } else{
-                    redirect = "/metric/list-metrics?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
-                break;
             default:
                 System.out.println(action);
         }
