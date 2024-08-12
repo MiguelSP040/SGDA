@@ -15,8 +15,6 @@ import java.util.List;
 @WebServlet(name = "ServletUser",
         urlPatterns = { //urlPatterns funge como directorio para relacionar funciones con vistas
                 "/user/list-users", //get
-                "/user/register", //get
-                "/user/update-view", //get
                 "/user/update", //post
                 "/user/delete", //post
                 "/user/search", //get
@@ -41,21 +39,6 @@ public class ServletUser extends HttpServlet {
                 redirect = "/views/user/userQuery.jsp";
                 break;
 
-            case "/user/register":
-                redirect = "/views/user/userRegistration.jsp";
-                break;
-
-            case "/user/update-view":
-                id = request.getParameter("id");
-                user = new DaoUser().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (user != null){
-                    request.setAttribute("user", user);
-                    redirect = "/user/list-users";
-                }else {
-                    redirect = "/user/list-users?result= " + false + "&message=" +
-                            URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
-                }
-                break;
             case "/user/search":
                 name = request.getParameter("name");
                 surname = request.getParameter("name");
@@ -67,7 +50,6 @@ public class ServletUser extends HttpServlet {
                 request.setAttribute("searchEmail", email);
                 users = new DaoUser().search(name, role, email, status2);
                 request.setAttribute("users", users);
-
                 break;
 
             default:

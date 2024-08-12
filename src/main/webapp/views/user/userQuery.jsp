@@ -163,7 +163,7 @@
                                     <button type="submit" class="btn botonCafe" onclick="updateUser()">
                                         Modificar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()" >
                                         Cancelar
                                     </button>
                                 </div>

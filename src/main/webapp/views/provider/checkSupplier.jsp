@@ -61,12 +61,12 @@
                     Teléfono de persona adicional* - Numérico
                     -->
 
-            <div class="modal fade" id="registerSupplier" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="registerSupplier" tabindex="-1" aria-labelledby="registerSupplier"
                  aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Proveedor</h1>
+                            <h1 class="modal-title fs-5">Nuevo Proveedor</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -158,74 +158,75 @@
                     Teléfono de persona adicional* - Numérico
                     -->
 
-            <div class="modal fade" id="updateSupplier" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="updateSupplier" tabindex="-1" aria-labelledby="updateSupplier"
                  aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar información de proveedor</h1>
+                            <h1 class="modal-title fs-5">Editar información de proveedor</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="updateSupplierForm" method="post" action="/provider/update">
                                 <div class="row">
+                                    <input hidden id="u_id" name="id">
                                     <h5>Datos de Proveedor</h5>
                                     <div class="col-6">
                                         <div class="mb-2">
-                                            <label for="name" class="col-form-label">Nombre del Proveedor*</label>
-                                            <input type="text" class="form-control" name="name" id="name" required>
+                                            <label for="u_name" class="col-form-label">Nombre del Proveedor*</label>
+                                            <input type="text" class="form-control" name="name" id="u_name" required>
                                         </div>
 
                                         <div class="mb-2">
-                                            <label for="socialCase" class="col-form-label">Razón social*</label>
-                                            <input type="text" class="form-control" name="socialCase" id="socialCase" required>
+                                            <label for="u_socialCase" class="col-form-label">Razón social*</label>
+                                            <input type="text" class="form-control" name="socialCase" id="u_socialCase" required>
                                         </div>
 
                                         <div class="mb-2">
-                                            <label for="rfc" class="col-form-label">RFC*</label>
-                                            <input type="text" class="form-control" name="rfc" id="rfc" required>
+                                            <label for="u_rfc" class="col-form-label">RFC*</label>
+                                            <input type="text" class="form-control" name="rfc" id="u_rfc" required>
                                         </div>
                                     </div>
                                     <div class="col-6">
 
                                         <div class="mb-2">
-                                            <label for="phone" class="col-form-label">Teléfono*</label>
-                                            <input type="tel" class="form-control" name="phone" id="phone" required>
+                                            <label for="u_phone" class="col-form-label">Teléfono*</label>
+                                            <input type="tel" class="form-control" name="phone" id="u_phone" required>
                                         </div>
 
                                         <div class="mb-2">
-                                            <label for="email" class="col-form-label">Correo electrónico*</label>
-                                            <input type="text" class="form-control" name="email" id="email" required>
+                                            <label for="u_email" class="col-form-label">Correo electrónico*</label>
+                                            <input type="text" class="form-control" name="email" id="u_email" required>
                                         </div>
 
                                         <div class="mb-2">
-                                            <label for="postCode" class="col-form-label">Codigo Postal*</label>
-                                            <input type="text" class="form-control" name="postCode" id="postCode" required>
+                                            <label for="u_postCode" class="col-form-label">Codigo Postal*</label>
+                                            <input type="text" class="form-control" name="postCode" id="u_postCode" required>
                                         </div>
                                     </div>
                                     <div class="mb-2 text-align-center">
-                                        <label for="address" class="col-form-label">Dirección*</label>
-                                        <input type="text" class="form-control" name="address" id="address" required>
+                                        <label for="u_address" class="col-form-label">Dirección*</label>
+                                        <input type="text" class="form-control" name="address" id="u_address" required>
                                     </div>
 
 
                                     <h5>Datos de Contacto Adicional</h5>
                                     <div class="mb-2">
-                                        <label for="contactName" class="col-form-label">Nombre
+                                        <label for="u_contactName" class="col-form-label">Nombre
                                             completo*</label>
-                                        <input type="text" class="form-control" name="contactName" id="contactName" required>
+                                        <input type="text" class="form-control" name="contactName" id="u_contactName" required>
                                     </div>
 
                                     <div class="mb-2">
-                                        <label for="contactPhone" class="col-form-label">Teléfono*</label>
-                                        <input type="tel" class="form-control" name="contactPhone" id="contactPhone" required>
+                                        <label for="u_contactPhone" class="col-form-label">Teléfono*</label>
+                                        <input type="tel" class="form-control" name="contactPhone" id="u_contactPhone" required>
                                     </div>
 
                                     <div class="mb-2">
-                                        <label for="contactEmail" class="col-form-label">Correo electrónico*</label>
-                                        <input type="tel" class="form-control" name="contactPhone" id="contactEmail" required>
+                                        <label for="u_contactEmail" class="col-form-label">Correo electrónico*</label>
+                                        <input type="tel" class="form-control" name="contactEmail" id="u_contactEmail" required>
                                     </div>
-
+                                    <input hidden id="u_status" name="status">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-secondary botonCafe" onclick="updateSupplier()">
@@ -236,6 +237,97 @@
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--[MODAL- MOSTRAR INFORMACION DE PROVEEDOR] -->
+            <!-- DATOS DE ENTRADA
+                    Nombre del proveedor* - Alfanumérico
+                    Razón social* - Alfanumérico
+                    RFC* - Alfanumérico
+                    Código Postal* - Numérico
+                    Dirección* - Alfanumérico
+                    Teléfono* - Numérico
+                    Correo de contacto* - Alfanumérico
+                    Nombre de persona adicional* - Alfanumérico
+                    Teléfono de persona adicional* - Numérico
+                    -->
+
+            <div class="modal fade" id="showSupplier" tabindex="-1" aria-labelledby="showSupplier"
+                 aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Editar información de proveedor</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="row">
+                                    <input hidden id="r_id" name="id">
+                                    <h5>Datos de Proveedor</h5>
+                                    <div class="col-6">
+                                        <div class="mb-2">
+                                            <label for="r_name" class="col-form-label">Nombre del Proveedor*</label>
+                                            <input type="text" class="form-control" name="name" id="r_name" readonly disabled>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="r_socialCase" class="col-form-label">Razón social*</label>
+                                            <input type="text" class="form-control" name="socialCase" id="r_socialCase" readonly disabled>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="r_rfc" class="col-form-label">RFC*</label>
+                                            <input type="text" class="form-control" name="rfc" id="r_rfc" readonly disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+
+                                        <div class="mb-2">
+                                            <label for="r_phone" class="col-form-label">Teléfono*</label>
+                                            <input type="tel" class="form-control" name="phone" id="r_phone" readonly disabled>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="r_email" class="col-form-label">Correo electrónico*</label>
+                                            <input type="text" class="form-control" name="email" id="r_email" readonly disabled>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="r_postCode" class="col-form-label">Codigo Postal*</label>
+                                            <input type="text" class="form-control" name="postCode" id="r_postCode" readonly disabled>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 text-align-center">
+                                        <label for="r_address" class="col-form-label">Dirección*</label>
+                                        <input type="text" class="form-control" name="address" id="r_address" readonly disabled>
+                                    </div>
+
+
+                                    <h5>Datos de Contacto Adicional</h5>
+                                    <div class="mb-2">
+                                        <label for="r_contactName" class="col-form-label">Nombre
+                                            completo*</label>
+                                        <input type="text" class="form-control" name="contactName" id="r_contactName" readonly disabled>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="r_contactPhone" class="col-form-label">Teléfono*</label>
+                                        <input type="tel" class="form-control" name="contactPhone" id="r_contactPhone" readonly disabled>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="r_contactEmail" class="col-form-label">Correo electrónico*</label>
+                                        <input type="tel" class="form-control" name="contactEmail" id="r_contactEmail" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary botonCafe" data-bs-dismiss="modal">
+                                        Aceptar
+                                    </button>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -315,7 +407,8 @@
                                     </h4>
                                 </td>
                                 <td>
-                                    <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()">
+                                    <button class="btn btn-lg botonVerMas" data-bs-toggle="modal" onclick="showProviderInformation(${provider.getId()})"
+                                            data-bs-target="#showSupplier">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
@@ -323,8 +416,8 @@
                                         </svg>
                                     </button>
 
-                                    <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"
-                                            data-bs-target="#updateUser">
+                                    <button class="btn btn-lg botonEditar" data-bs-toggle="modal" onclick="putProviderInformation(${provider.getId()})"
+                                            data-bs-target="#updateSupplier">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -365,7 +458,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script>
@@ -423,7 +515,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/funciones.js"></script>
 <script src="../../assets/js/alerts.js"></script>
-
+<script src="../../assets/js/udpateProviders.js"></script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>
