@@ -249,18 +249,18 @@
             Correo electronico* - Alfanumérico
             -->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/provider/search" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-3 ms-4">Nombre del proveedor</div>
-                        <div class="col-3 ms-1">RFC</div>
-                        <div class="col-3 ms-1">Correo electrónico</div>
+                        <div class="col-3">Nombre del proveedor</div>
+                        <div class="col-3">RFC</div>
+                        <div class="col-3">Correo electrónico</div>
+                        <div class="col-3">Estado</div>
                     </div>
 
                     <!--Clave del producto-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <input id="nameSupplier" type="text" class="form-control"
-                                   placeholder="Nombre(s) Apellidos">
+                            <input id="nameSupplier" type="text" class="form-control" placeholder="Nombre(s) Apellidos">
                         </div>
                         <div class="col-3">
                             <input id="rfc" type="text" class="form-control" placeholder="RFC">
@@ -269,11 +269,28 @@
                         <div class="col-3">
                             <input id="email" type="text" class="form-control" placeholder="alguien@example.com">
                         </div>
+                        <!--Estado-->
+                        <div class="col-3">
+                            <select class="form-select" name="status" aria-label="Seleccionar opción">
+                                <option disabled selected value>
+                                    Seleccionar opción
+                                </option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
 
                         <!--Botones -->
                         <div class="grid gap-2 d-flex justify-content-end mt-5">
-                            <button class="btn botonCafe mb-3" onsubmit="search()" id="">Buscar</button>
-                            <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">Limpiar</button>
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
                         </div>
                     </div>
                 </form>

@@ -1,5 +1,6 @@
 package com.utez.edu.almacen.controllers.provider;
 
+import com.utez.edu.almacen.models.product.DaoProduct;
 import com.utez.edu.almacen.models.provider.BeanProvider;
 import com.utez.edu.almacen.models.provider.DaoProvider;
 import com.utez.edu.almacen.models.user.DaoUser;
@@ -19,7 +20,8 @@ import java.util.List;
         "/provider/update-view",
         "/provider/delete",
         "/provider/save",
-        "/provider/update"
+        "/provider/update",
+        "/provider/search"
 })
 public class ServletProvider extends HttpServlet {
     private String action;
@@ -49,6 +51,17 @@ public class ServletProvider extends HttpServlet {
                             + URLEncoder.encode("¡Error! Acción no realizada correctamente",
                             StandardCharsets.UTF_8);
                 }
+                break;
+            case "/provider/search":
+                name = request.getParameter("name");
+                rfc = request.getParameter("rfc");
+                email = request.getParameter("email");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchRfc", rfc);
+                request.setAttribute("searchEmail", email);
+                providers = new DaoProvider().search(name, rfc, email, status2);
+                request.setAttribute("providers", providers);
                 break;
             default:
                 System.out.println(action);

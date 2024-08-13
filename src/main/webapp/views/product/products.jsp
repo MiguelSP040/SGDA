@@ -236,7 +236,7 @@
                             <th scope="row"><c:out value="${s.count}"/></th>
                             <td><c:out value="${product.code}"/></td>
                             <td><c:out value="${product.name}"/></td>
-                            <td><c:out value="${product.id_metric}"/></td>
+                            <td><c:out value="${DaoMetric().listOne(product.id_metric).getName()}"/></td>
                             <td><c:out value="${product.description}"/></td>
                             <td>
                                 <h4>

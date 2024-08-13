@@ -292,7 +292,7 @@
 
             <!-- Modal Nuevo Producto -->
             <div class="modal fade" id="newProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true" data-bs-backdrop="static">
+                 aria-hidden="true" data-bs-backdrop="false">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">

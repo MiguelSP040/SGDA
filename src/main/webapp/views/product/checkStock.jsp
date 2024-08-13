@@ -1,3 +1,8 @@
+<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
+<%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
+<%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
 <%--
   Created by IntelliJ IDEA.
   User: migue
@@ -13,6 +18,8 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
+    List<BeanMetric> metrics = new DaoMetric().listAll();
+    List<BeanProvider> providers = new DaoProvider().listAll();
 %>
 <html>
 <head>
@@ -42,7 +49,7 @@
 
             <!--FILTRO DE BUSQUEDA DE PRODUCTO-->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/stock/search" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">Nombre del producto</div>
                         <div class="col-3">Clave del producto</div>
@@ -53,42 +60,45 @@
                     <!--Clave del producto-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar opción">
-                                <option disabled selected value>Seleccionar
-                                    opción</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <input id="id_product" type="text" class="form-control" placeholder="Nombre del producto">
                         </div>
                         <div class="col-3">
-                            <input id="claveProducto" type="text" class="form-control" placeholder="E2024XXXX">
+                            <input id="code" type="text" class="form-control" placeholder="E2024XXXX">
                         </div>
                         <!--Proveedor-->
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar proveedor">
-                                <option disabled selected value>Seleccionar
-                                    proveedor</option>
-                                <option value="1">Scribe</option>
-                                <option value="2">Maped</option>
-                                <option value="3">Grupo BIC</option>
+                            <select class="form-select" name="id_provider" id="id_provider" required>
+                                <option disabled selected value>Seleccionar opción</option>
+                                <% for (BeanProvider pr : providers) { %>
+                                <% if (pr.getStatus()) { %>
+                                <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                <% } %>
+                                <% } %>
                             </select>
                         </div>
                         <!--Unidad de medida-->
                         <div class="col-3">
-                            <select class="form-select" aria-label="Seleccionar una opción">
-                                <option disabled selected value>Seleccionar una
-                                    opción</option>
-                                <option value="1">Paquete</option>
-                                <option value="2">Kilogramo</option>
-                                <option value="3">Litro</option>
+                            <select class="form-select" name="id_metric" id="id_metric">
+                                <option disabled selected value>Seleccionar opción</option>
+                                <% for (BeanMetric m : metrics) { %>
+                                <% if (m.getStatus()) { %>
+                                <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                <% } %>
+                                <% } %>
                             </select>
                         </div>
 
                         <!--Botones -->
                         <div class="grid gap-2 d-flex justify-content-end mt-5">
-                            <button class="btn botonCafe mb-3" onsubmit="search()" id="">Buscar</button>
-                            <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">Limpiar</button>
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
                         </div>
                     </div>
                 </form>
