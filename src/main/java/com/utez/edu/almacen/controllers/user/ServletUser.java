@@ -34,7 +34,8 @@ public class ServletUser extends HttpServlet {
         action = request.getServletPath();
         switch (action) {
             case "/user/list-users":
-                List<BeanUser> users = new DaoUser().listAll();
+                String currentUserEmail = (String) request.getSession().getAttribute("user");
+                List<BeanUser> users = new DaoUser().listAllExcept(currentUserEmail);
                 request.setAttribute("users", users);
                 redirect = "/views/user/userQuery.jsp";
                 break;

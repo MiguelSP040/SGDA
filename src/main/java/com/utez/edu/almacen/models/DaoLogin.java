@@ -27,7 +27,7 @@ public class DaoLogin {
                 boolean isActive = rs.getBoolean("status");
 
                 if (!dbPassword.equals(password)) {
-                    return new LoginResult(false, "Credenciales incorrectas.");
+                    return new LoginResult(false, "Usuario y/o contraseña incorrectos.");
                 }
 
                 if (!isActive) {
@@ -36,7 +36,7 @@ public class DaoLogin {
 
                 return new LoginResult(true, "Login exitoso.");
             } else {
-                return new LoginResult(false, "Usuario no encontrado.");
+                return new LoginResult(false, "Usuario y/o contraseña incorrectos.");
             }
 
         } catch (SQLException e) {
