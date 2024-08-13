@@ -5,7 +5,6 @@
     if (request.getSession(false).getAttribute("user") != null){
         response.sendRedirect(context+"/views/product/checkStock.jsp");
     }
-    boolean errorMessage = request.getAttribute("errorMessage") != null && !(boolean) request.getAttribute("errorMessage");
 %>
 <!DOCTYPE html>
 <html>
@@ -79,11 +78,14 @@
                                     Iniciar sesión
                                 </button>
                             </div>
-                            <%if (errorMessage) {%>
+                            <% if (request.getAttribute("errorMessage") != null) { %>
                             <div class="col-12">
-                                <div class="alert alert-danger mb-0">Contraseña y/o Usuario incorrectos</div>
+                                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                    <%= request.getAttribute("errorMessage") %>
+                                </div>
                             </div>
-                            <%}%>
+                            <% } %>
                         </form>
                     </div>
                     <div class="card-footer coffe text-center py-3 border-0">
