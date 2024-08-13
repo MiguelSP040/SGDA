@@ -5,15 +5,21 @@ import com.utez.edu.almacen.models.user.BeanUser;
 import com.utez.edu.almacen.utils.MySQLConnection;
 
 import java.sql.*;
+
 public class CustomerService {
-    private DaoUser daoUser = new DaoUser();
+    private final DaoUser daoUser = new DaoUser();
 
     public boolean resetCustomerPassword(String email, String newPassword, String token) {
         boolean isUpdated = daoUser.updatePassword(email, newPassword);
         if (isUpdated) {
-            deleteResetToken(token);
+            daoUser.deleteToken(token);
         }
         return isUpdated;
+    }
+
+    public boolean doesEmailExist(String email) {
+        BeanUser user = daoUser.findByEmail(email);
+        return user != null;
     }
 
     public void saveResetToken(String email, String resetToken) {
@@ -30,7 +36,6 @@ public class CustomerService {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime la traza del error para depuración
             throw new RuntimeException("Error saving reset token", e);
         }
     }
@@ -49,7 +54,6 @@ public class CustomerService {
                 email = rs.getString("email");
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime la traza del error para depuración
             throw new RuntimeException("Error validating reset token", e);
         }
 
@@ -58,20 +62,5 @@ public class CustomerService {
         }
 
         return null;
-    }
-
-    // Método para eliminar el token después de usarlo
-    private void deleteResetToken(String token) {
-        String sql = "DELETE FROM password_reset_tokens WHERE token = ?";
-
-        try (Connection conn = new MySQLConnection().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, token);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(); // Imprime la traza del error para depuración
-            throw new RuntimeException("Error deleting reset token", e);
-        }
     }
 }

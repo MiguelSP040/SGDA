@@ -433,7 +433,7 @@ function sendCode() {
 
 // FUNCIONES DE recoverPassword.html
 function redirectToLogin() {
-    window.location.href = "/login.html";
+    window.location.href = "/";
 }
 
 function validateEmail(email) {

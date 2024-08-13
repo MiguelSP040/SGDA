@@ -13,30 +13,34 @@ import java.util.UUID;
 
 @WebServlet("/resetPassword")
 public class ResetPasswordServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
 
         if (email != null && !email.isEmpty()) {
             CustomerService customerService = new CustomerService();
+            boolean emailExists = customerService.doesEmailExist(email);
+
+            if (!emailExists) {
+                request.setAttribute("message", "Correo no registrado.");
+                request.getRequestDispatcher("/recoverPassword.jsp").forward(request, response);
+                return;
+            }
+
             String resetToken = UUID.randomUUID().toString();
             String resetLink = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath() + "/newPassword.jsp?token=" + resetToken);
 
-            // Send email with resetLink
             try {
                 EmailUtility.sendResetPasswordEmail(email, resetLink);
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
 
-            // Save resetToken to database associated with user email
             customerService.saveResetToken(email, resetToken);
-
-            response.sendRedirect("resetPasswordConfirmation.jsp"); // A page that confirms the email was sent
+            response.sendRedirect("resetPasswordConfirmation.jsp");
         } else {
-            response.sendRedirect("error.jsp"); // Handle error case
+            request.setAttribute("message", "Por favor, ingrese un correo electrónico.");
+            request.getRequestDispatcher("/recoverPassword.jsp").forward(request, response);
         }
     }
 }

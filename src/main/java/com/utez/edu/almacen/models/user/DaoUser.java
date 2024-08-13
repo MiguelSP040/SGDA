@@ -238,7 +238,7 @@ public class DaoUser implements DaoTemplate<BeanUser> {
         String query = "UPDATE users SET password = ? WHERE email = ?";
 
         try {
-            conn = new MySQLConnection().getConnection(); // Asegúrate de abrir la conexión aquí
+            conn = new MySQLConnection().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, newPassword);
             ps.setString(2, email);
@@ -246,38 +246,35 @@ public class DaoUser implements DaoTemplate<BeanUser> {
         } catch (SQLException e) {
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function updatePassword failed: " + e.getMessage());
         } finally {
-            closeConnection(); // Cierra la conexión al final de 2todo
+            closeConnection();
         }
 
         return updated;
     }
 
 
-    public boolean deleteToken(String token) {
-        boolean deleted = false;
-        String query = "DELETE FROM password_reset_tokens WHERE token = ?"; // Ajusta la tabla según tu esquema
+    public void deleteToken(String token) {
+        String query = "DELETE FROM password_reset_tokens WHERE token = ?";
 
         try {
-            conn = new MySQLConnection().getConnection(); // Asegúrate de abrir la conexión aquí
+            conn = new MySQLConnection().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, token);
-            deleted = ps.executeUpdate() > 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function deleteToken failed: " + e.getMessage());
         } finally {
-            closeConnection(); // Cierra la conexión al final de todo
+            closeConnection();
         }
 
-        return deleted;
     }
-
 
     public BeanUser findByEmail(String email) {
         BeanUser user = null;
         String query = "SELECT * FROM users WHERE email = ?";
 
         try {
-            conn = new MySQLConnection().getConnection(); // Asegúrate de abrir la conexión aquí
+            conn = new MySQLConnection().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
             rs = ps.executeQuery();
@@ -297,7 +294,7 @@ public class DaoUser implements DaoTemplate<BeanUser> {
         } catch (SQLException e) {
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function findByEmail failed: " + e.getMessage());
         } finally {
-            closeConnection(); // Cierra la conexión al final de todo
+            closeConnection();
         }
 
         return user;

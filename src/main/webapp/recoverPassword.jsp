@@ -40,15 +40,18 @@
                             <h5 class="card-header h3 text-black mb-5">
                                 Restablecer contraseña
                             </h5>
+                            <c:if test="${not empty message}">
+                                <div class="alert alert-danger text-center">
+                                        ${message}
+                                </div>
+                            </c:if>
                             <form id="recoverPasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="resetPassword">
                                 <div class="mb-5 text-center">
                                     <label class="mb-4" for="email">
                                         Introduzca su correo electrónico registrado y le enviaremos un mensaje con instrucciones para restablecer su contraseña. Recuerda revisar la bandeja de SPAM.
                                     </label>
                                     <input id="email" type="email" class="form-control" name="email" required placeholder="Correo electrónico">
-                                    <div class="invalid-feedback">
-                                        Correo electrónico no registrado
-                                    </div>
+                                    <br>
                                 </div>
 
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -92,7 +95,7 @@
     });
 
     function redirectToLogin() {
-        window.location.href = '/login'; // Ajusta la URL según la ruta de tu página de inicio de sesión
+        window.location.href = '/';
     }
 </script>
 
