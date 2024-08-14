@@ -1,8 +1,6 @@
 package com.utez.edu.almacen.models.user;
 
-import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,33 +10,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DaoUser implements DaoTemplate<BeanUser>{
+public class DaoUser{
     private Connection conn = new MySQLConnection().getConnection();
     private PreparedStatement ps;
     private ResultSet rs;
 
-    public boolean validationByCredentials (String email, String password){
-        try {
-            String query = "SELECT * FROM users WHERE email = ? AND password = ?;";
-            ps = conn.prepareStatement(query);
-            ps.setString(1, email);
-            ps.setString(2, password);
-            rs = ps.executeQuery();
-            return rs.next();
-        }catch (SQLException e){
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error loading user" + e.getMessage());
-            return false;
-        }finally {
-            closeConnection();
-        }
-    }
-
-    @Override
-    public List<BeanUser> listAll() {
+    public List<BeanUser> listAllExcept(String email) {
         List<BeanUser> users = new ArrayList<>();
         try {
-            String query = "SELECT * FROM users;";
+            String query = "SELECT * FROM users WHERE email <> ?;";
             ps = conn.prepareStatement(query);
+            ps.setString(1, email);
             rs = ps.executeQuery();
             while (rs.next()) {
                 BeanUser user = new BeanUser();
@@ -62,8 +44,6 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         return users;
     }
 
-
-    @Override
     public BeanUser listOne(Long id) {
         try {
             String query = "SELECT * FROM users WHERE id_user = ?;";
@@ -91,7 +71,6 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         return null;
     }
 
-    @Override
     public boolean save(BeanUser object) {
         try {
             String query = "INSERT INTO users(name, surname, lastname, phone, email, password, role, status)" +
@@ -128,8 +107,6 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         }
     }
 
-
-    @Override
     public boolean update(BeanUser object) {
         try {
             String query = "UPDATE users SET name = ?, surname = ?, lastname = ?, phone = ?, email = ?," +
@@ -153,7 +130,6 @@ public class DaoUser implements DaoTemplate<BeanUser>{
         return false;
     }
 
-    @Override
     public boolean delete(Long id) {
         try {
             String query = "DELETE FROM users WHERE id_user = ?;";

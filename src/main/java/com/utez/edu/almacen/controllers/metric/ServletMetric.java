@@ -2,8 +2,6 @@ package com.utez.edu.almacen.controllers.metric;
 
 import com.utez.edu.almacen.models.metric.BeanMetric;
 import com.utez.edu.almacen.models.metric.DaoMetric;
-import com.utez.edu.almacen.models.product.DaoProduct;
-import com.utez.edu.almacen.models.user.DaoUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -37,21 +35,6 @@ public class ServletMetric extends HttpServlet {
                 List<BeanMetric> metrics = new DaoMetric().listAll();
                 request.setAttribute("metrics", metrics);
                 redirect = "/views/metric/metrics.jsp";
-                break;
-            case "/metric/register":
-                redirect = "";
-                break;
-            case "/metric/update-view":
-                id = request.getParameter("id");
-                metric = new DaoMetric().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (metric != null){
-                    request.setAttribute("metric", metric);
-                    redirect = "";
-                } else{
-                    redirect = "/metric/list-metrics?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
                 break;
             case "/metric/search":
                 shortName = request.getParameter("shortName");

@@ -38,21 +38,6 @@ public class ServletArea extends HttpServlet {
                 request.setAttribute("areas", areas);
                 redirect = "/views/area/destinationAreas.jsp";
                 break;
-            case "/area/register":
-                redirect = "";
-                break;
-            case "/area/update-view":
-                id = request.getParameter("id");
-                area = new DaoArea().listOne((id != null) ? (Long.parseLong(id)): (0));
-                if (area != null){
-                    request.setAttribute("area", area);
-                    redirect = "";
-                } else{
-                    redirect = "/area/list-areas?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
-                break;
             case "/area/search":
                 shortName = request.getParameter("shortName");
                 name = request.getParameter("name");

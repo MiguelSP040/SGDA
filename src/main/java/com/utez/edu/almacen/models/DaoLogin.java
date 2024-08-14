@@ -1,10 +1,8 @@
 package com.utez.edu.almacen.models;
 
 import com.utez.edu.almacen.utils.MySQLConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,40 +12,55 @@ public class DaoLogin {
     private ResultSet rs;
     private final MySQLConnection DB_CONNECTION = new MySQLConnection();
     private final String [] QUERIES = {
-            "SELECT * FROM users WHERE password=? AND email=?;"
+            "SELECT * FROM users WHERE email=?;" // Nueva query para solo buscar por email
     };
 
-    public boolean findUser(String username, String password) {
+    public LoginResult findUser(String username, String password) {
         try {
             con = DB_CONNECTION.getConnection();
             pstm = con.prepareStatement(QUERIES[0]);
-            pstm.setString(1,password);
-            pstm.setString(2,username);
+            pstm.setString(1, username);
             rs = pstm.executeQuery();
 
-            return rs.next();
-        }catch (SQLException e){
-            Logger.getLogger(DaoLogin.class.getName()).log(Level.SEVERE, "Error loading login" + e.getMessage());
-            return false;
-        }finally {
+            if (rs.next()) {
+                String dbPassword = rs.getString("password");
+                boolean isActive = rs.getBoolean("status");
+
+                if (!dbPassword.equals(password)) {
+                    return new LoginResult(false, "Usuario y/o contraseña incorrectos.");
+                }
+
+                if (!isActive) {
+                    return new LoginResult(false, "Usuario inactivo.");
+                }
+
+                return new LoginResult(true, "Login exitoso.");
+            } else {
+                return new LoginResult(false, "Usuario y/o contraseña incorrectos.");
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(DaoLogin.class.getName()).log(Level.SEVERE, "Error en el login: " + e.getMessage());
+            return new LoginResult(false, "Error en el servidor.");
+        } finally {
             CloseConnection();
         }
-
     }
 
     public void CloseConnection(){
         try {
-            if (con!=null){
+            if (con != null) {
                 con.close();
             }
-            if (pstm!=null){
+            if (pstm != null) {
                 pstm.close();
             }
-            if (rs!=null){
+            if (rs != null) {
                 rs.close();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
+

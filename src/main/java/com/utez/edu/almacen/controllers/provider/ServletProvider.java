@@ -16,8 +16,6 @@ import java.util.List;
 
 @WebServlet(name = "ServletProvider", urlPatterns = {
         "/provider/list-providers",
-        "/provider/register",
-        "/provider/update-view",
         "/provider/delete",
         "/provider/save",
         "/provider/update",
@@ -39,18 +37,6 @@ public class ServletProvider extends HttpServlet {
                 List<BeanProvider> providers = new DaoProvider().listAll();
                 request.setAttribute("providers", providers);
                 redirect = "/views/provider/checkSupplier.jsp";
-                break;
-            case "/provider/update-view":
-                id = request.getParameter("id");
-                provider = new DaoProvider().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (provider != null){
-                    request.setAttribute("provider", provider);
-                    redirect = "";
-                } else{
-                    redirect = "/provider/list-providers?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
                 break;
             case "/provider/search":
                 name = request.getParameter("name");

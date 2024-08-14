@@ -1,6 +1,7 @@
 package com.utez.edu.almacen.controllers;
 
 import com.utez.edu.almacen.models.DaoLogin;
+import com.utez.edu.almacen.models.LoginResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,28 +14,32 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean flag = (boolean) request.getAttribute("flag");
-        request.setAttribute("errorMessage", flag);
-        request.getRequestDispatcher(flag ? "/views/product/checkStock.jsp" : "/index.jsp").forward(request,response);
+        request.setAttribute("errorMessage", request.getAttribute("errorMessage"));
+        request.getRequestDispatcher(flag ? "/views/product/checkStock.jsp" : "/index.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
+
         DaoLogin daoLogin = new DaoLogin();
         String password = request.getParameter("password");
         String email = request.getParameter("email");
 
-        if (daoLogin.findUser(email,password)){
+        LoginResult result = daoLogin.findUser(email, password);
+
+        if (result.isSuccess()) {
             if (request.getSession(false) == null) {
                 request.getSession(true);
             }
-            request.getSession(false).setAttribute("user",email);
-            request.setAttribute("flag",true);
-        }else{
-            request.setAttribute("flag",false);
+            request.getSession(false).setAttribute("user", email);
+            request.setAttribute("flag", true);
+        } else {
+            request.setAttribute("flag", false);
+            request.setAttribute("errorMessage", result.getMessage());
         }
 
-        doGet(request,response);
+        doGet(request, response);
     }
 }
