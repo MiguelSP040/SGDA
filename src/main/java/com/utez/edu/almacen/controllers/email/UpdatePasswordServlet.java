@@ -21,7 +21,7 @@ public class UpdatePasswordServlet extends HttpServlet {
         // Check if passwords match
         if (!password1.equals(password2)) {
             request.setAttribute("message", "Las contraseñas no coinciden.");
-            request.getRequestDispatcher("/path/to/new-password.jsp").forward(request, response);
+            request.getRequestDispatcher("new-password.jsp").forward(request, response);
             return;
         }
 
@@ -30,7 +30,7 @@ public class UpdatePasswordServlet extends HttpServlet {
             BeanUser user = customerService.validateResetToken(token);
             if (user == null) {
                 request.setAttribute("message", "Token inválido o expirado.");
-                request.getRequestDispatcher("/path/to/new-password.jsp").forward(request, response);
+                request.getRequestDispatcher("new-password.jsp").forward(request, response);
                 return;
             }
 
@@ -40,7 +40,7 @@ public class UpdatePasswordServlet extends HttpServlet {
                 response.sendRedirect("updatePassword.jsp"); // Redirect to login page or success page
             } else {
                 request.setAttribute("message", "Error al actualizar la contraseña.");
-                request.getRequestDispatcher("/path/to/new-password.jsp").forward(request, response);
+                request.getRequestDispatcher("new-password.jsp").forward(request, response);
             }
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al actualizar la contraseña");
