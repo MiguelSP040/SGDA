@@ -409,12 +409,27 @@ function showHideDeleteMetric(){
     }
 }
 
-
-//Funcion para mostrar contraseña doble
+//Funcion para mostrar contraseña
 function showPassword() {
     const eyeOpen = document.querySelector(".eyeOpen");
     const eyeClose = document.querySelector(".eyeClose");
+    var password = document.getElementById("password");
 
+    if (password.type === "password") {
+        password.type = "text";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
+    } else {
+        password.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
+    }
+}
+
+//Funcion para mostrar contraseña doble
+function showPassword1() {
+    const eyeOpen = document.querySelector(".eyeOpen1");
+    const eyeClose = document.querySelector(".eyeClose1");
     var password1 = document.getElementById("password1");
 
     if (password1.type === "password") {
@@ -427,25 +442,24 @@ function showPassword() {
         eyeClose.style.display = "none";
     }
 }
-
-
 //Funcion para mostrar contraseña doble
 function showDoublePassword() {
-    const eyeOpen2 = document.querySelector(".eyeOpen2");
-    const eyeClose2 = document.querySelector(".eyeClose2");
-
+    const eyeOpen = document.querySelector(".eyeOpen2");
+    const eyeClose = document.querySelector(".eyeClose2");
     var password2 = document.getElementById("password2");
 
     if (password2.type === "password") {
         password2.type = "text";
-        eyeOpen2.style.display = "none";
-        eyeClose2.style.display = "block";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
     } else {
         password2.type = "password";
-        eyeOpen2.style.display = "block";
-        eyeClose2.style.display = "none";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
     }
 }
+
+
 // Función para desplegar submenu
 function showSubmenu(id) {
     // Selecciona el botón con el id dado

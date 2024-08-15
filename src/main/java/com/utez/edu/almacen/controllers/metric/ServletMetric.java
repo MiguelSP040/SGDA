@@ -87,7 +87,7 @@ public class ServletMetric extends HttpServlet {
                 name = request.getParameter("name");
                 shortName = request.getParameter("shortName");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                metric = new BeanMetric(Long.parseLong(id), name, shortName, status);
+                metric = new BeanMetric(Long.parseLong(id), name, shortName, true);
                 if (new DaoMetric().update(metric)){
                     redirect = "/metric/list-metrics?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación a la métrica realizada con éxito!", StandardCharsets.UTF_8);

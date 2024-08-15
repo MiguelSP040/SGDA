@@ -106,13 +106,12 @@ public class ServletUser extends HttpServlet {
                         password = request.getParameter("password");
                         role = request.getParameter("role");
                         status = Boolean.parseBoolean(request.getParameter("status"));
-                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
-                                password, role, status);
+                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email, password, role, true);
                         if (new DaoUser().update(user)){
-                            redirect = "/user/list-users?result= " + true + "&message=" +
+                            redirect = "/user/list-users?result=" + true + "&message=" +
                                     URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
                         }else {
-                            redirect = "/user/list-users?result= " + false + "&message=" +
+                            redirect = "/user/list-users?result=" + false + "&message=" +
                                     URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
                         }
                         break;

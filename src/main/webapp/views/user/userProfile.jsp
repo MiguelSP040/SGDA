@@ -25,13 +25,15 @@
                 Perfil de usuario
             </div>
             <div class="d-flex justify-content-end">
-                <button onclick="update()" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateUser">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                    </svg>
-                    Editar datos
-                </button>
+                <div class="row">
+                    <button onclick="update()" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateUser">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                        Editar datos
+                    </button>
+                </div>
             </div>
 
             <!-- DATOS DE CONSULTA
@@ -49,11 +51,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                             </svg>
-                            Nombre de usuario
+                            Nombre(s)
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="userName fw-bold fs-5">Isael Alejandro Reyes Vargas </span>
+                                <span class="userName fw-bold fs-5">Isael Alejandro</span>
                             </div>
                         </div>
                     </div>
@@ -76,29 +78,28 @@
                     <!--ROL-->
                     <div class="mt-4">
                         <label id="rol" for="rol" class="fs-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                             </svg>
-                            Rol de usuario
+                            Apellidos
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="rol fw-bold fs-5">Administrador</span>
+                                <span class="rol fw-bold fs-5">Reyes Vargas</span>
                             </div>
                         </div>
                     </div>
                     <!--ESTADO-->
                     <div class="mt-4">
                         <label id="status" for="status" class="fs-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
-                                <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
-                                <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+                                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
                             </svg>
-                            Estado
+                            Rol de usuario
                         </label>
                         <div class="row">
                             <div class="col align-items-center">
-                                <h4><span class="badge badge-pill statusGreen">Activo</span></h4>
+                                <span class="rol fw-bold fs-5">Administrador</span>
                             </div>
                         </div>
                     </div>
@@ -128,8 +129,16 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="fw-bold fs-5">************</span> <!-- Estos asteríscos no deben cambiar,-->
-                            </div>                                             <!-- deben quedar así aunque no muestre nada -->
+                                <div class="input-group">
+                                    <span class="fw-bold fs-5">************</span><!-- Estos asteríscos no deben cambiar,-->
+                                    <button onclick="" class="btn" data-bs-toggle="modal" data-bs-target="#updatePassword">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div><!-- deben quedar así aunque no muestre nada -->
                         </div>
 
                     </div>
@@ -189,6 +198,97 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updatePassword" tabindex="-1" aria-labelledby="updatePasswordModal"
+         aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="updatePasswordLabel">Cambiar contraseña</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updatePasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="">
+                        <div class="mb-1 text-start">
+
+                            <!--Contraseña ACTUAL-->
+                            <label class="mb-3" for="password">Ingrese su contraseña actual</label>
+                            <div class="input-group mb-5">
+                                <input  class="form-control" type="password" name="password" id="password" placeholder="Contraseña" required>
+                                <button class="btn btn-outline-secondary eyeOpen" type="button" onclick="showPassword()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-outline-secondary eyeClose" type="button" onclick="showPassword()" style="display:none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                                    </svg>
+                                </button>
+                                <div class="invalid-feedback">
+                                    Contraseña no válida
+                                </div>
+                            </div>
+
+                            <!--Contraseña NUEVA-->
+                            <label class="mb-3" for="password1">Ingrese una nueva contraseña</label>
+                            <div class="input-group mb-5">
+                                <input  class="form-control" type="password" name="password1" id="password1" placeholder="Nueva contraseña" required>
+                                <button class="btn btn-outline-secondary eyeOpen1" type="button" onclick="showPassword1()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-outline-secondary eyeClose1" type="button" onclick="showPassword1()" style="display:none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                                    </svg>
+                                </button>
+                                <div class="invalid-feedback">
+                                    Contraseña no válida
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Contraseña CONFIRMAR NUEVA-->
+                        <div class="mb-2 text-start">
+                            <label class="mb-3" for="password2">Confirme su contraseña</label>
+                            <div class="input-group mb-3">
+                                <input  class="form-control" type="password" name="password2" id="password2" placeholder="Confirmar nueva contraseña" required>
+                                <button class="btn btn-outline-secondary eyeOpen2" type="button" onclick="showDoublePassword()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-outline-secondary eyeClose2" type="button" onclick="showDoublePassword()" style="display:none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                                    </svg>
+                                </button>
+                                <div class="invalid-feedback">
+                                    Las contraseñas no coinciden
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- Enva correo para obtener un código de verificación -->
+                            <button type="button" class="btn botonCafe me-md-2" onclick="updatePassword()">
+                                Actualizar contraseña
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -331,6 +431,57 @@
             }
         }
     </script>
+<script>
+    //Funcion para mostrar contraseña
+    function showPassword() {
+        const eyeOpen = document.querySelector(".eyeOpen");
+        const eyeClose = document.querySelector(".eyeClose");
+        var password = document.getElementById("password");
+
+        if (password.type === "password") {
+            password.type = "text";
+            eyeOpen.style.display = "none";
+            eyeClose.style.display = "block";
+        } else {
+            password.type = "password";
+            eyeOpen.style.display = "block";
+            eyeClose.style.display = "none";
+        }
+    }
+
+    //Funcion para mostrar contraseña doble
+    function showPassword1() {
+        const eyeOpen = document.querySelector(".eyeOpen1");
+        const eyeClose = document.querySelector(".eyeClose1");
+        var password1 = document.getElementById("password1");
+
+        if (password1.type === "password") {
+            password1.type = "text";
+            eyeOpen.style.display = "none";
+            eyeClose.style.display = "block";
+        } else {
+            password1.type = "password";
+            eyeOpen.style.display = "block";
+            eyeClose.style.display = "none";
+        }
+    }
+    //Funcion para mostrar contraseña doble
+    function showDoublePassword() {
+        const eyeOpen = document.querySelector(".eyeOpen2");
+        const eyeClose = document.querySelector(".eyeClose2");
+        var password2 = document.getElementById("password2");
+
+        if (password2.type === "password") {
+            password2.type = "text";
+            eyeOpen.style.display = "none";
+            eyeClose.style.display = "block";
+        } else {
+            password2.type = "password";
+            eyeOpen.style.display = "block";
+            eyeClose.style.display = "none";
+        }
+    }
+</script>
     <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>

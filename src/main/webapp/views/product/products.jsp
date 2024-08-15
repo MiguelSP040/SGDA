@@ -70,15 +70,15 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="newProductForm" method="post" action="/product/save">
+                            <form id="newProductForm" method="post" action="/product/save" novalidate>
                                 <h5>Datos de Producto</h5>
                                 <div class="mb-3">
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
-                                    <input type="text" class="form-control" name="name" id="name" required>
+                                    <input type="text" class="form-control" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="code" class="col-form-label">Acrónimo*</label>
-                                    <input type="text" class="form-control" name="code" id="code" required>
+                                    <input type="text" class="form-control" name="code" id="code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="description" id="description" required></textarea>
+                                    <textarea class="form-control" name="description" id="description" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="registerProduct(event)">
@@ -119,19 +119,19 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateProductForm" method="post" action="/product/update">
+                            <form id="updateProductForm" method="post" action="/product/update" novalidate>
                                 <h5>Datos de Producto</h5>
                                 <div class="mb-3">
-                                    <label for="name" class="col-form-label">Nombre del Producto*</label>
-                                    <input type="text" class="form-control" name="name" id="name">
+                                    <label for="u_name" class="col-form-label">Nombre del Producto*</label>
+                                    <input type="text" class="form-control" name="u_name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="code" class="col-form-label">Acrónimo*</label>
-                                    <input type="text" class="form-control" name="code" id="code">
+                                    <label for="u_code" class="col-form-label">Acrónimo*</label>
+                                    <input type="text" class="form-control" name="u_code" id="u_code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
-                                    <select class="form-select" name="id_metric" id="id_metric" required>
+                                    <select class="form-select" name="u_id_metric" id="u_id_metric" required>
                                         <option disabled selected value>Seleccionar opción</option>
                                         <% for (BeanMetric m : metrics) { %>
                                         <% if (m.getStatus()) { %>
@@ -141,8 +141,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="description" id="description"></textarea>
+                                    <label for="u_description" class="col-form-label">Descripción*</label>
+                                    <textarea class="form-control" name="u_description" id="u_description" required></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="updateProduct(event)">
@@ -261,9 +261,9 @@
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                     </svg>
                                 </button>
-                                <form action="${pageContext.request.contextPath}/product/delete" method="post" style="display:inline;">
+                                <form action="${pageContext.request.contextPath}/product/delete" method="post" style="display:inline;" id="changeStatusForm">
                                     <input type="hidden" name="id" value="${product.id}"/>
-                                    <button type="submit" class="btn btn-lg botonRojo">
+                                    <button type="submit" class="btn btn-lg botonRojo" data-id="${product.id}">
                                         <svg class="bi bi-pencil-square" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              fill="none" viewBox="0 0 24 24">
@@ -299,33 +299,121 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/funciones.js"></script>
 <script>
-    // Obtener parámetros de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const result = urlParams.get('result');
-    const message = urlParams.get('message');
-    // Función de validación del formulario
-    function validateForm(formId) {
-        const form = document.getElementById(formId);
-        const cancelButton = document.querySelector('button[data-bs-dismiss="modal"]');
-        let isValid = true;
-
-        if (cancelButton && cancelButton.matches(':focus')) {
-            // Si el botón de cancelar está enfocado, quitamos el estado 'was-validated'
-            form.classList.remove('was-validated');
+    // Función para validar un campo individualmente en tiempo real
+    function validateField(input) {
+        const form = input.closest('form'); // Obtén el formulario al que pertenece el campo
+        if (input.required && !input.checkValidity()) {
+            input.classList.add('is-invalid');
+            form.classList.add('was-validated');
+        } else {
+            input.classList.remove('is-invalid');
+            if (form.querySelectorAll('input:invalid, select:invalid, textarea:invalid').length === 0) {
+                form.classList.remove('was-validated'); // Elimina 'was-validated' si todos los campos son válidos
+            }
         }
+    }
+
+    // Configura la validación en tiempo real para todos los campos del formulario
+    function setupRealTimeValidation(formId) {
+        const form = document.getElementById(formId);
 
         form.querySelectorAll('input, select, textarea').forEach(input => {
-            if (input.required && (input.tagName === 'SELECT' && input.value === '' || !input.value.trim())) {
+            input.addEventListener('input', () => {
+                validateField(input);
+            });
+        });
+    }
+
+    // Función para validar el formulario completo antes de enviar
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        let isValid = true;
+        let isEmpty = true;
+
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            // Verifica si el formulario tiene algún campo lleno
+            if (input.value.trim()) {
+                isEmpty = false;
+            }
+
+            // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
+            if (input.required && !input.checkValidity()) {
                 isValid = false;
-                form.classList.add('was-validated');
                 input.classList.add('is-invalid');
             } else {
                 input.classList.remove('is-invalid');
             }
         });
 
-        return isValid;
+        // Si el formulario está vacío, muestra una advertencia de formulario vacío
+        if (isEmpty) {
+            showEmptyWarning();
+            return false;
+        }
+
+        // Si algún campo no es válido, muestra una advertencia
+        if (!isValid) {
+            form.classList.add('was-validated');
+            showWarningAlert();
+            return false;
+        }
+
+        // Si es válido, aseguramos que la clase 'was-validated' esté eliminada
+        form.classList.remove('was-validated');
+        return true;
     }
+
+    // Configura la validación en tiempo real al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        setupRealTimeValidation('newProductForm');
+        setupRealTimeValidation('updateProductForm');
+    });
+
+    // Ejemplos de las funciones showWarningAlert y showEmptyWarning (deben estar definidas previamente)
+    function showWarningAlert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos inválidos',
+            text: 'Por favor corrige los campos marcados en el formulario.',
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido`,
+            footer: '<span class="red">Nota: Ingresa datos válidos en el formulario</span>',
+            allowOutsideClick: false,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup'
+            }
+        });
+    }
+
+    function showEmptyWarning() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor llena todos los campos obligatorios del formulario.',
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido`,
+            footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
+            allowOutsideClick: false,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup'
+            }
+        });
+    }
+
+    // Obtener parámetros de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const result = urlParams.get('result');
+    const message = urlParams.get('message');
 
 
     // Función para mostrar alerta de éxito
@@ -375,13 +463,13 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
                                       <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591"/>
                                     </svg>
-                                </span> Cancelar.`,
+                                </span> Cancelar`,
             confirmButtonText: `<span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
                                         <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
                                     </svg>
-                                </span> Sí, registrar.`,
-            footer: '<span class="green">Nota: Puedes desactivarlo después</span>',
+                                </span> Sí, continuar`,
+            footer: '<span class="green">Nota: Puedes cambiarlo después</span>',
             reverseButtons: false,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -409,56 +497,45 @@
     // Función para manejar el registro de un producto
     function registerProduct(event) {
         event.preventDefault(); // Evita el envío automático del formulario
-        const form = document.getElementById('newProductForm');
-        if (validateForm('newProductForm')) { // Asegúrate de usar el ID correcto
-            showProductConfirmation("¿Estás seguro de que deseas registrar este producto?",form);
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Campos incompletos',
-                text: 'Por favor llena todos los campos obligatorios del formulario.',
-                confirmButtonText: `<span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                                    </svg>
-                                </span> Entendido`,
-                footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
-                allowOutsideClick: false,
-                customClass: {
-                    confirmButton: 'btn botonCafe',
-                    cancelButton: 'btn botonGris',
-                    popup: 'no-select-popup'
-                }
-            });
+        const formId = 'newProductForm';
+
+        if (validateForm(formId)) {
+            const form = document.getElementById(formId);
+            showProductConfirmation("¿Estás seguro de que deseas registrar este producto?", form);
         }
     }
 
-    // Función para manejar la actualización de un producto
+    // Función para actualizar usuario
     function updateProduct(event) {
         event.preventDefault(); // Evita el envío automático del formulario
-        const form = document.getElementById('updateProductForm');
-        if (validateForm('updateProductForm')) {
-            showProductConfirmation("¿Estás seguro de que deseas actualizar este producto?",form);
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Campos incompletos',
-                text: 'Por favor llena todos los campos obligatorios del formulario.',
-                confirmButtonText: `<span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                                    </svg>
-                                </span> Entendido`,
-                footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
-                allowOutsideClick: false,
-                customClass: {
-                    confirmButton: 'btn botonCafe',
-                    cancelButton: 'btn botonGris',
-                    popup: 'no-select-popup'
-                }
-            });
+        const formId = 'updateProductForm';
+
+        if (validateForm(formId)) {
+            const form = document.getElementById(formId);
+            showProductConfirmation("¿Estás seguro de que deseas actualizar este producto?", form);
         }
     }
+
+    // Función para cambiar el estado de un product
+    function handleChangeStatus(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const button = event.currentTarget;
+        const productId = button.getAttribute('data-id');
+        const form = document.getElementById('changeStatusForm');
+
+        // Actualiza el input hidden con el ID correcto
+        form.querySelector('input[name="id"]').value = productId;
+        showProductConfirmation('¿Estás seguro de que deseas cambiar el estado a este producto?', form);
+    }
+
+    // Asocia la función a los botones cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        const changeStatusButtons = document.querySelectorAll('.botonRojo');
+
+        changeStatusButtons.forEach(button => {
+            button.addEventListener('click', handleChangeStatus);
+        });
+    });
 </script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
