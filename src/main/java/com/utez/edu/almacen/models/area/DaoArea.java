@@ -1,5 +1,7 @@
 package com.utez.edu.almacen.models.area;
 
+import com.utez.edu.almacen.models.metric.BeanMetric;
+import com.utez.edu.almacen.models.metric.DaoMetric;
 import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
@@ -131,6 +133,71 @@ public class DaoArea implements DaoTemplate<BeanArea> {
         } finally {
             closeConnection();
         }
+    }
+
+    public List<BeanArea> search(String name, String shortName, String status){
+        List<BeanArea> areas = new ArrayList<>();
+        int count = 1;
+        try {
+            Boolean status2 = false;
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                if (status.equals("Activo")){
+                    status2 = true;
+                } else if (status.equals("Inactivo")){
+                    status2 = false;
+                }
+            }
+            conn = new MySQLConnection().getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM areas WHERE 1=1");
+
+
+            if (shortName != null && !shortName.isEmpty()) {
+                query.append(" AND shortName = ?");
+            }
+            if (name != null && !name.isEmpty()) {
+                query.append(" AND name LIKE ?");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                query.append(" AND status = ?");
+            }else {
+                query.append(" AND (status = ? OR status = ?)");
+            }
+
+
+
+            ps = conn.prepareStatement(query.toString());
+
+            if (shortName != null && !shortName.isEmpty()) {
+                ps.setString(count++, shortName);
+            }
+            if (name != null && !name.isEmpty()) {
+                ps.setString(count++, "%" + name + "%");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                ps.setBoolean(count++, status2);
+            }else {
+                ps.setBoolean(count++, true);
+                ps.setBoolean(count++, false);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanArea area = new BeanArea();
+                area.setId(rs.getLong(1));
+                area.setShortName(rs.getString(2));
+                area.setName(rs.getString(3));
+                area.setDescription(rs.getString(4));
+                area.setStatus(rs.getBoolean(5));
+
+                areas.add(area);
+            }
+        }catch(SQLException e){
+            Logger.getLogger(DaoArea.class.getName()).log(Level.SEVERE, "ERROR. Function search failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return areas;
     }
 
     public void closeConnection(){

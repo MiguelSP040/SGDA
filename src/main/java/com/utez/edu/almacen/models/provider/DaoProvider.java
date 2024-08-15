@@ -1,5 +1,7 @@
 package com.utez.edu.almacen.models.provider;
 
+import com.utez.edu.almacen.models.product.BeanProduct;
+import com.utez.edu.almacen.models.product.DaoProduct;
 import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
@@ -161,6 +163,86 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
         } finally {
             closeConnection();
         }
+    }
+
+    public List<BeanProvider> search(String name, String rfc, String email, String status){
+        List<BeanProvider> providers = new ArrayList<>();
+        int count = 1;
+        try {
+            Boolean status2 = false;
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                if (status.equals("Activo")){
+                    status2 = true;
+                } else if (status.equals("Inactivo")){
+                    status2 = false;
+                }
+            }
+            conn = new MySQLConnection().getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM providers WHERE 1=1");
+
+
+            if (name != null && !name.isEmpty()) {
+                query.append(" AND name LIKE ?");
+            }
+            if (rfc != null && !rfc.isEmpty()) {
+                query.append(" AND rfc = ?");
+            }
+            if (email != null && !email.isEmpty()) {
+                query.append(" AND email LIKE ?");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                query.append(" AND status = ?");
+            }else {
+                query.append(" AND (status = ? OR status = ?)");
+            }
+
+
+
+            ps = conn.prepareStatement(query.toString());
+
+            if (name != null && !name.isEmpty()) {
+                ps.setString(count++, name);
+            }
+            if (rfc != null && !rfc.isEmpty()) {
+                ps.setString(count++, "%" + rfc + "%");
+            }
+
+            if (email != null && !email.isEmpty()) {
+                ps.setString(count++, "%" + email + "%");
+            }
+
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                ps.setBoolean(count++, status2);
+            }else {
+                ps.setBoolean(count++, true);
+                ps.setBoolean(count++, false);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanProvider provider = new BeanProvider();
+                provider.setId(rs.getLong(1));
+                provider.setName(rs.getString(2));
+                provider.setRfc(rs.getString(3));
+                provider.setPhone(rs.getString(4));
+                provider.setEmail(rs.getString(5));
+                provider.setContactName(rs.getString(6));
+                provider.setAddress(rs.getString(7));
+                provider.setPostCode(rs.getString(8));
+                provider.setSocialCase(rs.getString(9));
+                provider.setContactPhone(rs.getString(10));
+                provider.setContactEmail(rs.getString(11));
+                provider.setStatus(rs.getBoolean(12));
+
+                providers.add(provider);
+            }
+        }catch(SQLException e){
+            Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function search failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return providers;
     }
 
     public void closeConnection(){

@@ -1,5 +1,7 @@
 package com.utez.edu.almacen.models.metric;
 
+import com.utez.edu.almacen.models.product.BeanProduct;
+import com.utez.edu.almacen.models.product.DaoProduct;
 import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
@@ -122,11 +124,75 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             ps.setLong(1, metricId);
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
+            Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function change status failed: " + e.getMessage());
             return false;
         } finally {
             closeConnection();
         }
+    }
+
+    public List<BeanMetric> search(String name, String shortName, String status){
+        List<BeanMetric> metrics = new ArrayList<>();
+        int count = 1;
+        try {
+            Boolean status2 = false;
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                if (status.equals("Activo")){
+                    status2 = true;
+                } else if (status.equals("Inactivo")){
+                    status2 = false;
+                }
+            }
+            conn = new MySQLConnection().getConnection();
+            StringBuilder query = new StringBuilder("SELECT * FROM metrics WHERE 1=1");
+
+
+            if (shortName != null && !shortName.isEmpty()) {
+                query.append(" AND shortName = ?");
+            }
+            if (name != null && !name.isEmpty()) {
+                query.append(" AND name LIKE ?");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                query.append(" AND status = ?");
+            }else {
+                query.append(" AND (status = ? OR status = ?)");
+            }
+
+
+
+            ps = conn.prepareStatement(query.toString());
+
+            if (shortName != null && !shortName.isEmpty()) {
+                ps.setString(count++, shortName);
+            }
+            if (name != null && !name.isEmpty()) {
+                ps.setString(count++, "%" + name + "%");
+            }
+            if (status != null && (status.equals("Activo") || status.equals("Inactivo"))) {
+                ps.setBoolean(count++, status2);
+            }else {
+                ps.setBoolean(count++, true);
+                ps.setBoolean(count++, false);
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanMetric metric = new BeanMetric();
+                metric.setId(rs.getLong(1));
+                metric.setShortName(rs.getString(2));
+                metric.setName(rs.getString(3));
+                metric.setStatus(rs.getBoolean(4));
+
+                metrics.add(metric);
+            }
+        }catch(SQLException e){
+            Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function search failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return metrics;
     }
 
     public void closeConnection(){

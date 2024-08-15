@@ -1,5 +1,6 @@
 package com.utez.edu.almacen.controllers.provider;
 
+import com.utez.edu.almacen.models.product.DaoProduct;
 import com.utez.edu.almacen.models.provider.BeanProvider;
 import com.utez.edu.almacen.models.provider.DaoProvider;
 import com.utez.edu.almacen.models.user.DaoUser;
@@ -15,11 +16,10 @@ import java.util.List;
 
 @WebServlet(name = "ServletProvider", urlPatterns = {
         "/provider/list-providers",
-        "/provider/register",
-        "/provider/update-view",
         "/provider/delete",
         "/provider/save",
-        "/provider/update"
+        "/provider/update",
+        "/provider/search"
 })
 public class ServletProvider extends HttpServlet {
     private String action;
@@ -38,17 +38,16 @@ public class ServletProvider extends HttpServlet {
                 request.setAttribute("providers", providers);
                 redirect = "/views/provider/checkSupplier.jsp";
                 break;
-            case "/provider/update-view":
-                id = request.getParameter("id");
-                provider = new DaoProvider().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (provider != null){
-                    request.setAttribute("provider", provider);
-                    redirect = "";
-                } else{
-                    redirect = "/provider/list-providers?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
+            case "/provider/search":
+                name = request.getParameter("name");
+                rfc = request.getParameter("rfc");
+                email = request.getParameter("email");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchRfc", rfc);
+                request.setAttribute("searchEmail", email);
+                providers = new DaoProvider().search(name, rfc, email, status2);
+                request.setAttribute("providers", providers);
                 break;
             default:
                 System.out.println(action);
@@ -108,7 +107,7 @@ public class ServletProvider extends HttpServlet {
                 contactPhone = request.getParameter("contactPhone");
                 contactEmail = request.getParameter("contactEmail");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status);
+                provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, true);
                 if (new DaoProvider().update(provider)){
                     redirect = "/provider/list-providers?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación al proveedor realizada con éxito!", StandardCharsets.UTF_8);

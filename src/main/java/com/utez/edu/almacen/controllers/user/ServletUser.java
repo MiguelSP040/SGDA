@@ -7,18 +7,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "ServletUser",
         urlPatterns = { //urlPatterns funge como directorio para relacionar funciones con vistas
-        "/user/list-users", //get
-                "/user/register", //get
-                "/user/update-view", //get
+                "/user/list-users", //get
                 "/user/update", //post
                 "/user/delete", //post
                 "/user/search", //get
@@ -38,26 +34,12 @@ public class ServletUser extends HttpServlet {
         action = request.getServletPath();
         switch (action) {
             case "/user/list-users":
-                List<BeanUser> users = new DaoUser().listAll();
+                String currentUserEmail = (String) request.getSession().getAttribute("user");
+                List<BeanUser> users = new DaoUser().listAllExcept(currentUserEmail);
                 request.setAttribute("users", users);
                 redirect = "/views/user/userQuery.jsp";
                 break;
 
-            case "/user/register":
-                redirect = "/views/user/userRegistration.jsp";
-                break;
-
-            case "/user/update-view":
-                id = request.getParameter("id");
-                user = new DaoUser().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (user != null){
-                    request.setAttribute("user", user);
-                    redirect = "/user/list-users";
-                }else {
-                    redirect = "/user/list-users?result= " + false + "&message=" +
-                            URLEncoder.encode("¡ERROR!", StandardCharsets.UTF_8);
-                }
-                break;
             case "/user/search":
                 name = request.getParameter("name");
                 surname = request.getParameter("name");
@@ -69,7 +51,6 @@ public class ServletUser extends HttpServlet {
                 request.setAttribute("searchEmail", email);
                 users = new DaoUser().search(name, role, email, status2);
                 request.setAttribute("users", users);
-
                 break;
 
             default:
@@ -125,13 +106,12 @@ public class ServletUser extends HttpServlet {
                         password = request.getParameter("password");
                         role = request.getParameter("role");
                         status = Boolean.parseBoolean(request.getParameter("status"));
-                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
-                                password, role, status);
+                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email, password, role, true);
                         if (new DaoUser().update(user)){
-                            redirect = "/user/list-users?result= " + true + "&message=" +
+                            redirect = "/user/list-users?result=" + true + "&message=" +
                                     URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
                         }else {
-                            redirect = "/user/list-users?result= " + false + "&message=" +
+                            redirect = "/user/list-users?result=" + false + "&message=" +
                                     URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
                         }
                         break;

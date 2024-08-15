@@ -2,7 +2,6 @@ package com.utez.edu.almacen.controllers.metric;
 
 import com.utez.edu.almacen.models.metric.BeanMetric;
 import com.utez.edu.almacen.models.metric.DaoMetric;
-import com.utez.edu.almacen.models.user.DaoUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +16,8 @@ import java.util.List;
         "/metric/list-metrics",
         "/metric/delete",
         "/metric/save",
-        "/metric/update"
+        "/metric/update",
+        "/metric/search"
 })
 public class ServletMetric extends HttpServlet {
     private String action;
@@ -36,20 +36,14 @@ public class ServletMetric extends HttpServlet {
                 request.setAttribute("metrics", metrics);
                 redirect = "/views/metric/metrics.jsp";
                 break;
-            case "/metric/register":
-                redirect = "";
-                break;
-            case "/metric/update-view":
-                id = request.getParameter("id");
-                metric = new DaoMetric().listOne((id != null) ? (Long.parseLong(id)) : (0));
-                if (metric != null){
-                    request.setAttribute("metric", metric);
-                    redirect = "";
-                } else{
-                    redirect = "/metric/list-metrics?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
+            case "/metric/search":
+                shortName = request.getParameter("shortName");
+                name = request.getParameter("name");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchShortName", shortName);
+                request.setAttribute("searchName", name);
+                metrics = new DaoMetric().search(name, shortName, status2);
+                request.setAttribute("metrics", metrics);
                 break;
             default:
                 System.out.println(action);
@@ -93,7 +87,7 @@ public class ServletMetric extends HttpServlet {
                 name = request.getParameter("name");
                 shortName = request.getParameter("shortName");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                metric = new BeanMetric(Long.parseLong(id), name, shortName, status);
+                metric = new BeanMetric(Long.parseLong(id), name, shortName, true);
                 if (new DaoMetric().update(metric)){
                     redirect = "/metric/list-metrics?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación a la métrica realizada con éxito!", StandardCharsets.UTF_8);

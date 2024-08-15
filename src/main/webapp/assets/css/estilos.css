@@ -19,13 +19,23 @@
     font-weight: bold;
 }
 
-.no-select-popup .swal2-title,
-.no-select-popup .swal2-content {
-    user-select: none;
+.colored-toast .swal2-title,
+.colored-toast .swal2-html-container {
+    color: white;
 }
-
+.no-select-popup .swal2-title,
+.colored-toast .swal2-html-container {
+    user-select: none;
+    cursor: default;
+}
 .no-select {
     user-select: none;
+}
+.colored-toast.swal2-icon-success {
+    background-color: #a5dc86 !important;
+}
+.colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
 }
 
 /* ///////////////////////////////////////////////////////////// */
@@ -138,11 +148,6 @@ img {
     transform: scale(0.95);
 }
 
-.botonCheckbox {
-    background-color: #8D5B47!important;
-    color: #FFFFFF!important;
-}
-
 .botonVerMas {
     background-color: rgba(52, 200, 99, 0) !important;
     border-color: #34c863!important;
@@ -153,13 +158,10 @@ img {
     background-color: #34c863!important;
     color: #FFFFFF!important;
     transition: 0.2s;
-
 }
 .botonVerMas:active {
     transform: scale(0.95);
 }
-
-
 
 #esconderBTN {
     background-color: #f8f8f8;
@@ -176,12 +178,6 @@ img {
 
 #esconderBTN:active {
     transform: scale(0.95);
-}
-
-.nuevoProductoBoton {
-    justify-content: end;
-    display: flex;
-    align-items: center;
 }
 
 #linkPassword{
@@ -239,25 +235,6 @@ input, select{
     max-width: 100rem;
 }
 
-#tituloContactoExterno {
-    display: fixed;
-}
-
-#formularioContacto {
-    padding-left: 20%;
-}
-
-#anadirContacto {
-    display: block;
-    padding: 3% 0% 0% 0%;
-    border-top: 1px solid #cecccc;
-}
-
-#dataRegister {
-    padding-left: 20%;
-    padding-bottom: 2%;
-}
-
 .tableTitle {
     background-color: #4E6166!important;
     color: white!important;
@@ -267,32 +244,6 @@ input, select{
     background-color: #839093!important;
     color: white!important;
 }
-
-#titleForms {
-    background-color: #f3f3f3;
-    color: #000000;
-    padding-left: 2%;
-}
-
-.Inputs {
-    text-indent: 5%;
-    margin-top: 8%;
-    background-color: #f3f3f3;
-    color: black;
-    padding: 0%;
-}
-
-#containerRecoverPass {
-    width: 800px;
-    height: 400px;
-    margin: 15% 0% 15% 0%;
-}
-
-.datosProveedor {
-    padding: 0% 0% 0% 0%;
-}
-
-
 
 /* ///////////////////////////////////////////////////////////// */
 /* Sidebar Left */
@@ -340,7 +291,7 @@ input, select{
 }
 
 #sidebarAbierto a:hover {
-    border-right: 3px solid #88675a;
+    box-shadow: inset -3px 0 0 0 #88675a;
 }
 
 #sidebarAbierto .submenu a {
@@ -354,7 +305,7 @@ input, select{
 
 #sidebarAbierto .submenu a:hover {
     background-color: #a59b9297;
-    border-right: 3px solid #88675a;
+    box-shadow: inset -3px 0 0 0 #88675a;
 }
 
 .toggle-btn {
@@ -368,80 +319,3 @@ input, select{
 #statusDisabled {
     cursor: none;
 }
-/* ///////////////////////////////////////////////////////////// */
-/* Media Queries for Responsiveness */
-
-/* Adjustments for tablets and smaller screens
-@media (max-width: 768px) {
-    #barraNavegacion {
-        height: 7%;
-        font-size: 100%;
-        /*display: fixed;
-        font-weight: 500;
-        font-size: 24px;
-        border-bottom: 1px solid #A59B92;
-        background-color: #4E6166;
-        color: #FFFFFF;
-        user-select: none;
-    }
-
-    #sidebarCerrado {
-        width: 5%;
-    }
-
-    #sidebarAbierto {
-        width: 25%;
-    }
-
-    .toggle-btn {
-        font-size: 18px;
-        top: 15px;
-        left: 15px;
-    }
-
-    #formularioContacto, #dataRegister {
-        padding-left: 10%;
-    }
-
-    #userLogged {
-        bottom: 50px;
-    }
-}
-
-/* Adjustments for mobile screens
-@media (max-width: 480px) {
-    #sidebarCerrado {
-        width: 10%;
-    }
-
-    #sidebarAbierto {
-        width: 50%;
-    }
-
-    .toggle-btn {
-        font-size: 16px;
-        top: 10px;
-        left: 10px;
-    }
-
-    #sidebarAbierto a {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
-
-    .contenidoTotal {
-        margin: 5% 2% 0 2%;
-        padding: 2.5%;
-    }
-
-    #dataRegister {
-        padding-left: 5%;
-    }
-
-    #containerRecoverPass {
-        width: 100%;
-        height: auto;
-        margin: 5% 0;
-    }
-}
-*/

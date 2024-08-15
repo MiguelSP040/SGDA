@@ -17,7 +17,8 @@ import java.util.List;
         "/area/list-areas",
         "/area/delete",
         "/area/save",
-        "/area/update"
+        "/area/update",
+        "/area/search"
 })
 
 public class ServletArea extends HttpServlet {
@@ -37,20 +38,15 @@ public class ServletArea extends HttpServlet {
                 request.setAttribute("areas", areas);
                 redirect = "/views/area/destinationAreas.jsp";
                 break;
-            case "/area/register":
-                redirect = "";
-                break;
-            case "/area/update-view":
-                id = request.getParameter("id");
-                area = new DaoArea().listOne((id != null) ? (Long.parseLong(id)): (0));
-                if (area != null){
-                    request.setAttribute("area", area);
-                    redirect = "";
-                } else{
-                    redirect = "/area/list-areas?result=" + false + "&message="
-                            + URLEncoder.encode("¡Error! Acción no realizada correctamente",
-                            StandardCharsets.UTF_8);
-                }
+            case "/area/search":
+                shortName = request.getParameter("shortName");
+                name = request.getParameter("name");
+                description = request.getParameter("description");
+                String status2 = request.getParameter("status");
+                request.setAttribute("searchShortName", shortName);
+                request.setAttribute("searchName", name);
+                areas = new DaoArea().search(name, shortName, status2);
+                request.setAttribute("areas", areas);
                 break;
             default:
                 System.out.println(action);
@@ -96,7 +92,7 @@ public class ServletArea extends HttpServlet {
                 description = request.getParameter("description");
                 shortName = request.getParameter("shortName");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                area = new BeanArea(Long.parseLong(id), name, description, shortName, status);
+                area = new BeanArea(Long.parseLong(id), name, description, shortName, true);
                 if (new DaoArea().update(area)){
                     redirect = "/area/list-areas?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación al área realizada con éxito!", StandardCharsets.UTF_8);

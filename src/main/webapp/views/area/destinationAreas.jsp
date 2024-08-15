@@ -52,29 +52,44 @@
             Correo electronico* - Alfanumérico
         -->
             <div class="mt-3">
-                <form onsubmit="search(); return false;">
+                <form action="<%=context%>/area/search" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5 ms-3">Nombre</div>
-                        <div class="col-5 ms-1">Acrónimo</div>
+                        <div class="col-3 ms-3">Nombre</div>
+                        <div class="col-3 ms-1">Acrónimo</div>
+                        <div class="col-3 ms-1">Estado</div>
                     </div>
-                    <!--Nombre-->
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5">
-                            <input id="nameSupplier" type="text" class="form-control" placeholder="Nombre del área de destino">
+                        <!--Nombre-->
+                        <div class="col-3">
+                            <input class="form-control" type="text" id="nameMetric" name="name" placeholder="Nombre del área de destino">
                         </div>
-                        <!--Acronimo-->
-                        <div class="col-5">
-                            <input id="rfc" type="text" class="form-control" placeholder="Acrónimo del área de destino">
+                        <!--Abreviatura-->
+                        <div class="col-3">
+                            <input class="form-control" type="text" id="shortNameMetric" name="shortName" placeholder="Abreviatura del área de destino">
                         </div>
-                    </div>
-                    <!--Botones -->
-                    <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <button class="btn botonCafe mb-3" onsubmit="search()" id="">
-                            Buscar
-                        </button>
-                        <button class="btn botonGris btn-light mb-3" id="" onreset="reset()">
-                            Limpiar
-                        </button>
+                        <!--Estado-->
+                        <div class="col-3">
+                            <select class="form-select" name="status" aria-label="Seleccionar opción">
+                                <option disabled selected value>
+                                    Seleccionar opción
+                                </option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <!--Botones -->
+                        <div class="grid gap-2 d-flex justify-content-end mt-5">
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -89,15 +104,15 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="newAreaForm" method="post" action="/area/save">
+                            <form id="newAreaForm" method="post" action="/area/save" novalidate>
                                 <h5>Datos de Área de destino</h5>
                                 <div class="mb-3">
                                     <label for="name" class="col-4">Nombre*</label>
-                                    <input type="text" class="form-control mb-2" name="name" id="name" required>
+                                    <input type="text" class="form-control mb-2" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ0-9]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ0-9]*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="shortName">Acronimo*</label>
-                                    <input type="text" class="form-control mb-2" name="shortName" id="shortName" required>
+                                    <input type="text" class="form-control mb-2" name="shortName" id="shortName" required pattern="^([A-ZÁÉÍÓÚÑ0-9]+\s*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="description">Descripción</label>
@@ -105,10 +120,10 @@
                                 </div>
                                 <!--Botones MODAL--->
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe">
+                                    <button type="submit" class="btn botonCafe" onclick="registerDestinationArea(event)">
                                         Registrar
                                     </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         Cancelar
                                     </button>
                                 </div>
@@ -128,26 +143,28 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateAreaForm" method="post" action="/area/update">
+                            <form id="updateAreaForm" method="post" action="/area/update" novalidate>
+                                <input hidden id="u_id" name="id">
                                 <h5>Datos de Área de destino</h5>
                                 <div class="mb-3">
-                                    <label for="name" class="col-4">Nombre*</label>
-                                    <input type="text" class="form-control mb-2" name="name" id="name" required>
+                                    <label for="u_name" class="col-4">Nombre*</label>
+                                    <input type="text" class="form-control mb-2" name="name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ0-9]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ0-9]*)*$">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="shortName">Acronimo*</label>
-                                    <input type="text" class="form-control mb-2" name="shortName" id="shortName" required>
+                                    <label for="u_shortName">Acronimo*</label>
+                                    <input type="text" class="form-control mb-2" name="shortName" id="u_shortName" required pattern="^([A-ZÁÉÍÓÚÑ0-9]+\s*)*$">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description">Descripción</label>
-                                    <textarea class="form-control mb-3" name="description" id="description"></textarea>
+                                    <label for="u_description">Descripción</label>
+                                    <textarea class="form-control mb-3" name="description" id="u_description"></textarea>
                                 </div>
+                                <input hidden id="u_status" name="status">
                                 <!--Botones MODAL--->
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe" onclick="updateDestinationArea()">
+                                    <button type="submit" class="btn botonCafe" onclick="updateDestinationArea(event)">
                                         Modificar
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="reset()">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                         Cancelar
                                     </button>
                                 </div>
@@ -174,7 +191,7 @@
                     <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                     <c:forEach var="area" items="${areas}" varStatus="s">
                         <tr>
                             <th scope="row"><c:out value="${s.count}"/></th>
@@ -189,16 +206,16 @@
                                 </h4>
                             </td>
                             <td>
-                                <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateArea" onclick="update()">
+                                <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateArea" onclick="putAreaInfo(${area.getId()})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                     </svg>
                                 </button>
-                                <form action="${pageContext.request.contextPath}/area/delete" method="post" style="display:inline;">
+                                <form action="${pageContext.request.contextPath}/area/delete" method="post" style="display:inline;" id="changeStatusForm">
                                     <input type="hidden" name="id" value="${area.id}"/>
-                                    <button type="submit" class="btn btn-lg botonRojo">
+                                    <button type="submit" class="btn btn-lg botonRojo" data-id="${area.id}">
                                         <svg class="bi bi-pencil-square" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              fill="none" viewBox="0 0 24 24">
@@ -232,38 +249,113 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../assets/js/funciones.js"></script>
+<script src="../../assets/js/updateAreas.js"></script>
 <script>
-    // Función para mostrar la alerta
-    function changeSuccess(message) {
+    // Función para validar un campo individualmente en tiempo real
+    function validateField(input) {
+        const form = input.closest('form'); // Obtén el formulario al que pertenece el campo
+        if (input.required && !input.checkValidity()) {
+            input.classList.add('is-invalid');
+            form.classList.add('was-validated');
+        } else {
+            input.classList.remove('is-invalid');
+            if (form.querySelectorAll('input:invalid, select:invalid, textarea:invalid').length === 0) {
+                form.classList.remove('was-validated'); // Elimina 'was-validated' si todos los campos son válidos
+            }
+        }
+    }
+
+    // Configura la validación en tiempo real para todos los campos del formulario
+    function setupRealTimeValidation(formId) {
+        const form = document.getElementById(formId);
+
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', () => {
+                validateField(input);
+            });
+        });
+    }
+
+    // Función para validar el formulario completo antes de enviar
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        let isValid = true;
+        let isEmpty = true;
+
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            // Verifica si el formulario tiene algún campo lleno
+            if (input.value.trim()) {
+                isEmpty = false;
+            }
+
+            // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
+            if (input.required && !input.checkValidity()) {
+                isValid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        // Si el formulario está vacío, muestra una advertencia de formulario vacío
+        if (isEmpty) {
+            showEmptyWarning();
+            return false;
+        }
+
+        // Si algún campo no es válido, muestra una advertencia
+        if (!isValid) {
+            form.classList.add('was-validated');
+            showWarningAlert();
+            return false;
+        }
+
+        // Si es válido, aseguramos que la clase 'was-validated' esté eliminada
+        form.classList.remove('was-validated');
+        return true;
+    }
+
+    // Configura la validación en tiempo real al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        setupRealTimeValidation('newAreaForm');
+        setupRealTimeValidation('updateAreaForm');
+    });
+
+    // Ejemplos de las funciones showWarningAlert y showEmptyWarning (deben estar definidas previamente)
+    function showWarningAlert() {
         Swal.fire({
-            icon: 'success',
-            title: '¡Hecho!',
-            text: message,
-            showConfirmButton: true,
-            focusConfirm: false,
+            icon: 'error',
+            title: 'Campos inválidos',
+            text: 'Por favor corrige los campos marcados en el formulario.',
             confirmButtonText: `<span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                                </svg>
-                                </span> ¡Genial!`,
-            confirmButtonAriaLabel: "Thumbs up, great!",
-            timer: 2000,
-            timerProgressBar: true,
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido`,
+            footer: '<span class="red">Nota: Ingresa datos válidos en el formulario</span>',
+            allowOutsideClick: false,
             customClass: {
                 confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
                 popup: 'no-select-popup'
             }
         });
     }
 
-    function changeError(message) {
+    function showEmptyWarning() {
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: message,
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor llena todos los campos obligatorios del formulario.',
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Entendido`,
+            footer: '<span class="yellow">Nota: Todos los campos con asterisco son obligatorios</span>',
+            allowOutsideClick: false,
             customClass: {
                 confirmButton: 'btn botonCafe',
                 cancelButton: 'btn botonGris',
@@ -277,18 +369,129 @@
     const result = urlParams.get('result');
     const message = urlParams.get('message');
 
-    // Mostrar la alerta en función del resultado
+
+
+    // Función para mostrar alerta de éxito
+    function changeSuccess(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'success',
+            title: '¡Hecho!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar alerta de error
+    function changeError(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            icon: 'error',
+            title: '¡Error!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'no-select-popup colored-toast'
+            }
+        });
+    }
+
+    // Función para mostrar confirmación antes de enviar el formulario
+    function showAreaConfirmation(message, form) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Cuidado!',
+            text: message,
+            showCancelButton: true,
+            cancelButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                      <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591"/>
+                                    </svg>
+                                </span> Cancelar.`,
+            confirmButtonText: `<span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                </span> Sí, continuar.`,
+            footer: '<span class="green">Nota: Puedes cambiarlo después</span>',
+            reverseButtons: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            stopKeydownPropagation: true,
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Envía el formulario si se confirma
+            }
+        });
+    }
+
+    // Mostrar alerta en función del resultado
     if (result === 'true') {
         changeSuccess(decodeURIComponent(message));
     } else if (result === 'false') {
         changeError(decodeURIComponent(message));
     }
+
+    // Función para manejar el registro de area de destino
+    function registerDestinationArea(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const formId = 'newAreaForm';
+
+        if (validateForm(formId)) {
+            const form = document.getElementById(formId);
+            showAreaConfirmation("¿Estás seguro de que deseas registrar esta área de destino?", form);
+        }
+    }
+
+    // Función para manejar la actualización de una unidad de medida
+    function updateDestinationArea(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const formId = 'updateAreaForm';
+
+        if (validateForm(formId)) {
+            const form = document.getElementById(formId);
+            showAreaConfirmation("¿Estás seguro de que deseas actualizar esta área de destino?", form);
+        }
+    }
+
+    // Función para cambiar el estado de un usuario
+    function handleChangeStatus(event) {
+        event.preventDefault(); // Evita el envío automático del formulario
+        const button = event.currentTarget;
+        const areaId = button.getAttribute('data-id');
+        const form = document.getElementById('changeStatusForm');
+
+        // Actualiza el input hidden con el ID correcto
+        form.querySelector('input[name="id"]').value = areaId;
+        showAreaConfirmation('¿Estás seguro de que deseas cambiar el estado a esta área de destino?', form);
+    }
+
+    // Asocia la función a los botones cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        const changeStatusButtons = document.querySelectorAll('.botonRojo');
+
+        changeStatusButtons.forEach(button => {
+            button.addEventListener('click', handleChangeStatus);
+        });
+    });
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../../assets/js/funciones.js"></script>
-<script src="../../assets/js/alerts.js"></script>
-
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>

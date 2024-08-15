@@ -64,7 +64,7 @@ document.querySelectorAll('.dropdown-btn').forEach(button => {
     });
 });
 
-
+/*
 // Función para validar que todos los campos obligatorios estén llenos
 function validateForm(formId) {
     //'use strict';
@@ -80,56 +80,13 @@ function validateForm(formId) {
         }
     });
     return isValid;
-}
-
-// Función para manejar el reset de formularios
-function reset() {
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.reset();
-        form.querySelectorAll('input, select, textarea').forEach(input => {
-            input.classList.remove('is-invalid');
-            input.classList.remove('was-validated');
-        });
-    });
-}
-
-// Función de validación y registro de usuario en userQuery.html
-// Función para registrar usuario
-const registerUser = async (formId) => {
-    const isValidUser = validateForm('newUserForm');
-
-
-    if (isValidUser) {
-        // Llama a la función en alerts.js para mostrar la alerta de confirmación
-        showUserConfirmation();
-
-
-    } else {
-        // Muestra alerta si hay campos incompletos
-        showWarningAlert();
-    }
-}
-
-// Función para actualizar usuario
-const updateUser = async (formId) => {
-    const isValidUser = validateForm('updateUserForm');
-
-
-    if (isValidUser) {
-        // Llama a la función en alerts.js para mostrar la alerta de confirmación
-        showUserConfirmation();
-    } else {
-        // Muestra alerta si hay campos incompletos
-        showWarningAlert();
-    }
-}
-
+} */
+/*
 // Función de validación y registro de productos en products.html
 // Función para registrar producto
 const registerProduct = async (formId) => {
     const isValidUser = validateForm('newProductForm');
-    if (isValidUser) {
+    /*if (isValidUser) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showProductConfirmation();
     } else {
@@ -141,79 +98,48 @@ const registerProduct = async (formId) => {
 // Función para actualizar producto
 const updateProduct = async (formId) => {
     const isValidUser = validateForm('updateProductForm');
-    if (isValidUser) {
+    /*if (isValidUser) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showProductConfirmation();
     } else {
         // Muestra alerta si hay campos incompletos
         showWarningAlert();
     }
-}
-
+}*/
+/*
 // Función de validación y registro de proveedor y contacto en registerSupplier.html
 // Función para manejar el registro de proveedor y contacto
 async function registerSupplier() {
     const isValidSupplier = validateForm('supplierForm');
-
-
-    if (isValidSupplier) {
+    /*if (isValidSupplier) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showSupplierConfirmation();
 
     } else {
         // Llama a la función en alerts.js para mostrar la alerta de advertencia
         showWarningAlert();
-    }
+
 }
 
 // Función de validación y registro de proveedor y contacto en registerSupplier.html
 // Función para manejar el registro de proveedor y contacto
 async function updateSupplier() {
     const isValidSupplier = validateForm('updateSupplierForm');
-
-
-    if (isValidSupplier) {
+    /*if (isValidSupplier) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showSupplierConfirmation();
 
     } else {
         // Llama a la función en alerts.js para mostrar la alerta de advertencia
         showWarningAlert();
-    }
-}
 
-
-
-// Función de validación y registro de area en destinationAreas.html
-// Función para manejar el registro de area de destino
-async function registerDestinationArea() {
-    const isValidArea = validateForm('newAreaForm');
-    if (isValidArea) {
-        // Llama a la función en alerts.js para mostrar la alerta de confirmación
-        showAreaConfirmation();
-    } else {
-        // Llama a la función en alerts.js para mostrar la alerta de advertencia
-        showWarningAlert();
-    }
-}
-
-// Función para actualizar área
-async function updateDestinationArea() {
-    const isValidArea = validateForm('updateAreaForm');
-    if (isValidArea) {
-        // Llama a la función en alerts.js para mostrar la alerta de confirmación
-        showAreaConfirmation();
-    } else {
-        // Llama a la función en alerts.js para mostrar la alerta de advertencia
-        showWarningAlert();
-    }
-}
-
+}}*/
+/*
 // Función de validación y registro de unidad de medida metrics.html
 // Función para manejar el registro de unidad de medida
 async function registerMetrics() {
     const isValidMetric = validateForm('registerMetricsForm');
-    if (isValidMetric) {
+    /*if (isValidMetric) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showMetricConfirmation();
     } else {
@@ -226,14 +152,14 @@ async function registerMetrics() {
 async function updateMetrics() {
     const isValidMetric = validateForm('updateMetricForm');
 
-    if (isValidMetric) {
+    /*if (isValidMetric) {
         // Llama a la función en alerts.js para mostrar la alerta de confirmación
         showMetricConfirmation();
     } else {
         // Llama a la función en alerts.js para mostrar la alerta de advertencia
         showWarningAlert();
     }
-}
+}*/
 
 
 // FUNCIONES PARA EL REGISTRO DE MOVIMIENTOS EN entrys.html
@@ -460,43 +386,6 @@ function sendEmail() {
 }
 
 
-// BOTÓN DE LOGIN EN login.html
-// Función para validar y redirigir al usuario en el login
-function handleLogin() {
-    'use strict';
-    var email = document.getElementById("email");
-    var password = document.getElementById("password1");
-
-    var isValid = true;
-
-    if (!email.value || !password.value) {
-        var boxClosed = document.getElementById("boxClosed");
-        boxClosed.classList.add("fade-out");
-        boxClosed.style.display = "block";
-        boxClosed.classList.add("fade-in");
-
-        email.classList.add("is-invalid");
-        password.classList.add("is-invalid");
-        isValid = false;
-
-
-    } else {
-        email.classList.remove("is-invalid");
-        password.classList.remove("is-invalid");
-    }
-
-    if (isValid) {
-        var boxClosed = document.getElementById("boxClosed");
-        var boxOpen = document.getElementById("boxOpen");
-
-        boxClosed.style.display = "none";
-        boxClosed.classList.add("fade-out");
-        boxOpen.style.display = "block";
-        boxOpen.classList.add("fade-in");
-    }
-}
-
-
 //Mostrar seccion de Agregar metrica
 function showHide(){
     const addMetric = document.getElementById("addMetric");
@@ -520,12 +409,27 @@ function showHideDeleteMetric(){
     }
 }
 
-
-//Funcion para mostrar contraseña doble
+//Funcion para mostrar contraseña
 function showPassword() {
     const eyeOpen = document.querySelector(".eyeOpen");
     const eyeClose = document.querySelector(".eyeClose");
+    var password = document.getElementById("password");
 
+    if (password.type === "password") {
+        password.type = "text";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
+    } else {
+        password.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
+    }
+}
+
+//Funcion para mostrar contraseña doble
+function showPassword1() {
+    const eyeOpen = document.querySelector(".eyeOpen1");
+    const eyeClose = document.querySelector(".eyeClose1");
     var password1 = document.getElementById("password1");
 
     if (password1.type === "password") {
@@ -538,25 +442,24 @@ function showPassword() {
         eyeClose.style.display = "none";
     }
 }
-
-
 //Funcion para mostrar contraseña doble
 function showDoublePassword() {
-    const eyeOpen2 = document.querySelector(".eyeOpen2");
-    const eyeClose2 = document.querySelector(".eyeClose2");
-
+    const eyeOpen = document.querySelector(".eyeOpen2");
+    const eyeClose = document.querySelector(".eyeClose2");
     var password2 = document.getElementById("password2");
 
     if (password2.type === "password") {
         password2.type = "text";
-        eyeOpen2.style.display = "none";
-        eyeClose2.style.display = "block";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
     } else {
         password2.type = "password";
-        eyeOpen2.style.display = "block";
-        eyeClose2.style.display = "none";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
     }
 }
+
+
 // Función para desplegar submenu
 function showSubmenu(id) {
     // Selecciona el botón con el id dado

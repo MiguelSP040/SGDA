@@ -1,3 +1,12 @@
+<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
+<%@ page import="com.utez.edu.almacen.models.product.DaoProduct" %>
+<%@ page import="com.utez.edu.almacen.models.product.BeanProduct" %>
+<%@ page import="com.utez.edu.almacen.models.area.DaoArea" %>
+<%@ page import="com.utez.edu.almacen.models.area.BeanArea" %>
+<%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
 <%--
   Created by IntelliJ IDEA.
   User: PC
@@ -13,6 +22,10 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
+    List<BeanMetric> metrics = new DaoMetric().listAll();
+    List<BeanProduct> products = new DaoProduct().listAll();
+    List<BeanArea> areas = new DaoArea().listAll();
+    List<BeanUser> users = new DaoUser().listAll();
 %>
 <html>
 <head>
@@ -77,29 +90,33 @@
                                     </div>
                                     <div class="col me-2">
                                         <select class="form-select" name="id_area" id="id_area" required>
-                                            <option value="" disabled selected>Seleccionar un área de destino</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanArea a : areas) { %>
+                                            <% if (a.getStatus()) { %>
+                                            <option value="<%= a.getId() %>"><%= a.getName() %></option>
+                                            <% } %>
+                                            <% } %>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <select class="form-select" name="id_user" id="id_user" required>
-                                            <option value="" disabled selected>Seleccionar un almacenista</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanUser u : users) { %>
+                                            <% if (u.getStatus()) { %>
+                                            <option value="<%= u.getId() %>"><%= u.getName() %></option>
+                                            <% } %>
+                                            <% } %>
                                         </select>
                                     </div>
                                 </div>
 
                                 <!-- Campos para Salida -->
                                 <div class="table-responsive table-container">
-                                    <table class="table table-bordered table-striped text-center">
+                                    <table class="table table-bordered table-striped text-center" id="outboundTable">
                                         <thead class="thead-dark">
                                         <tr>
                                             <th scope="col" style="width: 3%" class="tableTitle">#</th>
-                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="id_product">Producto*</label></th>
+                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="id">Producto*</label></th>
                                             <th scope="col" style="width: 13%" class="tableTitle"><label for="id_metric">Medida*</label></th>
                                             <th scope="col" style="width: 15%" class="tableTitle"><label for="buyerName">Receptor*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
@@ -108,15 +125,17 @@
                                             <th scope="col" style="width: 3%;" class="tableTitle">Acciones</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="align-middle">
                                         <tr>
                                             <th scope="row">1</th>
                                             <td>
-                                                <select class="form-select" name="id_product" id="id_product" required>
-                                                    <option value="" disabled selected>Seleccionar un producto</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                <select class="form-select" name="id" id="id" required>
+                                                    <option disabled selected value>Seleccionar opción</option>
+                                                    <% for (BeanProduct p : products) { %>
+                                                    <% if (p.getStatus()) { %>
+                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                    <% } %>
+                                                    <% } %>
                                                 </select>
                                             </td>
                                             <td>
@@ -128,15 +147,13 @@
                                                 <input class="form-control w-100" type="text" name="buyerName" id="buyerName" placeholder="Receptor" required>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100" type="number" name="unitPrice" id="unitPrice" min="0" step="0.5"
-                                                       placeholder="$0.00" required>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" min="0" step="0.01" placeholder="$0.00" required>
                                             </td>
                                             <td>
-                                                <input class="form-control" type="number" name="quantity" id="quantity" min="1" step="1" placeholder="0"
-                                                       required>
+                                                <input class="form-control quantity" type="number" name="quantity" min="1" step="1" placeholder="0" required>
                                             </td>
                                             <td>
-                                                <input class="form-control" type="number" name="total_price" id="total_price" placeholder="$0.00" disabled>
+                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled>
                                             </td>
                                             <td class="d-flex justify-content-end">
                                                 <div class="btn-group">
@@ -201,29 +218,34 @@
                                         <div class="mb-3">
                                             <label for="id_area" class="form-label">Area de destino*</label>
                                             <select class="form-select" name="id_area" id="id_area" required>
-                                                <option value="" disabled selected>Seleccionar un area de destino</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanArea a : areas) { %>
+                                                <% if (a.getStatus()) { %>
+                                                <option value="<%= a.getId() %>"><%= a.getName() %></option>
+                                                <% } %>
+                                                <% } %>
                                             </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="id_user" class="form-label">Almacenista*</label>
                                             <select class="form-select" name="id_user" id="id_user" required>
-                                                <option value="" disabled selected>Seleccionar un almacenista</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanUser u : users) { %>
+                                                <% if (u.getStatus()) { %>
+                                                <option value="<%= u.getId() %>"><%= u.getName() %></option>
+                                                <% } %>
+                                                <% } %>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="id_product" class="form-label">Productos*</label>
-                                            <select class="form-select" aria-label="Default select example" name="id_product" id="id_product" required>
-                                                <option value="" disabled selected>Seleccionar un producto</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                                <!-- Opciones aquí -->
+                                            <label for="id" class="form-label">Productos*</label>
+                                            <select class="form-select" name="id" id="id" required>
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanProduct p : products) { %>
+                                                <% if (p.getStatus()) { %>
+                                                <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                <% } %>
+                                                <% } %>
                                             </select>
                                         </div>
                                     </div>
@@ -239,16 +261,16 @@
                                             <input type="text" class="form-control" name="buyerName" id="buyerName" min="0" step="0.5" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="unitPrice" class="form-label">Precio*</label>
-                                            <input type="number" class="form-control" name="unitPrice" id="unitPrice" min="0" step="0.5" placeholder="$0.00" required>
+                                            <label for="modalUnitPrice" class="form-label">Precio*</label>
+                                            <input type="number" class="form-control" name="modalUnitPrice" id="modalUnitPrice" min="0" step="0.01" placeholder="$0.00" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="quantity" class="form-label">Cantidad*</label>
-                                            <input type="number" class="form-control" name="quantity" id="quantity" min="1" step="1" placeholder="0" required>
+                                            <label for="modalQuantity" class="form-label">Cantidad*</label>
+                                            <input type="number" class="form-control" name="modalQuantity" id="modalQuantity" min="1" step="1" placeholder="0" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="total_price" class="form-label">Precio total*</label>
-                                            <input type="number" class="form-control" name="total_price" id="total_price" placeholder="$0.00" disabled>
+                                            <label for="modalTotalPrice" class="form-label">Precio total*</label>
+                                            <input type="number" class="form-control" name="modalTotalPrice" id="modalTotalPrice" placeholder="$0.00" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -315,14 +337,14 @@
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         <c:forEach var="exit" items="${exits}">
                             <tr>
                                 <th scope="row"><c:out value="${exit.id}"/></th>
                                 <td><c:out value="${exit.changeDate}"/></td>
                                 <td><c:out value="${exit.folioNumber}"/></td>
                                 <td><c:out value="${exit.invoiceNumber}"/></td>
-                                <td><c:out value="${exit.id_product}"/></td>
+                                <td><c:out value="${exit.id}"/></td>
                                 <td><c:out value="${exit.quantity}"/></td>
                                 <td><c:out value="${exit.total_price}"/></td>
                                 <td><c:out value="${exit.id_provider}"/></td>
@@ -462,6 +484,38 @@
             newProductModal.show();
         });
 
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Función para actualizar el precio total en una fila de la tabla
+        function updateTableTotalPrice(row) {
+            const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
+            const quantity = parseInt(row.querySelector('.quantity').value, 10) || 0;
+            const totalPrice = unitPrice * quantity;
+            row.querySelector('.total-price').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+        }
+
+        // Función para actualizar el precio total en el modal
+        function updateModalTotalPrice() {
+            const unitPrice = parseFloat(document.getElementById('modalUnitPrice').value) || 0;
+            const quantity = parseInt(document.getElementById('modalQuantity').value, 10) || 0;
+            const totalPrice = unitPrice * quantity;
+            document.getElementById('modalTotalPrice').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+        }
+
+        // Event listeners para inputs en la tabla
+        document.querySelector('#outboundTable tbody').addEventListener('input', (event) => {
+            if (event.target.classList.contains('unit-price') || event.target.classList.contains('quantity')) {
+                // Encuentra la fila actual
+                const row = event.target.closest('tr');
+                updateTableTotalPrice(row);
+            }
+        });
+
+        // Event listeners para inputs en el modal
+        document.getElementById('modalUnitPrice').addEventListener('input', updateModalTotalPrice);
+        document.getElementById('modalQuantity').addEventListener('input', updateModalTotalPrice);
     });
 </script>
 
