@@ -173,7 +173,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="modal-footer d-flex ">
+                                <div class="modal-footer d-flex">
                                     <div class="d-flex justify-content-start">
                                         <button class="btn btn-outline-secondary" type="button" id="openNewProductModal">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -185,10 +185,11 @@
                                         </button>
                                     </div>
                                     <div class="ms-auto">
+                                        <input class="form-control totalAllPrices mb-4" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
                                         <button type="submit" class="btn botonCafe" id="registerButton"
                                                 onclick="registerEntry()">Registrar</button>
-                                        <button type="button" class="btn btn-outline-secondary"
-                                                data-bs-dismiss="modal" onclick="reset()">Cancelar</button>
+                                        <button type="reset" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
                                     </div>
                                 </div>
                             </form>
@@ -609,7 +610,7 @@
     }
 </script>
 <script>
-    // Script  para realizar el calculo de precio unitario, cantidad y precio total
+    // Script para realizar el cálculo de precio unitario, cantidad y precio total
     document.addEventListener('DOMContentLoaded', () => {
         // Función para actualizar el precio total en una fila de la tabla
         function updateTableTotalPrice(row) {
@@ -617,6 +618,7 @@
             const quantity = parseInt(row.querySelector('.quantity').value, 10) || 0;
             const totalPrice = unitPrice * quantity;
             row.querySelector('.total-price').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+            updateTotalAllPrices(); // Actualiza el total de todos los precios
         }
 
         // Función para actualizar el precio total en el modal
@@ -625,6 +627,15 @@
             const quantity = parseInt(document.getElementById('modalQuantity').value, 10) || 0;
             const totalPrice = unitPrice * quantity;
             document.getElementById('modalTotalPrice').value = totalPrice.toFixed(2); // Ajusta a dos decimales
+        }
+
+        // Función para actualizar el total de todos los precios
+        function updateTotalAllPrices() {
+            let totalAllPrices = 0;
+            document.querySelectorAll('#entryTable tbody .total-price').forEach(input => {
+                totalAllPrices += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalAllPrices').value = totalAllPrices.toFixed(2); // Ajusta a dos decimales
         }
 
         // Event listeners para inputs en la tabla
