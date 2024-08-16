@@ -174,6 +174,7 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer d-flex">
+                                    <div class="me-auto">
                                     <div class="d-flex justify-content-start mt-4">
                                         <button class="btn btn-outline-secondary" type="button" id="openNewProductModal">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -183,6 +184,7 @@
                                             </svg>
                                             Nuevo Producto
                                         </button>
+                                    </div>
                                     </div>
                                     <div class="d-flex flex-column align-items-start me-2">
                                         <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
