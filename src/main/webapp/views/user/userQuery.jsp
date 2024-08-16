@@ -480,7 +480,21 @@
         });
     }
 
-
+    // Función para mostrar la alerta de error
+    const showErrorAlert = (message) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                confirmButton: 'btn botonCafe',
+                cancelButton: 'btn botonGris',
+                popup: 'no-select-popup'
+            }
+        });
+    }
 
     // Obtener parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
