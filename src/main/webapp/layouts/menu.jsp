@@ -211,7 +211,7 @@
         </a>
         <!--Usuario Logeado-->
         <div class="position-absolute w-100 bottom-0">
-            <a href="<%=context%>/views/user/userProfile.jsp" class="d-flex align-items-center gap-1 w-100 mb-1">
+            <a href="<%=context%>/user/find-logged-in-user" class="d-flex align-items-center gap-1 w-100 mb-1">
                 <div class="col text-center">
                     <div class="row">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

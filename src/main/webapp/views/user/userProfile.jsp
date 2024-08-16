@@ -8,6 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Usuario"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String context = request.getContextPath();
+    if (request.getSession(false).getAttribute("user") == null){
+        response.sendRedirect(context+"/index.jsp");
+    }
+%>
 <html>
 <head>
     <title>Perfil de usuario</title>
@@ -55,7 +61,7 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="userName fw-bold fs-5">Isael Alejandro</span>
+                                <span class="userName fw-bold fs-5"><%=request.getAttribute("name")%></span>
                             </div>
                         </div>
                     </div>
@@ -69,7 +75,7 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="fw-bold fs-5">77743838948</span>
+                                <span class="fw-bold fs-5"><%=request.getAttribute("phone")%></span>
                             </div>
                         </div>
                     </div>
@@ -85,7 +91,7 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="rol fw-bold fs-5">Reyes Vargas</span>
+                                <span class="rol fw-bold fs-5"><%=request.getAttribute("surname")%><%=request.getAttribute("lastname")%></span>
                             </div>
                         </div>
                     </div>
@@ -99,7 +105,7 @@
                         </label>
                         <div class="row">
                             <div class="col align-items-center">
-                                <span class="rol fw-bold fs-5">Administrador</span>
+                                <span class="rol fw-bold fs-5"><%=request.getAttribute("role")%></span>
                             </div>
                         </div>
                     </div>
@@ -163,7 +169,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateUserForm" method="post" action="">
+                            <form id="updateUserForm" method="post" action="<%=context%>/user/updateLogged">
                                 <div class="row">
                                     <label for="name" class="col">Nombre(s)*</label>
                                     <label for="surname" class="col">Apellido paterno*</label>
@@ -214,7 +220,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updatePasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="">
+                    <form id="updatePasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="<%=context%>/user/updatePassword">
                         <div class="mb-1 text-start">
 
                             <!--Contraseña ACTUAL-->
@@ -306,7 +312,7 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updateEmailForm" method="post" action="" novalidate>
+                    <form id="updateEmailForm" method="post" action="<%=context%>/user/updateEmail" novalidate>
                         <div class="row">
                             <label class="col-8" for="email1">Nuevo correo electrónico*</label>
                         </div>

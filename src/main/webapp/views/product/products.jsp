@@ -108,6 +108,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Modal Editar Producto -->
             <div class="modal fade" id="updateProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true" data-bs-backdrop="static">
@@ -119,19 +120,20 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateProductForm" method="post" action="/product/update" novalidate>
+                            <form id="updateProductForm" method="post" action="<%=context%>/product/update" novalidate>
+                                <input hidden id="u_id" name="id">
                                 <h5>Datos de Producto</h5>
                                 <div class="mb-3">
                                     <label for="u_name" class="col-form-label">Nombre del Producto*</label>
-                                    <input type="text" class="form-control" name="u_name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <input type="text" class="form-control" name="name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
                                 </div>
                                 <div class="mb-3">
                                     <label for="u_code" class="col-form-label">Acrónimo*</label>
-                                    <input type="text" class="form-control" name="u_code" id="u_code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <input type="text" class="form-control" name="code" id="u_code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="id_metric" class="col-form-label">Unidad de medida*</label>
-                                    <select class="form-select" name="u_id_metric" id="u_id_metric" required>
+                                    <label for="u_id_metric" class="col-form-label">Unidad de medida*</label>
+                                    <select class="form-select" name="id_metric" id="u_id_metric" required>
                                         <option disabled selected value>Seleccionar opción</option>
                                         <% for (BeanMetric m : metrics) { %>
                                         <% if (m.getStatus()) { %>
@@ -142,8 +144,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="u_description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="u_description" id="u_description" required></textarea>
+                                    <textarea class="form-control" name="description" id="u_description" required></textarea>
                                 </div>
+                                <input hidden id="u_status" name="status">
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="updateProduct(event)">
                                         Modificar
@@ -153,6 +156,52 @@
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Revisar Producto -->
+            <div class="modal fade" id="reviewProduct" tabindex="-1" aria-labelledby="reviewProductLabel"
+                 aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="reviewProductLabel">Más información</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input hidden id="r_id" name="id">
+                            <h5>Datos de Producto</h5>
+                            <div class="mb-3">
+                                <label for="r_name" class="col-form-label">Nombre del Producto*</label>
+                                <input type="text" class="form-control" name="r_name" id="r_name" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="r_code" class="col-form-label">Acrónimo*</label>
+                                <input type="text" class="form-control" name="r_code" id="r_code" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="r_id_metric" class="col-form-label">Unidad de medida*</label>
+                                <select class="form-select" name="r_id_metric" id="r_id_metric" readonly disabled>
+                                    <option disabled selected value>Seleccionar opción</option>
+                                    <% for (BeanMetric m : metrics) { %>
+                                    <% if (m.getStatus()) { %>
+                                    <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                                    <% } %>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="r_description" class="col-form-label">Descripción*</label>
+                                <textarea class="form-control" name="r_description" id="r_description" readonly disabled></textarea>
+                            </div>
+                            <input hidden id="u_status" name="status">
+                            <div class="modal-footer">
+                                <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
+                                    Aceptar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -246,15 +295,15 @@
                                 </h4>
                             </td>
                             <td>
-                                <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()"><svg
+                                <button class="btn btn-lg botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewProduct" onclick="showProductInformation(${product.getId()})">
+                                    <svg
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                     <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
                                     <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                                 </svg></button>
 
-                                <button onclick="update()" class="btn btn-lg botonEditar" data-bs-toggle="modal"
-                                        data-bs-target="#updateProduct">
+                                <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateProduct" onclick="putProductInformation(${product.getId()})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                          fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -298,6 +347,7 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/funciones.js"></script>
+<script src="../../assets/js/updateProducts.js"></script>
 <script>
     // Función para validar un campo individualmente en tiempo real
     function validateField(input) {

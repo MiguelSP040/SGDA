@@ -99,6 +99,36 @@ public class DaoUser{
         return null;
     }
 
+    public BeanUser findLoggedInUser(String email, String password) {
+        BeanUser user = null;
+        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try {
+            conn = new MySQLConnection().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new BeanUser();
+                user.setId(rs.getLong("id_user"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function findLoggedInUser failed: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return user;
+    }
+
+
     public boolean save(BeanUser object) {
         try {
             String query = "INSERT INTO users(name, surname, lastname, phone, email, password, role, status)" +
@@ -156,6 +186,57 @@ public class DaoUser{
             closeConnection();
         }
         return false;
+    }
+
+    public boolean updateLogged(Long id, String name, String surname, String lastname, String phone) {
+        boolean result = false;
+        try {
+            String query = "UPDATE users SET name = ?, surname = ?, lastname = ?, phone = ? WHERE id = ?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setString(2, surname);
+            ps.setString(3, lastname);
+            ps.setString(4, phone);
+            ps.setLong(5, id);
+            result = ps.executeUpdate() > 0;
+        }catch (SQLException e){
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    public boolean updatePassword(Long id, String password) {
+        boolean result = false;
+        try {
+            String query = "UPDATE users SET password = ? WHERE id = ?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, password);
+            ps.setLong(2, id);
+            result = ps.executeUpdate() > 0;
+        }catch (SQLException e){
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    public boolean updateEmail(Long id, String email) {
+        boolean result = false;
+        try {
+            String query = "UPDATE users SET email = ? WHERE id = ?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setLong(2, id);
+            result = ps.executeUpdate() > 0;
+        }catch (SQLException e){
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return result;
     }
 
     public boolean delete(Long id) {

@@ -1,7 +1,5 @@
 package com.utez.edu.almacen.models.product;
 
-import com.utez.edu.almacen.models.user.BeanUser;
-import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
 
@@ -14,12 +12,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DaoProduct implements DaoTemplate<BeanProduct> {
+public class DaoProduct{
     private Connection conn = new MySQLConnection().getConnection();
     private PreparedStatement ps;
     private ResultSet rs;
 
-    @Override
     public List<BeanProduct> listAll() {
         List<BeanProduct> products = new ArrayList<>();
         try {
@@ -44,7 +41,6 @@ public class DaoProduct implements DaoTemplate<BeanProduct> {
         return products;
     }
 
-    @Override
     public BeanProduct listOne(Long id) {
         try {
             String query = "SELECT * FROM products WHERE id_product = ?;";
@@ -70,7 +66,6 @@ public class DaoProduct implements DaoTemplate<BeanProduct> {
         return null;
     }
 
-    @Override
     public boolean save(BeanProduct object) {
         try {
             String query = "INSERT INTO products(name, code, description, id_metric, status) VALUES(?, ?, ?, ?, ?);";
@@ -89,7 +84,6 @@ public class DaoProduct implements DaoTemplate<BeanProduct> {
         return false;
     }
 
-    @Override
     public boolean update(BeanProduct object) {
         try {
             String query = "UPDATE products SET name = ?, code = ?, description = ?, id_metric = ?, status = ? WHERE id_product = ?;";
@@ -109,7 +103,6 @@ public class DaoProduct implements DaoTemplate<BeanProduct> {
         return false;
     }
 
-    @Override
     public boolean delete(Long id) {
         try {
             String query = "DELETE FROM products WHERE id_product = ?;";

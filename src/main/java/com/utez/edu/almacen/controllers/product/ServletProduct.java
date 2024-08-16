@@ -12,13 +12,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@WebServlet(name = "ServletProduct", urlPatterns = {
-        "/product/list-products",
-        "/product/delete",
-        "/product/save",
-        "/product/saveout",
-        "/product/update",
-        "/product/search"
+@WebServlet(name = "ServletProduct",
+        urlPatterns = {
+            "/product/list-products", //get
+            "/product/delete", //post
+            "/product/save", //post
+            "/product/saveout", //post
+            "/product/update", //post
+            "/product/search" //get
 })
 public class ServletProduct extends HttpServlet {
     private String action;
