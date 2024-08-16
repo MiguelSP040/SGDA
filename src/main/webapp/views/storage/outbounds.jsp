@@ -744,6 +744,24 @@
         });
     }
 </script>
+<!--Generar folio automático-->
+<script>
+    function generateFolioNumber() {
+        var year = new Date().getFullYear(); // Obtener el año actual
+        var randomDigits = Math.floor(1000 + Math.random() * 9000); // Generar 4 números aleatorios
+        return "S" + year + randomDigits; // Concatenar E + año + 4 números
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var registerMovementButton = document.querySelector('[data-bs-target="#registerMovement"]');
+        var folioNumberInput = document.getElementById('folioNumber');
+
+        registerMovementButton.addEventListener('click', function() {
+            var folio = generateFolioNumber(); // Generar el folio
+            folioNumberInput.value = folio; // Asignar el folio al input
+        });
+    });
+</script>
 
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
