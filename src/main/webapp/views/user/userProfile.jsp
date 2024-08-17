@@ -357,7 +357,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col">
-                                <input type="text" class="form-control" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="alguien@example.com" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
                                     Los correos no coinciden.
                                 </div>
@@ -368,7 +368,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col">
-                                <input type="text" class="form-control" name="email2" id="email2" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                                <input type="text" class="form-control" name="email2" id="email2" placeholder="alguien@example.com" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
                                     Las correos no coinciden.
                                 </div>
@@ -667,7 +667,7 @@
 
             if (validateForm(formId)) {
                 const form = document.getElementById(formId);
-                showUserConfirmation("¿Estás seguro de que deseas actualizar a este usuario?", form);
+                showUserConfirmation("¿Estás seguro de que deseas cambiar tus datos?", form);
             }
         }
     </script>
