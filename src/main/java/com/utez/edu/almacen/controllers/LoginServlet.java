@@ -8,20 +8,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        boolean flag = (boolean) request.getAttribute("flag");
-        request.setAttribute("errorMessage", request.getAttribute("errorMessage"));
-        request.getRequestDispatcher(flag ? "/views/product/checkStock.jsp" : "/index.jsp").forward(request, response);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
 
         DaoLogin daoLogin = new DaoLogin();
         String password = request.getParameter("password");
@@ -29,17 +23,21 @@ public class LoginServlet extends HttpServlet {
 
         LoginResult result = daoLogin.findUser(email, password);
 
+        PrintWriter out = response.getWriter();
+
         if (result.isSuccess()) {
             if (request.getSession(false) == null) {
                 request.getSession(true);
             }
             request.getSession(false).setAttribute("user", email);
-            request.setAttribute("flag", true);
+            // Envía una respuesta JSON con la URL de redirección
+            out.write("{\"success\": true, \"redirectUrl\": \"/views/product/checkStock.jsp\"}");
         } else {
-            request.setAttribute("flag", false);
-            request.setAttribute("errorMessage", result.getMessage());
+            out.write("{\"success\": false, \"errorMessage\": \"" + result.getMessage() + "\"}");
         }
 
-        doGet(request, response);
+        out.flush();
+        out.close();
     }
 }
+

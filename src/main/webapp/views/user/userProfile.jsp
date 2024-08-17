@@ -1,3 +1,4 @@
+<%@ page import="com.utez.edu.almacen.models.user.BeanLoggedUser" %>
 <%--
   Created by IntelliJ IDEA.
   User: DS
@@ -10,9 +11,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") == null){
-        response.sendRedirect(context+"/index.jsp");
+    String email = (String) request.getSession(false).getAttribute("user");
+    if (email == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
+    BeanLoggedUser user = (BeanLoggedUser) request.getAttribute("user");
 %>
 <html>
 <head>
@@ -23,7 +27,6 @@
 <body>
 <jsp:include page="../../layouts/menu.jsp"/>
 
-
 <div class="container">
     <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
         <div class="card contenidoTotal shadow-lg p-5">
@@ -32,7 +35,8 @@
             </div>
             <div class="d-flex justify-content-end">
                 <div class="row">
-                    <button onclick="update()" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateUser">
+                    <!-- Botón para actualizar información -->
+                    <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateUser" data-user-id="<%= user.getId() %>" onclick="putUserLoggedInformation(this)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -61,13 +65,13 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="userName fw-bold fs-5"><%=request.getAttribute("name")%></span>
+                                <span class="userName fw-bold fs-5"><%=user.getName()%></span>
                             </div>
                         </div>
                     </div>
                     <!--TELEFONO-->
                     <div class="mt-4">
-                        <label for="rol" class="fs-4">
+                        <label for="phone" id="phone" class="fs-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
                                 <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
                             </svg>
@@ -75,15 +79,15 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="fw-bold fs-5"><%=request.getAttribute("phone")%></span>
+                                <span class="fw-bold fs-5"><%=user.getPhone()%></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-3">
-                    <!--ROL-->
+                    <!--APELLIDOS-->
                     <div class="mt-4">
-                        <label id="rol" for="rol" class="fs-4">
+                        <label id="surname" for="surname" class="fs-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                             </svg>
@@ -91,13 +95,13 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="rol fw-bold fs-5"><%=request.getAttribute("surname")%><%=request.getAttribute("lastname")%></span>
+                                <span class="rol fw-bold fs-5"><%=user.getSurname()%> <%=user.getLastname()%></span>
                             </div>
                         </div>
                     </div>
-                    <!--ESTADO-->
+                    <!--ROL-->
                     <div class="mt-4">
-                        <label id="status" for="status" class="fs-4">
+                        <label id="rol" for="rol" class="fs-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
                                 <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
                             </svg>
@@ -105,7 +109,7 @@
                         </label>
                         <div class="row">
                             <div class="col align-items-center">
-                                <span class="rol fw-bold fs-5"><%=request.getAttribute("role")%></span>
+                                <span class="rol fw-bold fs-5"><%=user.getRole()%></span>
                             </div>
                         </div>
                     </div>
@@ -121,9 +125,12 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <div class="input-group">
-                                <span class="email fw-bold fs-5"><%=request.getSession(false).getAttribute("user")%></span>
-                                    <button onclick="" class="btn" data-bs-toggle="modal" data-bs-target="#updateEmail">
+                                <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="input-group">
+                                        <span class="email fw-bold fs-5"><%=request.getSession(false).getAttribute("user")%></span>
+                                    </div>
+                                    <!-- Botón para cambiar correo electrónico -->
+                                    <button class="btn botonEditar btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#updateEmail" data-user-id="<%= user.getId() %>" onclick="emailUserLoggedInformation(this)">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -134,7 +141,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 mb-4">
+                    <div class="mt-2">
                         <label class="fs-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-lock" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
@@ -143,9 +150,12 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <div class="input-group">
-                                    <span class="fw-bold fs-5">************</span><!-- Estos asteríscos no deben cambiar,-->
-                                    <button onclick="" class="btn" data-bs-toggle="modal" data-bs-target="#updatePassword">
+                                <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="input-group">
+                                        <span class="fw-bold fs-5">************</span><!-- Estos asteríscos no deben cambiar,-->
+                                    </div>
+                                    <!-- Botón para cambiar contraseña -->
+                                    <button class="btn botonEditar btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#updatePassword" data-user-id="<%= user.getId() %>" onclick="passwordUserLoggedInformation(this)">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -158,53 +168,56 @@
                 </div>
             </div>
 
-            <!-- Modal Editar Usuario -->
-            <div class="modal fade" id="updateUser" tabindex="-1" aria-labelledby="updateUserLabel"
-                 aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="updateUserLabel">Editar perfil</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+    <!-- Modal Editar Usuario -->
+    <div class="modal fade" id="updateUser" tabindex="-1" aria-labelledby="updateUserLabel"
+         aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="updateUserLabel">Editar perfil</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateUserForm" method="post" action="<%=context%>/user/profile-update">
+                        <input hidden id="u_id" name="id">
+                        <div class="row">
+                            <label for="u_name" class="col">Nombre(s)*</label>
+                            <label for="u_surname" class="col">Apellido paterno*</label>
                         </div>
-                        <div class="modal-body">
-                            <form id="updateUserForm" method="post" action="<%=context%>/user/updateLogged">
-                                <div class="row">
-                                    <label for="name" class="col">Nombre(s)*</label>
-                                    <label for="surname" class="col">Apellido paterno*</label>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <input type="text" class="col-3 form-control" name="name" id="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
-                                    </div>
-                                    <div class="col">
-                                        <input type="text" class="form-control" name="surname" id="surname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label for="lastname" class="col">Apellido materno*</label>
-                                    <label class="col" for="phone">Teléfono*</label>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <input type="text" class="form-control" name="lastname" id="lastname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
-                                    </div>
-                                    <div class="col">
-                                        <input type="tel" class="form-control" name="phone" id="phone" minlength="10" maxlength="10" required pattern="^[0-9]*$">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe" onclick="updateUser(event)">
-                                        Modificar
-                                    </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </form>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <input type="text" class="col-3 form-control" name="name" id="u_name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="surname" id="u_surname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <label for="u_lastname" class="col">Apellido materno*</label>
+                            <label class="col" for="u_phone">Teléfono*</label>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <input type="text" class="form-control" name="lastname" id="u_lastname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                            </div>
+                            <div class="col">
+                                <input type="tel" class="form-control" name="phone" id="u_phone" minlength="10" maxlength="10" required pattern="^[0-9]*$">
+                            </div>
+                        </div>
+                        <input hidden id="u_email" name="email">
+                        <input hidden id="u_role" name="role">
+                        <input hidden id="u_status" name="status">
+                        <input hidden id="u_password" name="password">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn botonCafe" onclick="updateUser(event)">
+                                Modificar
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -220,46 +233,59 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updatePasswordForm" class="needs-validation" novalidate autocomplete="off" method="post" action="<%=context%>/user/updatePassword">
+                    <form id="updatePasswordForm" method="post" action="<%=context%>/user/password-update" novalidate>
+                        <input hidden id="p_id" name="id">
+                        <input hidden id="p_name" name="name">
+                        <input hidden id="p_surname" name="surname">
+                        <input hidden id="p_lastname" name="lastname">
+                        <input hidden id="p_phone" name="phone">
+                        <input hidden id="p_email" name="email">
                         <div class="mb-1 text-start">
-
                             <!--Contraseña ACTUAL-->
-                            <label class="form-label" for="password">Ingrese su contraseña actual</label>
+                            <label class="form-label" for="currentPassword">Ingrese su contraseña actual</label>
                             <div class="input-group mb-5">
-                                <input  class="form-control" type="password" name="password" id="password" placeholder="Contraseña" required>
+
+                                <input class="form-control" type="password" name="currentPassword" id="currentPassword" placeholder="Contraseña" required>
+
                                 <button class="btn btn-outline-secondary eyeOpen" type="button" onclick="showPassword()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
                                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
                                     </svg>
                                 </button>
+
                                 <button class="btn btn-outline-secondary eyeClose" type="button" onclick="showPassword()" style="display:none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                                         <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                                         <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                                     </svg>
                                 </button>
+
                                 <div class="invalid-feedback">
                                     La contraseña no es válida.
                                 </div>
                             </div>
 
                             <!--Contraseña NUEVA-->
-                            <label class="form-label" for="password1">Ingrese una nueva contraseña</label>
+                            <label class="form-label" for="password">Ingrese una nueva contraseña</label>
                             <div class="input-group mb-5">
-                                <input  class="form-control" type="password" name="password1" id="password1" placeholder="Nueva contraseña" required>
+
+                                <input  class="form-control" type="password" name="password" id="password" placeholder="Nueva contraseña" required>
+
                                 <button class="btn btn-outline-secondary eyeOpen1" type="button" onclick="showPassword1()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
                                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
                                     </svg>
                                 </button>
+
                                 <button class="btn btn-outline-secondary eyeClose1" type="button" onclick="showPassword1()" style="display:none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                                         <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                                         <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                                     </svg>
                                 </button>
+
                                 <div class="invalid-feedback">
                                     Las contraseñas no coinciden.
                                 </div>
@@ -268,27 +294,35 @@
                             <!--Contraseña CONFIRMAR NUEVA-->
                             <label class="form-label" for="password2">Confirme su contraseña</label>
                             <div class="input-group mb-3">
+
                                 <input  class="form-control" type="password" name="password2" id="password2" placeholder="Confirmar nueva contraseña" required>
+
                                 <button class="btn btn-outline-secondary eyeOpen2" type="button" onclick="showDoublePassword()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
                                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
                                     </svg>
                                 </button>
+
                                 <button class="btn btn-outline-secondary eyeClose2" type="button" onclick="showDoublePassword()" style="display:none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
                                         <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                                         <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                                     </svg>
                                 </button>
+
                                 <div class="invalid-feedback">
                                     Las contraseñas no coinciden.
                                 </div>
                             </div>
                         </div>
+
+                        <input hidden id="p_role" name="role">
+                        <input hidden id="p_status" name="status">
+
                         <div class="modal-footer">
-                            <!-- Enva correo para obtener un código de verificación -->
-                            <button type="button" class="btn botonCafe me-md-2" onclick="changePassword(event)">
+                            <!-- Botones -->
+                            <button type="submit" class="btn botonCafe me-md-2" onclick="changePassword(event)">
                                 Actualizar contraseña
                             </button>
                             <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -312,13 +346,18 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updateEmailForm" method="post" action="<%=context%>/user/updateEmail" novalidate>
+                    <form id="updateEmailForm" method="post" action="<%=context%>/user/email-update" novalidate>
+                        <input hidden id="r_id" name="id">
+                        <input hidden id="r_name" name="name">
+                        <input hidden id="r_surname" name="surname">
+                        <input hidden id="r_lastname" name="lastname">
+                        <input hidden id="r_phone" name="phone">
                         <div class="row">
-                            <label class="col-8" for="email1">Nuevo correo electrónico*</label>
+                            <label class="col-8" for="email">Nuevo correo electrónico*</label>
                         </div>
                         <div class="row mb-4">
                             <div class="col">
-                                <input type="email" class="form-control" name="email1" id="email1" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                <input type="text" class="form-control" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
                                     Los correos no coinciden.
                                 </div>
@@ -329,12 +368,15 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col">
-                                <input type="email" class="form-control" name="email2" id="email2" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                <input type="text" class="form-control" name="email2" id="email2" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
                                     Las correos no coinciden.
                                 </div>
                             </div>
                         </div>
+                        <input hidden id="r_password" name="password">
+                        <input hidden id="r_role" name="role">
+                        <input hidden id="r_status" name="status">
                         <div class="modal-footer">
                             <button type="submit" class="btn botonCafe" onclick="changeEmail(event)">
                                 Confirmar
@@ -348,11 +390,10 @@
             </div>
         </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../assets/js/funciones.js"></script>
-    <script src="../../assets/js/updateUsers.js"></script>
+    <script src="../../assets/js/updateUserLogged.js"></script>
     <script>
         // Función para validar un campo individualmente en tiempo real
         function validateField(input) {
@@ -425,7 +466,6 @@
             setupRealTimeValidation('updateEmailForm');
         });
 
-        // Ejemplos de las funciones showWarningAlert y showEmptyWarning (deben estar definidas previamente)
         function showWarningAlert() {
             Swal.fire({
                 icon: 'error',
@@ -591,12 +631,12 @@
         function changePassword(event) {
             event.preventDefault(); // Evita el envío automático del formulario
             const formId = 'updatePasswordForm';
-            let password1 = document.getElementById('password1').value;
+            let password1 = document.getElementById('password').value;
             let password2 = document.getElementById('password2').value;
 
             if (password1 !== password2) {
                 showWarningAlert();
-                document.getElementById('password1').classList.add('is-invalid');
+                document.getElementById('password').classList.add('is-invalid');
                 document.getElementById('password2').classList.add('is-invalid');
             } else if (validateForm(formId)) {
                 const form = document.getElementById(formId);
@@ -608,8 +648,13 @@
         function changeEmail(event) {
             event.preventDefault(); // Evita el envío automático del formulario
             const formId = 'updateEmailForm';
-
-            if (validateForm(formId)) {
+            let email1 = document.getElementById('email').value;
+            let email2 = document.getElementById('email2').value;
+            if (email1 !== email2) {
+                showWarningAlert();
+                document.getElementById('email').classList.add('is-invalid');
+                document.getElementById('email2').classList.add('is-invalid');
+            } else if (validateForm(formId)) {
                 const form = document.getElementById(formId);
                 showSpecialConfirmation("¿Estás seguro de que deseas cambiar tu correo electrónico?", form);
             }
@@ -625,34 +670,13 @@
                 showUserConfirmation("¿Estás seguro de que deseas actualizar a este usuario?", form);
             }
         }
-
-        // Función para cambiar el estado de un usuario
-        function handleChangeStatus(event) {
-            event.preventDefault(); // Evita el envío automático del formulario
-            const button = event.currentTarget;
-            const userId = button.getAttribute('data-id');
-            const form = document.getElementById('changeStatusForm');
-
-            // Actualiza el input hidden con el ID correcto
-            form.querySelector('input[name="id"]').value = userId;
-            showUserConfirmation('¿Estás seguro de que deseas cambiar el estado a este usuario?', form);
-        }
-
-        // Asocia la función a los botones cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', function() {
-            const changeStatusButtons = document.querySelectorAll('.botonRojo');
-
-            changeStatusButtons.forEach(button => {
-                button.addEventListener('click', handleChangeStatus);
-            });
-        });
     </script>
 <script>
     //Funcion para mostrar contraseña
     function showPassword() {
         const eyeOpen = document.querySelector(".eyeOpen");
         const eyeClose = document.querySelector(".eyeClose");
-        var password = document.getElementById("password");
+        var password = document.getElementById("currentPassword");
 
         if (password.type === "password") {
             password.type = "text";
@@ -669,7 +693,7 @@
     function showPassword1() {
         const eyeOpen = document.querySelector(".eyeOpen1");
         const eyeClose = document.querySelector(".eyeClose1");
-        var password1 = document.getElementById("password1");
+        var password1 = document.getElementById("password");
 
         if (password1.type === "password") {
             password1.type = "text";
