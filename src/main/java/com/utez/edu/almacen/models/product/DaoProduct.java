@@ -169,7 +169,6 @@ public class DaoProduct{
             conn = new MySQLConnection().getConnection();
             StringBuilder query = new StringBuilder("SELECT * FROM products WHERE 1=1");
 
-
             if (code != null && !code.isEmpty()) {
                 query.append(" AND code = ?");
             }
@@ -184,8 +183,6 @@ public class DaoProduct{
             }else {
                 query.append(" AND (status = ? OR status = ?)");
             }
-
-
 
             ps = conn.prepareStatement(query.toString());
 
@@ -227,6 +224,42 @@ public class DaoProduct{
         }
         return products;
     }
+
+    public List<BeanProduct> searchStock(String name, String code, String id_metric, String providerName) {
+        List<BeanProduct> stocks = new ArrayList<>();
+        try {
+            conn = new MySQLConnection().getConnection();
+            String query = "{CALL SearchStock(?, ?, ?, ?)}";
+
+            ps = conn.prepareCall(query);
+
+            // Si el parámetro es null o está vacío, pasamos null al procedimiento almacenado
+            ps.setString(1, (code == null || code.isEmpty()) ? null : code);
+            ps.setString(2, (name == null || name.isEmpty()) ? null : name);
+            ps.setString(3, (id_metric == null || id_metric.isEmpty()) ? null : id_metric);
+            ps.setString(4, (providerName == null || providerName.isEmpty()) ? null : providerName);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BeanProduct stock = new BeanProduct();
+                stock.setId(rs.getLong("productId"));
+                stock.setCode(rs.getString("productCode"));
+                stock.setName(rs.getString("productName"));
+                stock.setMetricName(rs.getString("metricName"));
+                stock.setProviderName(rs.getString("providerName"));
+                stock.setQuantity(rs.getInt("quantity"));
+                stocks.add(stock);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoProduct.class.getName()).log(Level.SEVERE, "ERROR. Function search failed: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return stocks;
+    }
+
+
 
     public void closeConnection() {
         try {

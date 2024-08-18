@@ -3,8 +3,6 @@
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
 <%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
-<%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
-<%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
 <%--
   Created by IntelliJ IDEA.
   User: migue
@@ -20,7 +18,7 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
-    List<BeanUser> users = new DaoUser().listAll();
+    List<BeanMetric> metrics = new DaoMetric().listAll();
     List<BeanProvider> providers = new DaoProvider().listAll();
 %>
 <html>
@@ -51,9 +49,9 @@
 
             <!--FILTRO DE BUSQUEDA DE PRODUCTO-->
             <div class="mt-3">
-                <form action="<%=context%>/stock/search" method="get">
+                <form action="<%=context%>/product/searchStock" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-3">Folio de la entrada</div>
+                        <div class="col-3">Clave del producto</div>
                         <div class="col-3">Nombre del producto</div>
                         <div class="col-3">Proveedor </div>
                         <div class="col-3">Almacenista</div>
@@ -62,30 +60,30 @@
                     <!--Folio de la entrada-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <input id="code" type="text" class="form-control" placeholder="E2024XXXX">
+                            <input id="code" name="code" type="text" class="form-control" placeholder="Clave del producto">
                         </div>
                         <!--Nombre del producto-->
                         <div class="col-3">
-                            <input id="id_product" type="text" class="form-control" placeholder="Nombre del producto">
+                            <input id="id_product" name="name"  type="text" class="form-control" placeholder="Nombre del producto">
                         </div>
                         <!--Proveedor-->
                         <div class="col-3">
-                            <select class="form-select" name="id_provider" id="id_provider" required>
+                            <select class="form-select" name="providerName" id="id_provider">
                                 <option disabled selected value>Seleccionar Proveedor</option>
                                 <% for (BeanProvider pr : providers) { %>
                                 <% if (pr.getStatus()) { %>
-                                <option value="<%= pr.getId() %>"><%=pr.getName()%></option>
+                                <option value="<%=pr.getName()%>"><%=pr.getName()%></option>
                                 <% } %>
                                 <% } %>
                             </select>
                         </div>
                         <!--Almacenista-->
                         <div class="col-3">
-                            <select class="form-select" name="id_user" id="id_user" required>
-                                <option disabled selected value>Seleccionar Almacenista</option>
-                                <% for (BeanUser us : users) { %>
-                                <% if (us.getStatus()) { %>
-                                <option value="<%= us.getId() %>"><%= us.getName() %> <%=us.getSurname()%></option>
+                            <select class="form-select" name="id_metric" id="id_metric">
+                                <option disabled selected value>Seleccionar opción</option>
+                                <% for (BeanMetric m : metrics) { %>
+                                <% if (m.getStatus()) { %>
+                                <option value="<%= m.getName() %>"><%= m.getName() %></option>
                                 <% } %>
                                 <% } %>
                             </select>

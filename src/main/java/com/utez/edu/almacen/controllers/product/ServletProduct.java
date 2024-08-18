@@ -16,11 +16,13 @@ import java.util.List;
         urlPatterns = {
             "/product/list-products", //get
             "/product/list-stocks", //get
+            "/product/search", //get
+            "/product/searchStock", //get
             "/product/delete", //post
             "/product/save", //post
             "/product/saveout", //post
-            "/product/update", //post
-            "/product/search" //get
+            "/product/update" //post
+
 })
 public class ServletProduct extends HttpServlet {
     private String action;
@@ -69,7 +71,22 @@ public class ServletProduct extends HttpServlet {
                 products = new DaoProduct().search(name, code, id_metric, status2);
                 request.setAttribute("products", products);
             break;
-        default:
+            case "/product/searchStock":
+                String code = request.getParameter("code");
+                String name = request.getParameter("name");
+                String id_metric = request.getParameter("id_metric");
+                String providerName = request.getParameter("providerName");
+                request.setAttribute("searchCode", code);
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchMetric", id_metric);
+                request.setAttribute("searchProviderName", providerName);
+
+                stocks = new DaoProduct().searchStock(name, code, id_metric, providerName);
+
+                request.setAttribute("stocks", stocks);
+                break;
+
+            default:
             System.out.println(action);
         }
         request.getRequestDispatcher(redirect).forward(request, response);
