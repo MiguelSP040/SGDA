@@ -98,14 +98,7 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <select class="form-select" name="id_user" id="id_user" required>
-                                            <option disabled selected value>Seleccionar opción</option>
-                                            <% for (BeanUser u : users) { %>
-                                            <% if (u.getStatus()) { %>
-                                            <option value="<%= u.getId() %>"><%= u.getName() %></option>
-                                            <% } %>
-                                            <% } %>
-                                        </select>
+                                        <input class="form-control w-100" name="id_user" id="id_user" placeholder="Almacenista logeado" required disabled>
                                     </div>
                                 </div>
 
@@ -138,9 +131,7 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-select " name="id_metric" id="id_metric" disabled>
-                                                        <option value="" selected>Tipo</option>
-                                                    </select>
+                                                    <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="tipo" disabled>
                                                 </td>
                                                 <td>
                                                     <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required>
