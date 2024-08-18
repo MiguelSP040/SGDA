@@ -72,15 +72,24 @@
                         <div class="modal-body">
                             <form id="newProductForm" method="post" action="/product/save" novalidate>
                                 <h5>Datos de Producto</h5>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
                                     <input type="text" class="form-control" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="code" class="col-form-label">Acrónimo*</label>
                                     <input type="text" class="form-control" name="code" id="code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
                                     <select class="form-select" name="id_metric" id="id_metric" required>
                                         <option disabled selected value>Seleccionar opción</option>
@@ -90,11 +99,19 @@
                                         <% } %>
                                         <% } %>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Este campo no puede estar vacío.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="description" class="col-form-label">Descripción*</label>
                                     <textarea class="form-control" name="description" id="description" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$"></textarea>
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="registerProduct(event)">
                                         Registrar
@@ -123,15 +140,21 @@
                             <form id="updateProductForm" method="post" action="<%=context%>/product/update" novalidate>
                                 <input hidden id="u_id" name="id">
                                 <h5>Datos de Producto</h5>
-                                <div class="mb-3">
+                                <div>
                                     <label for="u_name" class="col-form-label">Nombre del Producto*</label>
                                     <input type="text" class="form-control" name="name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+                                <div>
                                     <label for="u_code" class="col-form-label">Acrónimo*</label>
                                     <input type="text" class="form-control" name="code" id="u_code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+                                <div>
                                     <label for="u_id_metric" class="col-form-label">Unidad de medida*</label>
                                     <select class="form-select" name="id_metric" id="u_id_metric" required>
                                         <option disabled selected value>Seleccionar opción</option>
@@ -141,10 +164,16 @@
                                         <% } %>
                                         <% } %>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Este campo no puede estar vacío.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+                                <div>
                                     <label for="u_description" class="col-form-label">Descripción*</label>
                                     <textarea class="form-control" name="description" id="u_description" required></textarea>
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
                                 <input hidden id="u_status" name="status">
                                 <div class="modal-footer">
@@ -173,16 +202,16 @@
                         <div class="modal-body">
                             <input hidden id="r_id" name="id">
                             <h5>Datos de Producto</h5>
-                            <div class="mb-3">
-                                <label for="r_name" class="col-form-label">Nombre del Producto*</label>
+                            <div>
+                                <label for="r_name" class="col-form-label">Nombre del Producto</label>
                                 <input type="text" class="form-control" name="r_name" id="r_name" readonly disabled>
                             </div>
-                            <div class="mb-3">
-                                <label for="r_code" class="col-form-label">Acrónimo*</label>
+                            <div>
+                                <label for="r_code" class="col-form-label">Acrónimo</label>
                                 <input type="text" class="form-control" name="r_code" id="r_code" readonly disabled>
                             </div>
-                            <div class="mb-3">
-                                <label for="r_id_metric" class="col-form-label">Unidad de medida*</label>
+                            <div>
+                                <label for="r_id_metric" class="col-form-label">Unidad de medida</label>
                                 <select class="form-select" name="r_id_metric" id="r_id_metric" readonly disabled>
                                     <option disabled selected value>Seleccionar opción</option>
                                     <% for (BeanMetric m : metrics) { %>
@@ -192,11 +221,11 @@
                                     <% } %>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="r_description" class="col-form-label">Descripción*</label>
+                            <div>
+                                <label for="r_description" class="col-form-label">Descripción</label>
                                 <textarea class="form-control" name="r_description" id="r_description" readonly disabled></textarea>
                             </div>
-                            <input hidden id="u_status" name="status">
+                            <input hidden id="r_status" name="status">
                             <div class="modal-footer">
                                 <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
                                     Aceptar

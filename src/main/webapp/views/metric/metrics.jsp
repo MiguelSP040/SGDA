@@ -110,10 +110,16 @@
                                 <div class="mb-3">
                                     <label for="name" class="col-4">Nombre*</label>
                                     <input type="text" class="form-control mb-2" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="shortName">Abreviatura*</label>
-                                    <input type="text" class="form-control mb-4" name="shortName" id="shortName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <input type="text" class="form-control" name="shortName" id="shortName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas.
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="registerMetrics(event)">
@@ -145,10 +151,16 @@
                                 <div class="mb-3">
                                     <label for="u_name" class="col-4">Nombre*</label>
                                     <input type="text" class="form-control mb-2" name="name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="u_shortName">Abreviatura*</label>
-                                    <input type="text" class="form-control mb-4" name="shortName" id="u_shortName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <input type="text" class="form-control" name="shortName" id="u_shortName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas.
+                                    </div>
                                 </div>
                                 <input hidden id="u_status" name="status">
                                 <div class="modal-footer">

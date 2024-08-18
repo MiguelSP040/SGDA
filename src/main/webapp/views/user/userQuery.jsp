@@ -75,32 +75,47 @@
                                     <label for="name" class="col">Nombre(s)*</label>
                                     <label for="surname" class="col">Apellido paterno*</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col">
                                         <input type="text" class="col-3 form-control" name="name" id="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <input type="text" class="form-control" name="surname" id="surname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
-                                    <label for="lastname" class="col">Apellido materno*</label>
+                                    <label for="lastname" class="col">Apellido materno</label>
                                     <label class="col" for="phone">Teléfono*</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col">
                                         <input type="text" class="form-control" name="lastname" id="lastname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <input type="tel" class="form-control" name="phone" id="phone" minlength="10" maxlength="10" required pattern="^[0-9]*$">
+                                        <div class="invalid-feedback">
+                                            Mínimo 10 caracteres.
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
                                     <label class="col-8" for="email">Correo electrónico*</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col">
-                                        <input type="email" class="form-control" name="email" id="email" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                        <input type="email" class="form-control" name="email" id="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <div class="invalid-feedback">
+                                            formato: alguien@example.com
+                                        </div>
                                     </div>
                                 </div>
                                 <!--Botones MODAL--->
@@ -136,23 +151,48 @@
                                     <label for="u_name" class="col">Nombre(s)*</label>
                                     <label for="u_surname" class="col">Apellido paterno*</label>
                                 </div>
-                                <div class="row">
-                                    <div class="col"><input type="text" class="col-3 form-control" id="u_name" name="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$"></div>
-                                    <div class="col"><input type="text" class="form-control" id="u_surname" name="surname"  required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$"></div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="text" class="col-3 form-control" id="u_name" name="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="u_surname" name="surname"  required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
-                                    <label for="u_lastname" class="col">Apellido materno*</label>
+                                    <label for="u_lastname" class="col">Apellido materno</label>
                                     <label class="col" for="u_phone">Teléfono*</label>
                                 </div>
-                                <div class="row">
-                                    <div class="col"><input type="text" class="form-control" id="u_lastname" name="lastname"  required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$"></div>
-                                    <div class="col"><input type="tel" class="form-control" id="u_phone" name="phone" maxlength="10" minlength="10" required pattern="^[0-9]*$"></div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="u_lastname" name="lastname"  required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <input type="tel" class="form-control" id="u_phone" name="phone" maxlength="10" minlength="10" required pattern="^[0-9]*$">
+                                        <div class="invalid-feedback">
+                                            Mínimo 10 caracteres.
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
                                     <label class="col-8" for="u_email">Correo electrónico*</label>
                                 </div>
-                                <div class="row">
-                                    <div class="col"><input type="email" class="form-control" id="u_email" name="email" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$"></div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="email" class="form-control" id="u_email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <div class="invalid-feedback">
+                                            formato: alguien@example.com
+                                        </div>
+                                    </div>
                                 </div>
                                 <input hidden id="u_role" name="role">
                                 <input hidden id="u_status" name="status">
@@ -188,7 +228,7 @@
                                     <label for="r_name" class="col">Nombre(s)</label>
                                     <label for="r_surname" class="col">Apellido paterno</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col"><input type="text" class="form-control" id="r_name" name="name" readonly disabled></div>
                                     <div class="col"><input type="text" class="form-control" id="r_surname" name="surname"  readonly disabled></div>
                                 </div>
@@ -196,20 +236,20 @@
                                     <label for="r_lastname" class="col">Apellido materno</label>
                                     <label class="col" for="r_phone">Teléfono</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col"><input type="text" class="form-control" id="r_lastname" name="lastname" readonly disabled></div>
                                     <div class="col"><input type="tel" class="form-control" id="r_phone" name="phone"  readonly disabled></div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
                                     <label class="col-8" for="r_email">Correo electrónico</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col"><input type="email" class="form-control" id="r_email" name="email" readonly disabled></div>
                                 </div>
                                 <div class="row" style="text-indent: 2%!important;">
                                     <label for="r_role" class="col">Rol</label>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col"><input type="text" class="form-control" id="r_role" name="role"  readonly disabled></div>
                                 </div>
                                 <input hidden id="r_status" name="status">
@@ -406,12 +446,23 @@
                 isEmpty = false;
             }
 
-            // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
-            if (input.required && !input.checkValidity()) {
-                isValid = false;
-                input.classList.add('is-invalid');
+            // Validación personalizada para campos como 'lastname'
+            if (input.name === 'lastname') {
+                // Si el campo está lleno, validar el patrón; si no, lo consideramos válido
+                if (input.value.trim() !== '' && !input.checkValidity()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
             } else {
-                input.classList.remove('is-invalid');
+                // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
+                if (input.required && !input.checkValidity()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
             }
         });
 

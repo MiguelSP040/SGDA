@@ -7,7 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% request.setAttribute("pageTitle", "Usuario"); %>
+<% request.setAttribute("pageTitle", "Perfil de usuario"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
@@ -30,18 +30,18 @@
 <div class="container">
     <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
         <div class="card contenidoTotal shadow-lg p-5">
-            <div class="position-relative fs-1">
-                Perfil de usuario
+            <div>
+                <h3>Consulta tu información personal</h3>
             </div>
             <div class="d-flex justify-content-end">
                 <div class="row">
                     <!-- Botón para actualizar información -->
-                    <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateUser" data-user-id="<%= user.getId() %>" onclick="putUserLoggedInformation(this)">
+                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateUser" data-user-id="<%= user.getId() %>" onclick="putUserLoggedInformation(this)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                         </svg>
-                        Editar datos
+                        Editar perfil
                     </button>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <!--NAME-->
                 <div class="col-3">
                     <div class="mt-4">
-                        <label id="userName" for="userName" class="fs-4">
+                        <label id="userName" for="userName" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                             </svg>
@@ -65,13 +65,13 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="userName fw-bold fs-5"><%=user.getName()%></span>
+                                <span class="userName fs-5"><%=user.getName()%></span>
                             </div>
                         </div>
                     </div>
                     <!--TELEFONO-->
                     <div class="mt-4">
-                        <label for="phone" id="phone" class="fs-4">
+                        <label for="phone" id="phone" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
                                 <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
                             </svg>
@@ -79,7 +79,7 @@
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="fw-bold fs-5"><%=user.getPhone()%></span>
+                                <span class="fs-5"><%=user.getPhone()%></span>
                             </div>
                         </div>
                     </div>
@@ -87,21 +87,21 @@
                 <div class="col-3">
                     <!--APELLIDOS-->
                     <div class="mt-4">
-                        <label id="surname" for="surname" class="fs-4">
+                        <label id="surname" for="surname" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                             </svg>
-                            Apellidos
+                            Apellido(s)
                         </label>
                         <div class="row">
                             <div class="col">
-                                <span class="rol fw-bold fs-5"><%=user.getSurname()%> <%=user.getLastname()%></span>
+                                <span class="rol fs-5"><%=user.getSurname()%> <%=user.getLastname()%></span>
                             </div>
                         </div>
                     </div>
                     <!--ROL-->
                     <div class="mt-4">
-                        <label id="rol" for="rol" class="fs-4">
+                        <label id="rol" for="rol" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
                                 <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5"/>
                             </svg>
@@ -109,7 +109,7 @@
                         </label>
                         <div class="row">
                             <div class="col align-items-center">
-                                <span class="rol fw-bold fs-5"><%=user.getRole()%></span>
+                                <span class="rol fs-5"><%=user.getRole()%></span>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                 <div class="col-3">
                     <!--EMAIL-->
                     <div class=" mt-4">
-                        <label class="fs-4">
+                        <label for="email" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
                             </svg>
@@ -127,11 +127,11 @@
                             <div class="col">
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="input-group">
-                                        <span class="email fw-bold fs-5"><%=request.getSession(false).getAttribute("user")%></span>
+                                        <span class="email fs-5"><%=request.getSession(false).getAttribute("user")%></span>
                                     </div>
                                     <!-- Botón para cambiar correo electrónico -->
                                     <button class="btn botonEditar btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#updateEmail" data-user-id="<%= user.getId() %>" onclick="emailUserLoggedInformation(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                         </svg>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="fs-4">
+                        <label for="password" class="fs-5 fw-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-lock" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
                             </svg>
@@ -152,11 +152,11 @@
                             <div class="col">
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="input-group">
-                                        <span class="fw-bold fs-5">************</span><!-- Estos asteríscos no deben cambiar,-->
+                                        <span class="fs-5">************</span><!-- Estos asteríscos no deben cambiar,-->
                                     </div>
                                     <!-- Botón para cambiar contraseña -->
                                     <button class="btn botonEditar btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#updatePassword" data-user-id="<%= user.getId() %>" onclick="passwordUserLoggedInformation(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                         </svg>
@@ -188,9 +188,15 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <input type="text" class="col-3 form-control" name="name" id="u_name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                <div class="invalid-feedback">
+                                    Debe empezar con mayúscula.
+                                </div>
                             </div>
                             <div class="col">
                                 <input type="text" class="form-control" name="surname" id="u_surname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                <div class="invalid-feedback">
+                                    Debe empezar con mayúscula.
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -200,9 +206,15 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <input type="text" class="form-control" name="lastname" id="u_lastname" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                <div class="invalid-feedback">
+                                    Debe empezar con mayúscula.
+                                </div>
                             </div>
                             <div class="col">
                                 <input type="tel" class="form-control" name="phone" id="u_phone" minlength="10" maxlength="10" required pattern="^[0-9]*$">
+                                <div class="invalid-feedback">
+                                    Mínimo 10 caracteres.
+                                </div>
                             </div>
                         </div>
                         <input hidden id="u_email" name="email">
@@ -262,7 +274,7 @@
                                 </button>
 
                                 <div class="invalid-feedback">
-                                    La contraseña no es válida.
+                                    Este campo no puede estar vacío.
                                 </div>
                             </div>
 
@@ -287,7 +299,7 @@
                                 </button>
 
                                 <div class="invalid-feedback">
-                                    Las contraseñas no coinciden.
+                                    Las contraseñas no coinciden o el campo se encuentra vacío.
                                 </div>
                             </div>
 
@@ -312,7 +324,7 @@
                                 </button>
 
                                 <div class="invalid-feedback">
-                                    Las contraseñas no coinciden.
+                                    Las contraseñas no coinciden o el campo se encuentra vacío.
                                 </div>
                             </div>
                         </div>
@@ -359,7 +371,7 @@
                             <div class="col">
                                 <input type="text" class="form-control" name="email" id="email" placeholder="alguien@example.com" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
-                                    Los correos no coinciden.
+                                    Los correos no coinciden o el correo es inválido.
                                 </div>
                             </div>
                         </div>
@@ -370,7 +382,7 @@
                             <div class="col">
                                 <input type="text" class="form-control" name="email2" id="email2" placeholder="alguien@example.com" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
                                 <div class="invalid-feedback">
-                                    Las correos no coinciden.
+                                    Los correos no coinciden o el correo es inválido.
                                 </div>
                             </div>
                         </div>
@@ -432,12 +444,23 @@
                     isEmpty = false;
                 }
 
-                // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
-                if (input.required && !input.checkValidity()) {
-                    isValid = false;
-                    input.classList.add('is-invalid');
+                // Validación personalizada para campos como 'lastname'
+                if (input.name === 'lastname') {
+                    // Si el campo está lleno, validar el patrón; si no, lo consideramos válido
+                    if (input.value.trim() !== '' && !input.checkValidity()) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
                 } else {
-                    input.classList.remove('is-invalid');
+                    // Verifica si el campo es requerido y si cumple con el patrón (si está presente)
+                    if (input.required && !input.checkValidity()) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
                 }
             });
 
@@ -458,6 +481,7 @@
             form.classList.remove('was-validated');
             return true;
         }
+
 
         // Configura la validación en tiempo real al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
@@ -631,6 +655,7 @@
         function changePassword(event) {
             event.preventDefault(); // Evita el envío automático del formulario
             const formId = 'updatePasswordForm';
+
             let password1 = document.getElementById('password').value;
             let password2 = document.getElementById('password2').value;
 

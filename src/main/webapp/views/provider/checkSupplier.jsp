@@ -61,9 +61,9 @@
                     Teléfono de persona adicional* - Numérico
                     -->
 
-            <div class="modal fade" id="registerSupplier" tabindex="-1" aria-labelledby="registerSupplier"
-                 aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-md">
+            <div class="modal fade" id="registerSupplier" tabindex="-1" aria-labelledby="registerSupplier" aria-hidden="true"
+                 data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="registerModalLabel">Nuevo Proveedor</h1>
@@ -74,58 +74,89 @@
                                 <div class="row">
                                     <h5>Datos de Proveedor</h5>
                                     <div class="col-6">
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="name" class="col-form-label">Nombre del Proveedor*</label>
                                             <input type="text" class="form-control" name="name" id="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                            <div class="invalid-feedback">
+                                                Debe empezar con mayúscula.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="socialCase" class="col-form-label">Razón social*</label>
                                             <input type="text" class="form-control" name="socialCase" id="socialCase" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                            <div class="invalid-feedback">
+                                                Debe empezar con mayúscula.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="rfc" class="col-form-label">RFC*</label>
                                             <input type="text" class="form-control" name="rfc" id="rfc" maxlength="13" minlength="12" required pattern="^[A-Z0-9]+$">
+                                            <div class="invalid-feedback">
+                                                Rango 12-13 caracteres.
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="phone" class="col-form-label">Teléfono*</label>
                                             <input type="tel" class="form-control" name="phone" id="phone" maxlength="10" minlength="10" required pattern="^[0-9]*$">
+                                            <div class="invalid-feedback">
+                                                Mínimo 10 caracteres.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="email" class="col-form-label">Correo electrónico*</label>
-                                            <input type="text" class="form-control" name="email" id="email" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                            <input type="text" class="form-control" name="email" id="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                            <div class="invalid-feedback">
+                                                formato: alguien@example.com
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="postCode" class="col-form-label">Codigo Postal*</label>
                                             <input type="text" class="form-control" name="postCode" id="postCode" maxlength="5" minlength="5" required pattern="^[0-9]*$">
+                                            <div class="invalid-feedback">
+                                                Mínimo 5 caracteres.
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mb-2 text-align-center">
+                                    <div class="text-align-center">
                                         <label for="address" class="col-form-label">Dirección*</label>
                                         <input type="text" class="form-control" name="address" id="address" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
 
-
+                                    <div class="mt-3">
                                     <h5>Datos de Contacto Adicional</h5>
-                                    <div class="mb-2">
+                                    </div>
+
+                                    <div class="col-6">
                                         <label for="contactName" class="col-form-label">Nombre completo*</label>
                                         <input type="text" class="form-control" name="contactName" id="contactName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
 
-                                    <div class="mb-2">
+                                    <div class="col-6">
                                         <label for="contactPhone" class="col-form-label">Teléfono*</label>
                                         <input type="tel" class="form-control" name="contactPhone" id="contactPhone" maxlength="10" minlength="10" required pattern="^[0-9]*$">
+                                        <div class="invalid-feedback">
+                                            Mínimo 10 caracteres.
+                                        </div>
                                     </div>
-
-                                    <div class="mb-2">
+                                    <div>
                                         <label for="contactEmail" class="col-form-label">Correo electrónico*</label>
-                                        <input type="tel" class="form-control" name="contactEmail" id="contactEmail" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                        <input type="tel" class="form-control" name="contactEmail" id="contactEmail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <div class="invalid-feedback">
+                                            formato: alguien@example.com
+                                        </div>
                                     </div>
 
                                 </div>
@@ -157,9 +188,9 @@
                     Teléfono de persona adicional* - Numérico
                     -->
 
-            <div class="modal fade" id="updateSupplier" tabindex="-1" aria-labelledby="updateSupplier"
-                 aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-md">
+            <div class="modal fade" id="updateSupplier" tabindex="-1" aria-labelledby="updateSupplier" aria-hidden="true"
+                 data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="updateModalLabel">Editar información de proveedor</h1>
@@ -171,59 +202,89 @@
                                     <input hidden id="u_id" name="id">
                                     <h5>Datos de Proveedor</h5>
                                     <div class="col-6">
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_name" class="col-form-label">Nombre del Proveedor*</label>
                                             <input type="text" class="form-control" name="name" id="u_name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                            <div class="invalid-feedback">
+                                                Debe empezar con mayúscula.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_socialCase" class="col-form-label">Razón social*</label>
                                             <input type="text" class="form-control" name="socialCase" id="u_socialCase" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                            <div class="invalid-feedback">
+                                                Debe empezar con mayúscula.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_rfc" class="col-form-label">RFC*</label>
                                             <input type="text" class="form-control" name="rfc" id="u_rfc" maxlength="13" minlength="12" required pattern="^[A-Z0-9]+$">
+                                            <div class="invalid-feedback">
+                                                Rango 12-13 caracteres.
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_phone" class="col-form-label">Teléfono*</label>
                                             <input type="tel" class="form-control" name="phone" id="u_phone" maxlength="10" minlength="10" required pattern="^[0-9]*$">
+                                            <div class="invalid-feedback">
+                                                Mínimo 10 caracteres.
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_email" class="col-form-label">Correo electrónico*</label>
-                                            <input type="text" class="form-control" name="email" id="u_email" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                            <input type="text" class="form-control" name="email" id="u_email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                            <div class="invalid-feedback">
+                                                formato: alguien@example.com
+                                            </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <div>
                                             <label for="u_postCode" class="col-form-label">Codigo Postal*</label>
                                             <input type="text" class="form-control" name="postCode" id="u_postCode" maxlength="5" minlength="5" required pattern="^[0-9]*$">
+                                            <div class="invalid-feedback">
+                                                Mínimo 5 caracteres.
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="mb-2 text-align-center">
+                                    <div class="text-align-center">
                                         <label for="u_address" class="col-form-label">Dirección*</label>
                                         <input type="text" class="form-control" name="address" id="u_address" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
 
+                                    <div class="mt-3">
+                                        <h5>Datos de Contacto Adicional</h5>
+                                    </div>
 
-                                    <h5>Datos de Contacto Adicional</h5>
-                                    <div class="mb-2">
-                                        <label for="u_contactName" class="col-form-label">Nombre
-                                            completo*</label>
+                                    <div class="col-6">
+                                        <label for="u_contactName" class="col-form-label">Nombre completo*</label>
                                         <input type="text" class="form-control" name="contactName" id="u_contactName" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        <div class="invalid-feedback">
+                                            Debe empezar con mayúscula.
+                                        </div>
                                     </div>
 
-                                    <div class="mb-2">
+                                    <div class="col-6">
                                         <label for="u_contactPhone" class="col-form-label">Teléfono*</label>
                                         <input type="tel" class="form-control" name="contactPhone" id="u_contactPhone" maxlength="10" minlength="10" required pattern="^[0-9]*$">
+                                        <div class="invalid-feedback">
+                                            Mínimo 10 caracteres.
+                                        </div>
                                     </div>
-
-                                    <div class="mb-2">
+                                    <div>
                                         <label for="u_contactEmail" class="col-form-label">Correo electrónico*</label>
-                                        <input type="tel" class="form-control" name="contactEmail" id="u_contactEmail" required pattern="^[a-z0-9]+[a-z0-9\.\_]+[a-z0-9]+@[a-z]{2,}(\.[a-z]{2,}){1,2}$">
+                                        <input type="tel" class="form-control" name="contactEmail" id="u_contactEmail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <div class="invalid-feedback">
+                                            formato: alguien@example.com
+                                        </div>
                                     </div>
                                     <input hidden id="u_status" name="status">
                                 </div>
@@ -254,9 +315,9 @@
                     Teléfono de persona adicional* - Numérico
                     -->
 
-            <div class="modal fade" id="showSupplier" tabindex="-1" aria-labelledby="showSupplier"
-                 aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-md">
+            <div class="modal fade" id="showSupplier" tabindex="-1" aria-labelledby="showSupplier" aria-hidden="true"
+                 data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5">Más información</h1>
@@ -267,58 +328,60 @@
                                     <input hidden id="r_id" name="id">
                                     <h5>Datos de Proveedor</h5>
                                     <div class="col-6">
-                                        <div class="mb-2">
-                                            <label for="r_name" class="col-form-label">Nombre del Proveedor*</label>
+                                        <div>
+                                            <label for="r_name" class="col-form-label">Nombre del Proveedor</label>
                                             <input type="text" class="form-control" name="name" id="r_name" readonly disabled>
                                         </div>
 
-                                        <div class="mb-2">
-                                            <label for="r_socialCase" class="col-form-label">Razón social*</label>
+                                        <div>
+                                            <label for="r_socialCase" class="col-form-label">Razón social</label>
                                             <input type="text" class="form-control" name="socialCase" id="r_socialCase" readonly disabled>
                                         </div>
 
-                                        <div class="mb-2">
-                                            <label for="r_rfc" class="col-form-label">RFC*</label>
+                                        <div>
+                                            <label for="r_rfc" class="col-form-label">RFC</label>
                                             <input type="text" class="form-control" name="rfc" id="r_rfc" readonly disabled>
                                         </div>
                                     </div>
                                     <div class="col-6">
 
-                                        <div class="mb-2">
-                                            <label for="r_phone" class="col-form-label">Teléfono*</label>
+                                        <div>
+                                            <label for="r_phone" class="col-form-label">Teléfono</label>
                                             <input type="tel" class="form-control" name="phone" id="r_phone" readonly disabled>
                                         </div>
 
-                                        <div class="mb-2">
-                                            <label for="r_email" class="col-form-label">Correo electrónico*</label>
+                                        <div>
+                                            <label for="r_email" class="col-form-label">Correo electrónico</label>
                                             <input type="text" class="form-control" name="email" id="r_email" readonly disabled>
                                         </div>
 
-                                        <div class="mb-2">
-                                            <label for="r_postCode" class="col-form-label">Codigo Postal*</label>
+                                        <div>
+                                            <label for="r_postCode" class="col-form-label">Codigo Postal</label>
                                             <input type="text" class="form-control" name="postCode" id="r_postCode" readonly disabled>
                                         </div>
                                     </div>
-                                    <div class="mb-2 text-align-center">
-                                        <label for="r_address" class="col-form-label">Dirección*</label>
+                                    <div class="text-align-center">
+                                        <label for="r_address" class="col-form-label">Dirección</label>
                                         <input type="text" class="form-control" name="address" id="r_address" readonly disabled>
                                     </div>
 
+                                    <div class="mt-3">
+                                        <h5>Datos de Contacto Adicional</h5>
+                                    </div>
 
-                                    <h5>Datos de Contacto Adicional</h5>
-                                    <div class="mb-2">
-                                        <label for="r_contactName" class="col-form-label">Nombre
-                                            completo*</label>
+
+                                    <div class="col-6">
+                                        <label for="r_contactName" class="col-form-label">Nombre completo</label>
                                         <input type="text" class="form-control" name="contactName" id="r_contactName" readonly disabled>
                                     </div>
 
-                                    <div class="mb-2">
-                                        <label for="r_contactPhone" class="col-form-label">Teléfono*</label>
+                                    <div class="col-6">
+                                        <label for="r_contactPhone" class="col-form-label">Teléfono</label>
                                         <input type="tel" class="form-control" name="contactPhone" id="r_contactPhone" readonly disabled>
                                     </div>
 
-                                    <div class="mb-2">
-                                        <label for="r_contactEmail" class="col-form-label">Correo electrónico*</label>
+                                    <div>
+                                        <label for="r_contactEmail" class="col-form-label">Correo electrónico</label>
                                         <input type="tel" class="form-control" name="contactEmail" id="r_contactEmail" readonly disabled>
                                     </div>
                                 </div>

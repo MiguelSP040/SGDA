@@ -109,10 +109,16 @@
                                 <div class="mb-3">
                                     <label for="name" class="col-4">Nombre*</label>
                                     <input type="text" class="form-control mb-2" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ0-9]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ0-9]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="shortName">Acronimo*</label>
                                     <input type="text" class="form-control mb-2" name="shortName" id="shortName" required pattern="^([A-ZÁÉÍÓÚÑ0-9]+\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas y números.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description">Descripción</label>
@@ -149,10 +155,16 @@
                                 <div class="mb-3">
                                     <label for="u_name" class="col-4">Nombre*</label>
                                     <input type="text" class="form-control mb-2" name="name" id="u_name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ0-9]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ0-9]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="u_shortName">Acronimo*</label>
                                     <input type="text" class="form-control mb-2" name="shortName" id="u_shortName" required pattern="^([A-ZÁÉÍÓÚÑ0-9]+\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas y números.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="u_description">Descripción</label>
