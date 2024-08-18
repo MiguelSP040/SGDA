@@ -3,10 +3,7 @@ package com.utez.edu.almacen.models.product;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,6 +61,32 @@ public class DaoProduct{
             closeConnection();
         }
         return null;
+    }
+
+    public List<BeanProduct> listAllStock() {
+        List<BeanProduct> stocks = new ArrayList<>();
+        CallableStatement cs = null;
+        rs = null;
+        try {
+            String query = "{CALL GetStock()}";
+            cs = conn.prepareCall(query);
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                BeanProduct stock = new BeanProduct();
+                stock.setId(rs.getLong("productId"));
+                stock.setCode(rs.getString("productCode"));
+                stock.setName(rs.getString("productName"));
+                stock.setMetricName(rs.getString("metricName"));
+                stock.setProviderName(rs.getString("providerName"));
+                stock.setQuantity(rs.getInt("quantity"));
+                stocks.add(stock);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoProduct.class.getName()).log(Level.SEVERE, "ERROR. Function listAllStock failed: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return stocks;
     }
 
     public boolean save(BeanProduct object) {

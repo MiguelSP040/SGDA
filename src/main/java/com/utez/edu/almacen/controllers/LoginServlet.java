@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
             }
             request.getSession(false).setAttribute("user", email);
             // Envía una respuesta JSON con la URL de redirección
-            out.write("{\"success\": true, \"redirectUrl\": \"/views/product/checkStock.jsp\"}");
+            out.write("{\"success\": true, \"redirectUrl\": \"/product/list-stocks\"}");
         } else {
             out.write("{\"success\": false, \"errorMessage\": \"" + result.getMessage() + "\"}");
         }

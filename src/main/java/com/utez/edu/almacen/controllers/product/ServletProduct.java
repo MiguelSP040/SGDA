@@ -15,6 +15,7 @@ import java.util.List;
 @WebServlet(name = "ServletProduct",
         urlPatterns = {
             "/product/list-products", //get
+            "/product/list-stocks", //get
             "/product/delete", //post
             "/product/save", //post
             "/product/saveout", //post
@@ -37,7 +38,7 @@ public class ServletProduct extends HttpServlet {
                 List<BeanProduct> products = new DaoProduct().listAll();
                 request.setAttribute("products", products);
                 redirect = "/views/product/products.jsp";
-                break;
+            break;
             case "/product/register":
                 redirect = "";
                 break;
@@ -51,7 +52,12 @@ public class ServletProduct extends HttpServlet {
                     redirect = "/product/list-products?result=" + false + "&message=" +
                             URLEncoder.encode("¡Error! Acción no realizada correctamente", StandardCharsets.UTF_8);
                 }
-                break;
+            break;
+            case "/product/list-stocks":
+                List<BeanProduct> stocks = new DaoProduct().listAllStock();
+                request.setAttribute("stocks", stocks);
+                redirect = "/views/product/checkStock.jsp";
+            break;
             case "/product/search":
                 code = request.getParameter("code");
                 name = request.getParameter("name");
@@ -62,10 +68,9 @@ public class ServletProduct extends HttpServlet {
                 request.setAttribute("searchName", name);
                 products = new DaoProduct().search(name, code, id_metric, status2);
                 request.setAttribute("products", products);
-
-                break;
-            default:
-                System.out.println(action);
+            break;
+        default:
+            System.out.println(action);
         }
         request.getRequestDispatcher(redirect).forward(request, response);
     }

@@ -3,6 +3,8 @@
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
 <%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
+<%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
 <%--
   Created by IntelliJ IDEA.
   User: migue
@@ -18,7 +20,7 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
-    List<BeanMetric> metrics = new DaoMetric().listAll();
+    List<BeanUser> users = new DaoUser().listAll();
     List<BeanProvider> providers = new DaoProvider().listAll();
 %>
 <html>
@@ -51,38 +53,39 @@
             <div class="mt-3">
                 <form action="<%=context%>/stock/search" method="get">
                     <div class="row d-flex justify-content-center">
+                        <div class="col-3">Folio de la entrada</div>
                         <div class="col-3">Nombre del producto</div>
-                        <div class="col-3">Clave del producto</div>
                         <div class="col-3">Proveedor </div>
-                        <div class="col-3">Unidad de medida</div>
+                        <div class="col-3">Almacenista</div>
                     </div>
 
-                    <!--Clave del producto-->
+                    <!--Folio de la entrada-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <input id="id_product" type="text" class="form-control" placeholder="Nombre del producto">
-                        </div>
-                        <div class="col-3">
                             <input id="code" type="text" class="form-control" placeholder="E2024XXXX">
+                        </div>
+                        <!--Nombre del producto-->
+                        <div class="col-3">
+                            <input id="id_product" type="text" class="form-control" placeholder="Nombre del producto">
                         </div>
                         <!--Proveedor-->
                         <div class="col-3">
                             <select class="form-select" name="id_provider" id="id_provider" required>
-                                <option disabled selected value>Seleccionar opción</option>
+                                <option disabled selected value>Seleccionar Proveedor</option>
                                 <% for (BeanProvider pr : providers) { %>
                                 <% if (pr.getStatus()) { %>
-                                <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                <option value="<%= pr.getId() %>"><%=pr.getName()%></option>
                                 <% } %>
                                 <% } %>
                             </select>
                         </div>
-                        <!--Unidad de medida-->
+                        <!--Almacenista-->
                         <div class="col-3">
-                            <select class="form-select" name="id_metric" id="id_metric">
-                                <option disabled selected value>Seleccionar opción</option>
-                                <% for (BeanMetric m : metrics) { %>
-                                <% if (m.getStatus()) { %>
-                                <option value="<%= m.getId() %>"><%= m.getName() %></option>
+                            <select class="form-select" name="id_user" id="id_user" required>
+                                <option disabled selected value>Seleccionar Almacenista</option>
+                                <% for (BeanUser us : users) { %>
+                                <% if (us.getStatus()) { %>
+                                <option value="<%= us.getId() %>"><%= us.getName() %> <%=us.getSurname()%></option>
                                 <% } %>
                                 <% } %>
                             </select>
@@ -94,7 +97,6 @@
                             <button type="submit" class="btn botonCafe mb-3">
                                 Buscar
                             </button>
-
                             <!-- Botón Limpiar -->
                             <button type="reset" class="btn botonGris btn-light mb-3">
                                 Limpiar
@@ -114,37 +116,23 @@
                     <tr>
                         <th scope="col" class="thead">#</th>
                         <th scope="col" class="thead">Clave</th>
-                        <th scope="col" class="thead">Nombre del producto</th>
-                        <th scope="col" class="thead">Cantidad</th>
-                        <th scope="col" class="thead">Unidad de medida</th>
-                        <th scope="col" class="thead">Precio Unitario</th>
-                        <th scope="col" class="thead">Precio de Venta</th>
+                        <th scope="col" class="thead">Producto</th>
+                        <th scope="col" class="thead">Medida</th>
                         <th scope="col" class="thead">Proveedor</th>
+                        <th scope="col" class="thead">Cantidad</th>
                     </tr>
                     </thead>
                     <tbody class="align-middle">
-                    <c:forEach var="stock" items="${stocks}">
+                    <c:forEach var="stock" items="${stocks}" varStatus="s">
                         <tr>
-                            <th scope="row"><c:out value="${product.id}"/></th>
-                            <td><c:out value="${entry.folio}"/></td>
-                            <td><c:out value="${product.name}"/></td>
-                            <td><c:out value="${entry_product.quantity}"/></td>
-                            <td><c:out value="${entry_product.unitPrice}"/></td>
-                            <td><c:out value="${entry_product.total_price}"/></td>
-                            <td><c:out value="${provider.name}"/></td>
+                            <th scope="row"><c:out value="${s.count}"/></th>
+                            <td><c:out value="${stock.code}"/></td>
+                            <td><c:out value="${stock.name}"/></td>
+                            <td><c:out value="${stock.metricName}"/></td>
+                            <td><c:out value="${stock.providerName}"/></td>
+                            <td><c:out value="${stock.quantity}"/></td>
                         </tr>
                     </c:forEach>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>E2024F1KL</td>
-                        <td>Hojas</td>
-                        <td>100</td>
-                        <td>Paquetes</td>
-                        <td>$000.00</td>
-                        <td>$000.00</td>
-                        <!--Visualizar info Proveedor-->
-                        <td>Scribe </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
