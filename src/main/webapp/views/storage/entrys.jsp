@@ -529,7 +529,7 @@
                     <tbody class="align-middle">
                     <c:forEach var="entry" items="${entries2}" varStatus="s">
                         <tr>
-                            <th scope="row"><c:out value="${entry.idEntry}"/></th>
+                            <th scope="row"><c:out value="${s.count}"/></th>
                             <td><c:out value="${entry.changeDate}"/></td>
                             <td><c:out value="${entry.folioNumber}"/></td>
                             <td><c:out value="${entry.invoiceNumber}"/></td>
@@ -579,6 +579,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../assets/js/updateEntries.js"></script>
 <script src="../../assets/js/funciones.js"></script>
+
+<!--ESTE SCRIPT HACE QUE FUNCIONE TODO EL MODAL DE VER MÁS-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     // Asocia un evento click a los botones que abren el modal
