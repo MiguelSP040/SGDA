@@ -364,7 +364,7 @@
                                     <tr>
                                         <th scope="col" style="width: 3%" class="tableTitle">#</th>
                                         <th scope="col" style="width: 25%" class="tableTitle"><label for="r_idProduct">Producto*</label></th>
-                                        <th scope="col" style="width: 18%" class="tableTitle"><label for="id_metric_">Medida*</label></th>
+                                        <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice_">Precio*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity_">Cantidad*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
