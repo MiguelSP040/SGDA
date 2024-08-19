@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "ServletProduct",
         urlPatterns = {
@@ -57,9 +58,15 @@ public class ServletProduct extends HttpServlet {
             break;
             case "/product/list-stocks":
                 List<BeanProduct> stocks = new DaoProduct().listAllStock();
-                request.setAttribute("stocks", stocks);
+
+                // Filtrar productos con cantidad mayor a 0
+                List<BeanProduct> inStockProducts = stocks.stream()
+                        .filter(product -> product.getQuantity() > 0)
+                        .collect(Collectors.toList());
+
+                request.setAttribute("stocks", inStockProducts);
                 redirect = "/views/product/checkStock.jsp";
-            break;
+                break;
             case "/product/search":
                 code = request.getParameter("code");
                 name = request.getParameter("name");
@@ -76,6 +83,7 @@ public class ServletProduct extends HttpServlet {
                 String name = request.getParameter("name");
                 String id_metric = request.getParameter("id_metric");
                 String providerName = request.getParameter("providerName");
+
                 request.setAttribute("searchCode", code);
                 request.setAttribute("searchName", name);
                 request.setAttribute("searchMetric", id_metric);
@@ -83,8 +91,12 @@ public class ServletProduct extends HttpServlet {
 
                 stocks = new DaoProduct().searchStock(name, code, id_metric, providerName);
 
-                request.setAttribute("stocks", stocks);
-                break;
+                List<BeanProduct> inStockSearchResults = stocks.stream()
+                        .filter(product -> product.getQuantity() > 0)
+                        .collect(Collectors.toList());
+
+                request.setAttribute("stocks", inStockSearchResults);
+            break;
 
             default:
             System.out.println(action);

@@ -151,9 +151,9 @@ public class DaoUser{
             ps.setBoolean(8, object.getStatus());
             ps.setLong(9, object.getId());
             return ps.executeUpdate() > 0;
-        }catch (SQLException e){
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
-        }finally {
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed: " + e.getMessage());
+        } finally {
             closeConnection();
         }
         return false;
@@ -315,6 +315,32 @@ public class DaoUser{
         return user;
     }
 
+    public BeanUser getUserByEmail(String email) {
+        BeanUser user = null;
+        String query = "SELECT * FROM users WHERE email = ?;";
+
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                user = new BeanUser();
+                user.setId(rs.getLong("id_user"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function getUserByEmail failed: " + e.getMessage());
+        }
+        return user;
+    }
 
     private void closeConnection() {
         try {
