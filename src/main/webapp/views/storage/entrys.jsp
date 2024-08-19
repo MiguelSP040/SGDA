@@ -186,7 +186,7 @@
                                         <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
                                     </div>
                                     <div class="d-flex align-items-center mt-4">
-                                        <button type="submit" class="btn botonCafe me-2" id="registerButton" onclick="registerEntry(event)">
+                                        <button type="submit" class="btn botonCafe me-2" onclick="registerEntry(event)">
                                             Registrar
                                         </button>
                                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -252,7 +252,7 @@
                                             <th scope="col" style="width: 18%" class="tableTitle"><label for="u_id_metric">Medida*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label>Precio*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label>Cantidad*</label></th>
-                                            <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total</label></th>
                                             <th scope="col" style="width: 3%" class="tableTitle">Acciones*</th>
                                         </tr>
                                         </thead>
@@ -305,13 +305,19 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe" id="updateEntryButton" onclick="updateEntry(event)">
-                                        Modificar
-                                    </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                        Cancelar
-                                    </button>
+                                <div class="modal-footer d-flex">
+                                    <div class="d-flex flex-column align-items-start me-2">
+                                        <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
+                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-4">
+                                        <button type="submit" class="btn botonCafe me-2" onclick="updateEntry(event)">
+                                            Modificar
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
