@@ -128,7 +128,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateUserForm" method="post" action="<%=context%>/user/update">
+                            <form id="updateUserForm" method="post" action="/user/update">
                                 <input hidden id="u_id" name="id">
                                 <h5>Datos de Usuario</h5>
                                 <div class="row" style="text-indent: 2%!important;">
@@ -378,17 +378,16 @@
     const urlParams = new URLSearchParams(window.location.search);
     const result = urlParams.get('result');
     const message = urlParams.get('message');
+
     // Función de validación del formulario
     function validateForm(formId) {
         const form = document.getElementById(formId);
         const cancelButton = document.querySelector('button[data-bs-dismiss="modal"]');
         let isValid = true;
-
         if (cancelButton && cancelButton.matches(':focus')) {
             // Si el botón de cancelar está enfocado, quitamos el estado 'was-validated'
             form.classList.remove('was-validated');
         }
-
         form.querySelectorAll('input, select, textarea').forEach(input => {
             if (input.required && (input.tagName === 'SELECT' && input.value === '' || !input.value.trim())) {
                 isValid = false;
@@ -398,7 +397,6 @@
                 input.classList.remove('is-invalid');
             }
         });
-
         return isValid;
     }
 
@@ -511,8 +509,8 @@
     // Función para actualizar los datos de un usuario
     function updateUser(event) {
         event.preventDefault(); // Evita el envío automático del formulario
-        const form = document.getElementById('updateUser');
-        if (validateForm('updateUser')) {
+        const form = document.getElementById('updateUserForm');
+        if (validateForm('updateUserForm')) {
             showUserConfirmation("¿Estás seguro de que deseas actualizar a este usuario?",form);
         } else {
             Swal.fire({
