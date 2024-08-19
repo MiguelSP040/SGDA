@@ -1,8 +1,6 @@
 package com.utez.edu.almacen.models.user;
 
-import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,20 +15,32 @@ public class DaoUser{
     private PreparedStatement ps;
     private ResultSet rs;
 
-    public boolean validationByCredentials(String email, String password) {
+    public List<BeanUser> listAll() {
+        List<BeanUser> users = new ArrayList<>();
         try {
-            String query = "SELECT * FROM users WHERE email = ? AND password = ?;";
+            String query = "SELECT * FROM users;";
             ps = conn.prepareStatement(query);
-            ps.setString(1, email);
-            ps.setString(2, password);
             rs = ps.executeQuery();
-            return rs.next();
+            while (rs.next()) {
+                BeanUser user = new BeanUser();
+                user.setId(rs.getLong("id_user"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                // Convertir el valor booleano a cadena
+                user.setStatus(rs.getBoolean("status") ? true : false);
+                users.add(user);
+            }
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error loading user: " + e.getMessage());
-            return false;
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed" + e.getMessage());
         } finally {
             closeConnection();
         }
+        return users;
     }
 
     public List<BeanUser> listAllExcept(String email) {
@@ -55,7 +65,7 @@ public class DaoUser{
                 users.add(user);
             }
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed" + e.getMessage());
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAllExcept0 failed" + e.getMessage());
         } finally {
             closeConnection();
         }
@@ -88,6 +98,7 @@ public class DaoUser{
         }
         return null;
     }
+
 
     public boolean save(BeanUser object) {
         try {
@@ -140,9 +151,9 @@ public class DaoUser{
             ps.setBoolean(8, object.getStatus());
             ps.setLong(9, object.getId());
             return ps.executeUpdate() > 0;
-        }catch (SQLException e){
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
-        }finally {
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function update failed: " + e.getMessage());
+        } finally {
             closeConnection();
         }
         return false;
@@ -191,8 +202,6 @@ public class DaoUser{
             }else {
                 query.append(" AND (status = ? OR status = ?)");
             }
-
-
 
             ps = conn.prepareStatement(query.toString());
 
@@ -306,8 +315,34 @@ public class DaoUser{
         return user;
     }
 
+    public BeanUser getUserByEmail(String email) {
+        BeanUser user = null;
+        String query = "SELECT * FROM users WHERE email = ?;";
 
-    public void closeConnection() {
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                user = new BeanUser();
+                user.setId(rs.getLong("id_user"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function getUserByEmail failed: " + e.getMessage());
+        }
+        return user;
+    }
+
+    private void closeConnection() {
         try {
             if (rs != null) rs.close();
             if (ps != null) ps.close();

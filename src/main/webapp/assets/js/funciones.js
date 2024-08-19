@@ -228,61 +228,6 @@ function updateOutbound() {
     }
 }
 
-// Función para añadir una fila de la tabla
-function addRow(button) {
-    // Obtener la fila actual (donde se hizo clic en el botón)
-    const currentRow = button.closest('tr');
-    // Obtener el cuerpo de la tabla
-    const tableBody = currentRow.parentElement;
-
-    // Clonar la fila actual para crear una nueva fila vacía
-    const newRow = currentRow.cloneNode(true);
-
-    // Limpiar los valores de los campos en la nueva fila
-    const inputs = newRow.querySelectorAll('input, select');
-    inputs.forEach(input => {
-        if (input.type === 'text' || input.type === 'number') {
-            input.value = '';
-        } else if (input.tagName === 'SELECT') {
-            input.selectedIndex = 0;
-        }
-    });
-
-    // Insertar la nueva fila después de la fila actual
-    currentRow.insertAdjacentElement('afterend', newRow);
-
-    // Actualizar los índices de todas las filas
-    updateRowIndices();
-}
-
-// Función para eliminar una fila de la tabla
-function removeRow(button) {
-    // Obtener la fila actual y el cuerpo de la tabla
-    const row = button.closest('tr');
-    const tableBody = row.parentElement;
-
-    // Eliminar la fila si no es la única
-    if (tableBody.children.length > 1) {
-        row.remove();
-        // Actualizar los índices de todas las filas
-        updateRowIndices();
-    } else {
-        showErrorAlert('No se puede eliminar la única fila.');
-    }
-}
-
-// Función para actualizar los índices de la tabla
-function updateRowIndices() {
-    const rows = document.querySelectorAll('tbody tr');
-    rows.forEach((row, index) => {
-        const indexCell = row.querySelector('th');
-        if (indexCell) {
-            indexCell.textContent = index + 1; // Actualizar el índice de la fila
-        }
-    });
-}
-
-
 // Función para cerrar modales
 function closeModal(modalId) {
     const modalElement = document.querySelector(modalId);
@@ -409,12 +354,27 @@ function showHideDeleteMetric(){
     }
 }
 
-
-//Funcion para mostrar contraseña doble
+//Funcion para mostrar contraseña
 function showPassword() {
     const eyeOpen = document.querySelector(".eyeOpen");
     const eyeClose = document.querySelector(".eyeClose");
+    var password = document.getElementById("password");
 
+    if (password.type === "password") {
+        password.type = "text";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
+    } else {
+        password.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
+    }
+}
+
+//Funcion para mostrar contraseña doble
+function showPassword1() {
+    const eyeOpen = document.querySelector(".eyeOpen1");
+    const eyeClose = document.querySelector(".eyeClose1");
     var password1 = document.getElementById("password1");
 
     if (password1.type === "password") {
@@ -427,25 +387,24 @@ function showPassword() {
         eyeClose.style.display = "none";
     }
 }
-
-
 //Funcion para mostrar contraseña doble
 function showDoublePassword() {
-    const eyeOpen2 = document.querySelector(".eyeOpen2");
-    const eyeClose2 = document.querySelector(".eyeClose2");
-
+    const eyeOpen = document.querySelector(".eyeOpen2");
+    const eyeClose = document.querySelector(".eyeClose2");
     var password2 = document.getElementById("password2");
 
     if (password2.type === "password") {
         password2.type = "text";
-        eyeOpen2.style.display = "none";
-        eyeClose2.style.display = "block";
+        eyeOpen.style.display = "none";
+        eyeClose.style.display = "block";
     } else {
         password2.type = "password";
-        eyeOpen2.style.display = "block";
-        eyeClose2.style.display = "none";
+        eyeOpen.style.display = "block";
+        eyeClose.style.display = "none";
     }
 }
+
+
 // Función para desplegar submenu
 function showSubmenu(id) {
     // Selecciona el botón con el id dado

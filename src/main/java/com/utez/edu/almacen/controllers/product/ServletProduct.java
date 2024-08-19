@@ -11,14 +11,19 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@WebServlet(name = "ServletProduct", urlPatterns = {
-        "/product/list-products",
-        "/product/delete",
-        "/product/save",
-        "/product/saveout",
-        "/product/update",
-        "/product/search"
+@WebServlet(name = "ServletProduct",
+        urlPatterns = {
+            "/product/list-products", //get
+            "/product/list-stocks", //get
+            "/product/search", //get
+            "/product/searchStock", //get
+            "/product/delete", //post
+            "/product/save", //post
+            "/product/saveout", //post
+            "/product/update" //post
+
 })
 public class ServletProduct extends HttpServlet {
     private String action;
@@ -36,7 +41,7 @@ public class ServletProduct extends HttpServlet {
                 List<BeanProduct> products = new DaoProduct().listAll();
                 request.setAttribute("products", products);
                 redirect = "/views/product/products.jsp";
-                break;
+            break;
             case "/product/register":
                 redirect = "";
                 break;
@@ -50,6 +55,17 @@ public class ServletProduct extends HttpServlet {
                     redirect = "/product/list-products?result=" + false + "&message=" +
                             URLEncoder.encode("¡Error! Acción no realizada correctamente", StandardCharsets.UTF_8);
                 }
+            break;
+            case "/product/list-stocks":
+                List<BeanProduct> stocks = new DaoProduct().listAllStock();
+
+                // Filtrar productos con cantidad mayor a 0
+                List<BeanProduct> inStockProducts = stocks.stream()
+                        .filter(product -> product.getQuantity() > 0)
+                        .collect(Collectors.toList());
+
+                request.setAttribute("stocks", inStockProducts);
+                redirect = "/views/product/checkStock.jsp";
                 break;
             case "/product/search":
                 code = request.getParameter("code");
@@ -61,10 +77,29 @@ public class ServletProduct extends HttpServlet {
                 request.setAttribute("searchName", name);
                 products = new DaoProduct().search(name, code, id_metric, status2);
                 request.setAttribute("products", products);
+            break;
+            case "/product/searchStock":
+                String code = request.getParameter("code");
+                String name = request.getParameter("name");
+                String id_metric = request.getParameter("id_metric");
+                String providerName = request.getParameter("providerName");
 
-                break;
+                request.setAttribute("searchCode", code);
+                request.setAttribute("searchName", name);
+                request.setAttribute("searchMetric", id_metric);
+                request.setAttribute("searchProviderName", providerName);
+
+                stocks = new DaoProduct().searchStock(name, code, id_metric, providerName);
+
+                List<BeanProduct> inStockSearchResults = stocks.stream()
+                        .filter(product -> product.getQuantity() > 0)
+                        .collect(Collectors.toList());
+
+                request.setAttribute("stocks", inStockSearchResults);
+            break;
+
             default:
-                System.out.println(action);
+            System.out.println(action);
         }
         request.getRequestDispatcher(redirect).forward(request, response);
     }
@@ -124,7 +159,8 @@ public class ServletProduct extends HttpServlet {
                 code = request.getParameter("code");
                 description = request.getParameter("description");
                 id_metric = request.getParameter("id_metric");
-                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, true);
+                status = Boolean.parseBoolean(request.getParameter("status"));
+                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, status);
                 if (new DaoProduct().update(product)) {
                     redirect = "/product/list-products?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación del producto realizada con éxito!", StandardCharsets.UTF_8);

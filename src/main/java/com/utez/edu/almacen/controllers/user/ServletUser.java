@@ -13,15 +13,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "ServletUser",
-        urlPatterns = { //urlPatterns funge como directorio para relacionar funciones con vistas
-                "/user/list-users", //get
-                "/user/update", //post
-                "/user/delete", //post
-                "/user/search", //get
-                "/user/save" //post
+        urlPatterns = { // urlPatterns funge como directorio para relacionar funciones con vistas
+                "/user/list-users", // GET
+                "/user/search", // GET
+                "/user/save", // POST
+                "/user/update", // POST
+                "/user/delete" // POST
         })
 public class ServletUser extends HttpServlet {
-    //Declaración de variables locales
     private String action;
     private String redirect = "/user/list-users";
     private BeanUser user;
@@ -35,10 +34,10 @@ public class ServletUser extends HttpServlet {
         switch (action) {
             case "/user/list-users":
                 String currentUserEmail = (String) request.getSession().getAttribute("user");
-                List<BeanUser> users = new DaoUser().listAllExcept(currentUserEmail);
+                List<BeanUser> users = new DaoUser().listAll();
                 request.setAttribute("users", users);
                 redirect = "/views/user/userQuery.jsp";
-                break;
+            break;
 
             case "/user/search":
                 name = request.getParameter("name");
@@ -51,7 +50,7 @@ public class ServletUser extends HttpServlet {
                 request.setAttribute("searchEmail", email);
                 users = new DaoUser().search(name, role, email, status2);
                 request.setAttribute("users", users);
-                break;
+            break;
 
             default:
                 System.out.println(action);
@@ -66,56 +65,80 @@ public class ServletUser extends HttpServlet {
         response.setContentType("text/html");
         action = request.getServletPath();
         switch (action) {
-            case "/user/delete":
-                id = request.getParameter("id");
-                // Cambiar el estado
-                if (new DaoUser().changeStatus(Long.parseLong(id))) {
+            case "/user/save":
+                name = request.getParameter("name");
+                surname = request.getParameter("surname");
+                lastname = request.getParameter("lastname");
+                phone = request.getParameter("phone");
+                email = request.getParameter("email");
+                password = request.getParameter("email");
+                user = new BeanUser(0L, name, surname, lastname, phone, email, password, "Almacenista", true);
+                boolean result = new DaoUser().save(user);
+                if (result) {
                     redirect = "/user/list-users?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Estado del usuario cambiado con éxito!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡Usuario registrado con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/user/list-users?result=" + false + "&message=" +
-                            URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡ERROR al crear el registro de este usuario!", StandardCharsets.UTF_8);
+                }
+            break;
+
+            case "/user/update":
+                id = request.getParameter("id");
+                name = request.getParameter("name");
+                surname = request.getParameter("surname");
+                lastname = request.getParameter("lastname");
+                phone = request.getParameter("phone");
+                email = request.getParameter("email");
+                password = request.getParameter("password");
+                role = request.getParameter("role");
+                status = Boolean.parseBoolean(request.getParameter("status"));
+
+                String currentUserEmail = (String) request.getSession().getAttribute("user");
+                DaoUser daoUser = new DaoUser();
+                BeanUser currentUser = daoUser.getUserByEmail(currentUserEmail);
+
+                BeanUser user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email, password, role, status);
+
+                // Verifica si el usuario está tratando de actualizar su propio correo electrónico
+                if (currentUser != null && currentUser.getId().equals(Long.parseLong(id))) {
+                    if (!currentUser.getEmail().equals(email)) {
+                        redirect = "/user/list-users?result=" + false + "&message=" +
+                                URLEncoder.encode("¡ERROR! No puedes cambiar tu propio correo electrónico desde aquí, para ello dirígete a tu perfil.", StandardCharsets.UTF_8);
+                        break;
+                    }
+                }
+                if (daoUser.update(user)) {
+                    redirect = "/user/list-users?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
+                } else {
+                    redirect = "/user/list-users?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
                 }
                 break;
 
-            case "/user/save":
-                    name = request.getParameter("name");
-                    surname = request.getParameter("surname");
-                    lastname = request.getParameter("lastname");
-                    phone = request.getParameter("phone");
-                    email = request.getParameter("email");
-                    password = request.getParameter("email");
-                    user = new BeanUser(0L, name, surname, lastname, phone, email, password, "Administrador", true);
-                    boolean result = new DaoUser().save(user);
-                    if (result){
+            case "/user/delete":
+                id = request.getParameter("id");
+                 currentUserEmail = (String) request.getSession().getAttribute("user");
+                 daoUser = new DaoUser();
+                 currentUser = daoUser.getUserByEmail(currentUserEmail); // Obtén el usuario logueado por su email
+                if (currentUser != null && currentUser.getId().equals(Long.parseLong(id))) {
+                    redirect = "/user/list-users?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR NO puedes desactivarte a ti mismo!", StandardCharsets.UTF_8);
+                } else {
+                    if (daoUser.changeStatus(Long.parseLong(id))) {
                         redirect = "/user/list-users?result=" + true + "&message=" +
-                                URLEncoder.encode("¡Usuario registrado con éxito!", StandardCharsets.UTF_8);
-                    }else {
+                                URLEncoder.encode("¡Estado del usuario cambiado con éxito!", StandardCharsets.UTF_8);
+                    } else {
                         redirect = "/user/list-users?result=" + false + "&message=" +
-                                URLEncoder.encode("¡ERROR al crear el registro de este usuario!", StandardCharsets.UTF_8);
+                                URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
                     }
-                    break;
+                }
+                break;
 
-                    case "/user/update":
-                        id = request.getParameter("id");
-                        name = request.getParameter("name");
-                        surname = request.getParameter("surname");
-                        lastname = request.getParameter("lastname");
-                        phone = request.getParameter("phone");
-                        email = request.getParameter("email");
-                        password = request.getParameter("password");
-                        role = request.getParameter("role");
-                        status = Boolean.parseBoolean(request.getParameter("status"));
-                        user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email,
-                                password, role, status);
-                        if (new DaoUser().update(user)){
-                            redirect = "/user/list-users?result= " + true + "&message=" +
-                                    URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
-                        }else {
-                            redirect = "/user/list-users?result= " + false + "&message=" +
-                                    URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
-                        }
-                        break;
+            default:
+                System.out.println(action);
+                break;
         }
         response.sendRedirect(request.getContextPath() + redirect);
     }

@@ -148,11 +148,6 @@ img {
     transform: scale(0.95);
 }
 
-.botonCheckbox {
-    background-color: #8D5B47!important;
-    color: #FFFFFF!important;
-}
-
 .botonVerMas {
     background-color: rgba(52, 200, 99, 0) !important;
     border-color: #34c863!important;
@@ -163,13 +158,10 @@ img {
     background-color: #34c863!important;
     color: #FFFFFF!important;
     transition: 0.2s;
-
 }
 .botonVerMas:active {
     transform: scale(0.95);
 }
-
-
 
 #esconderBTN {
     background-color: #f8f8f8;
@@ -186,12 +178,6 @@ img {
 
 #esconderBTN:active {
     transform: scale(0.95);
-}
-
-.nuevoProductoBoton {
-    justify-content: end;
-    display: flex;
-    align-items: center;
 }
 
 #linkPassword{
@@ -249,21 +235,6 @@ input, select{
     max-width: 100rem;
 }
 
-#formularioContacto {
-    padding-left: 20%;
-}
-
-#anadirContacto {
-    display: block;
-    padding: 3% 0% 0% 0%;
-    border-top: 1px solid #cecccc;
-}
-
-#dataRegister {
-    padding-left: 20%;
-    padding-bottom: 2%;
-}
-
 .tableTitle {
     background-color: #4E6166!important;
     color: white!important;
@@ -273,32 +244,6 @@ input, select{
     background-color: #839093!important;
     color: white!important;
 }
-
-#titleForms {
-    background-color: #f3f3f3;
-    color: #000000;
-    padding-left: 2%;
-}
-
-.Inputs {
-    text-indent: 5%;
-    margin-top: 8%;
-    background-color: #f3f3f3;
-    color: black;
-    padding: 0%;
-}
-
-#containerRecoverPass {
-    width: 800px;
-    height: 400px;
-    margin: 15% 0% 15% 0%;
-}
-
-.datosProveedor {
-    padding: 0% 0% 0% 0%;
-}
-
-
 
 /* ///////////////////////////////////////////////////////////// */
 /* Sidebar Left */
@@ -346,21 +291,23 @@ input, select{
 }
 
 #sidebarAbierto a:hover {
-    border-right: 3px solid #88675a;
+    box-shadow: inset -3px 0 0 0 #88675a;
 }
 
 #sidebarAbierto .submenu a {
     font-size: 16px;
 }
 
-.submenu {
+#sidebarAbierto .submenu {
     display: none;
     text-indent: 10%;
+    background-color: #F2F2F2;
+    box-shadow: inset 0 5px 5px -4px rgba(0, 0, 0, 0.2);
 }
 
 #sidebarAbierto .submenu a:hover {
     background-color: #a59b9297;
-    border-right: 3px solid #88675a;
+    box-shadow: inset -3px 0 0 0 #88675a;
 }
 
 .toggle-btn {

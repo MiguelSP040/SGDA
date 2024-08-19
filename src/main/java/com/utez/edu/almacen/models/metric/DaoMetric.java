@@ -148,7 +148,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
 
 
             if (shortName != null && !shortName.isEmpty()) {
-                query.append(" AND shortName = ?");
+                query.append(" AND shortName LIKE ?");
             }
             if (name != null && !name.isEmpty()) {
                 query.append(" AND name LIKE ?");
@@ -164,7 +164,7 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
             ps = conn.prepareStatement(query.toString());
 
             if (shortName != null && !shortName.isEmpty()) {
-                ps.setString(count++, shortName);
+                ps.setString(count++,"%" + shortName + "%");
             }
             if (name != null && !name.isEmpty()) {
                 ps.setString(count++, "%" + name + "%");
