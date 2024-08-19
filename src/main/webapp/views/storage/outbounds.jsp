@@ -1,4 +1,6 @@
+
 <%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanLoggedUser" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.product.DaoProduct" %>
@@ -11,7 +13,7 @@
   Created by IntelliJ IDEA.
   User: PC
   Date: 04/08/2024
-  Time: 09:30 a. m.
+  Time: 09:30 a. m.
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,9 +21,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") == null){
-        response.sendRedirect(context+"/index.jsp");
+    String email = (String) request.getSession(false).getAttribute("user");
+    if (email == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
+    BeanLoggedUser user = (BeanLoggedUser) request.getAttribute("user");
     List<BeanMetric> metrics = new DaoMetric().listAll();
     List<BeanProduct> products = new DaoProduct().listAll();
     List<BeanArea> areas = new DaoArea().listAll();
@@ -51,7 +56,7 @@
 
             <!-- Botón para registrar movimiento -->
             <div class="position-absolute top-10 end-0">
-                <button class="btn btn-outline-secondary me-md-5" type="button" data-bs-toggle="modal"
+                <button class="btn btn-outline-secondary me-md-5" onclick="generateFolioNumber()" type="button" data-bs-toggle="modal"
                         data-bs-target="#registerMovement">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -72,7 +77,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="registerOutboundForm" method="post" action="/exit/save" novalidate>
+                            <form id="registerOutboundForm" method="post" action="<%=context%>/storage/save-Exit">
                                 <h5>Datos de la Salida</h5>
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-3"><label for="folioNumber">Folio</label></div>
@@ -82,13 +87,14 @@
                                 </div>
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" disabled>
+                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" required readonly>
                                     </div>
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" placeholder="Facturación" maxlength="9" required pattern="^[0-9]*$">
+                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" maxlength="9" placeholder="Facturación"
+                                               required title="Solo se admiten números." pattern="^[0-9]*$">
                                     </div>
                                     <div class="col me-2">
-                                        <select class="form-select" name="id_area" id="id_area" required>
+                                        <select class="form-select" name="id_area" id="id_area" required title="Elige una área.">
                                             <option disabled selected value>Seleccionar opción</option>
                                             <% for (BeanArea a : areas) { %>
                                             <% if (a.getStatus()) { %>
@@ -98,7 +104,8 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control w-100" name="id_user" id="id_user" placeholder="Almacenista logeado" required disabled>
+                                        <input type="hidden" name="id_user" id="id_user" value="<%= user.getId() %>">
+                                        <input class="form-control w-100" value="<%= user.getName() %>" placeholder="" val required disabled>
                                     </div>
                                 </div>
 
@@ -121,7 +128,7 @@
                                         <tr>
                                             <th scope="row">1</th>
                                             <td>
-                                                <select class="form-select" name="id_product" id="id_product" required>
+                                                <select class="form-select" name="id_product" id="id_product" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : products) { %>
                                                     <% if (p.getStatus()) { %>
@@ -131,19 +138,19 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="tipo" disabled>
+                                                <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="tipo" readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100" type="text" name="buyerName" id="buyerName" placeholder="Receptor" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                                <input class="form-control w-100" type="text" name="buyerName" id="buyerName" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" max="999999" min="1" step="1" placeholder="0" required>
+                                                <input class="form-control quantity" type="number" name="quantity" max="999999" min="1" step="1" placeholder="0" required title="Ingresa un valor.">
                                             </td>
                                             <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled>
+                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
                                             </td>
                                             <td class="d-flex justify-content-end">
                                                 <div class="btn-group">
@@ -173,7 +180,7 @@
                                         <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
                                     </div>
                                     <div class="d-flex align-items-center mt-4">
-                                        <button type="submit" class="btn botonCafe me-2" id="registerButton" onclick="registerOutbound(event)">
+                                        <button type="submit" class="btn botonCafe me-2" onclick="registerOutbound(event)">
                                             Registrar
                                         </button>
                                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -190,7 +197,7 @@
             <!-- Modal Actualizar Salida -->
             <div class="modal fade" id="updateOutboundModal" tabindex="-1" aria-labelledby="updateOutboundLabel"
                  aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="updateOutboundLabel">Editar información de Salida</h1>
@@ -200,83 +207,115 @@
                         <div class="modal-body">
                             <form id="updateOutboundForm" method="post" action="/exit/update" novalidate>
                                 <h5>Datos de la Salida</h5>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <!-- Campos para Entrada -->
-                                        <div class="mb-3">
-                                            <label for="u_changeDate" class="form-label">Fecha del movimiento*</label>
-                                            <input type="date" class="form-control" name="u_changeDate" id="u_changeDate" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_invoiceNumber" class="form-label">Número de facturación*</label>
-                                            <input type="text" class="form-control" name="u_invoiceNumber" id="u_invoiceNumber" maxlength="9" required pattern="^[0-9]*$">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_idArea" class="form-label">Area de destino*</label>
-                                            <select class="form-select" name="u_idArea" id="u_idArea" required>
-                                                <option disabled selected value>Seleccionar opción</option>
-                                                <% for (BeanArea a : areas) { %>
-                                                <% if (a.getStatus()) { %>
-                                                <option value="<%= a.getId() %>"><%= a.getName() %></option>
-                                                <% } %>
-                                                <% } %>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_idUser" class="form-label">Almacenista*</label>
-                                            <select class="form-select" name="u_idUser" id="u_idUser" required>
-                                                <option disabled selected value>Seleccionar opción</option>
-                                                <% for (BeanUser u : users) { %>
-                                                <% if (u.getStatus()) { %>
-                                                <option value="<%= u.getId() %>"><%= u.getName() %></option>
-                                                <% } %>
-                                                <% } %>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_idProduct" class="form-label">Productos*</label>
-                                            <select class="form-select" name="u_idProduct" id="u_idProduct" required>
-                                                <option disabled selected value>Seleccionar opción</option>
-                                                <% for (BeanProduct p : products) { %>
-                                                <% if (p.getStatus()) { %>
-                                                <option value="<%= p.getId() %>"><%= p.getName() %></option>
-                                                <% } %>
-                                                <% } %>
-                                            </select>
-                                        </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-3"><label for="u_folioNumber">Folio</label></div>
+                                    <div class="col-3"><label for="u_invoiceNumber">Facturación</label></div>
+                                    <div class="col-3"><label for="u_id_area">Área</label></div>
+                                    <div class="col-3"><label for="u_id_user">Almacenista</label></div>
+                                </div>
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="col me-2">
+                                        <input class="form-control w-100" type="text" name="folioNumber" id="u_folioNumber" placeholder="Folio" required readonly>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="u_idMetric" class="form-label" >Unidad de medida*</label>
-                                            <select class="form-select" name="u_idMetric" id="u_idMetric" disabled>
-                                                <option value="" selected>Tipo</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_buyerName" class="form-label">Receptor*</label>
-                                            <input type="text" class="form-control" name="u_buyerName" id="u_buyerName" min="0" step="0.5" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_modalUnitPrice" class="form-label">Precio*</label>
-                                            <input type="number" class="form-control" name="u_modalUnitPrice" id="u_modalUnitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_modalQuantity" class="form-label">Cantidad*</label>
-                                            <input type="number" class="form-control" name="u_modalQuantity" id="u_modalQuantity" max="999999" min="1" step="1" placeholder="0" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="u_modalTotalPrice" class="form-label">Precio total*</label>
-                                            <input type="number" class="form-control" name="u_modalTotalPrice" id="u_modalTotalPrice" placeholder="$0.00" disabled>
-                                        </div>
+                                    <div class="col me-2">
+                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="u_invoiceNumber" maxlength="9" placeholder="Facturación"
+                                               required title="Solo se admiten números." pattern="^[0-9]*$">
+                                    </div>
+                                    <div class="col me-2">
+                                        <select class="form-select" name="id_area" id="u_id_area" required title="Elige una área.">
+                                            <option disabled selected value>Seleccionar opción</option>
+                                            <% for (BeanArea a : areas) { %>
+                                            <% if (a.getStatus()) { %>
+                                            <option value="<%= a.getId() %>"><%= a.getName() %></option>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control w-100" name="id_user" id="u_id_user" placeholder="Almacenista logeado" required readonly>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn botonCafe" onclick="updateOutbound(event)">
-                                        Modificar
-                                    </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                        Cancelar
-                                    </button>
+
+                                <!-- Campos para Salida -->
+                                <div class="table-responsive table-container">
+                                    <table class="table table-bordered table-striped text-center" id="outboundTable">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col" style="width: 3%" class="tableTitle">#</th>
+                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="u_id_product">Producto*</label></th>
+                                            <th scope="col" style="width: 13%" class="tableTitle"><label for="u_id_metric">Medida*</label></th>
+                                            <th scope="col" style="width: 15%" class="tableTitle"><label for="u_buyerName">Receptor*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label for="u_unitPrice">Precio*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label for="u_quantity">Cantidad*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label for="u_total_price">Precio total*</label></th>
+                                            <th scope="col" style="width: 3%;" class="tableTitle">Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="align-middle">
+                                        <c:forEach var="exit" items="${exits}" varStatus="s">
+                                            <tr>
+                                                <th scope="row"><c:out value="${s.count}"/></th>
+                                                <td>
+                                                    <select class="form-select" name="idProduct" id="u_idProduct" required>
+                                                        <option disabled selected value>Seleccionar opción</option>
+                                                        <% for (BeanProduct p : products) { %>
+                                                        <% if (p.getStatus()) { %>
+                                                        <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                        <% } %>
+                                                        <% } %>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control w-100 metric" type="text" name="id_metric" id="u_id_metric_${exit.id}" value="${exit.id_metric}" readonly/>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control w-100" type="text" name="buyerName" id="u_buyerName_${exit.id}" value="${exit.buyerName}" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control unit-price" type="number" name="unitPrice" id="u_unitPrice_${exit.id}" max="9999999" min="0" step="0.01" value="${exit.unitPrice}" required title="Ingresa un valor.">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control quantity" type="number" name="quantity" id="u_quantity_${exit.id}" max="999999" min="1" step="1" value="${exit.quantity}" required title="Ingresa un valor.">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
+                                                </td>
+                                                <td class="d-flex justify-content-end">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn botonVerMas" onclick="addRow(this)">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 fill="currentColor" class="bi bi-plus-circle-fill h-auto w-auto"
+                                                                 viewBox="0 0 16 16">
+                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                                                            </svg>
+                                                        </button>
+                                                        <button type="button" class="btn botonRojo me-2" onclick="removeRow(this)">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 fill="currentColor" class="bi bi-dash-circle-fill"
+                                                                 viewBox="0 0 16 16">
+                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer d-flex align-items-center">
+                                    <div class="d-flex flex-column align-items-start me-2">
+                                        <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
+                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-4">
+                                        <button type="submit" class="btn botonCafe me-2" onclick="updateOutbound(event)">
+                                            Modificar
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -284,9 +323,98 @@
                 </div>
             </div>
 
+            <!-- Modal Revisar Salida -->
+            <div class="modal fade" id="reviewOutboundModal" tabindex="-1" aria-labelledby="reviewOutboundLabel"
+                 aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content w-100">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="reviewEntryLabel">Más información</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Datos de la Entrada</h5>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-3"><label for="r_folioNumber">Folio</label></div>
+                                <div class="col-3"><label for="r_invoiceNumber">Facturación</label></div>
+                                <div class="col-3"><label for="r_id_provider">Proveedor</label></div>
+                                <div class="col-3"><label for="r_id_user">Almacenista</label></div>
+                            </div>
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="col me-2">
+                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly disabled>
+                                </div>
+                                <div class="col me-2">
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly disabled>
+                                </div>
+                                <div class="col me-2">
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_id_provider" readonly disabled>
+                                </div>
+                                <div class="col">
+                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly disabled>
+                                </div>
+                            </div>
+
+                            <!-- Campos para Entrada -->
+                            <div class="table-responsive table-container">
+                                <table class="table table-bordered table-striped mt-0 text-center" id="reviewEntryTable">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col" style="width: 3%" class="tableTitle">#</th>
+                                        <th scope="col" style="width: 25%" class="tableTitle"><label for="r_idProduct">Producto*</label></th>
+                                        <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice">Precio*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity">Cantidad*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                    <c:forEach var="exit" items="${exits}" varStatus="s">
+                                        <tr>
+                                            <th scope="row"><c:out value="${s.count}"/></th>
+                                            <td>
+                                                <select class="form-select" name="idProduct" id="r_idProduct" required>
+                                                    <option disabled selected value>Seleccionar opción</option>
+                                                    <% for (BeanProduct p : products) { %>
+                                                    <% if (p.getStatus()) { %>
+                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                    <% } %>
+                                                    <% } %>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric_${exit.id}" value="${exit.id_metric}" readonly/>
+                                            </td>
+                                            <td>
+                                                <input class="form-control w-100" type="text" name="buyerName" id="r_buyerName_${exit.id}" value="${exit.buyerName}" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                            </td>
+                                            <td>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice_${exit.id}" max="9999999" min="0" step="0.01" value="${exit.unitPrice}" required title="Ingresa un valor.">
+                                            </td>
+                                            <td>
+                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity_${exit.id}" max="999999" min="1" step="1" value="${exit.quantity}" required title="Ingresa un valor.">
+                                            </td>
+                                            <td>
+                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
+                                    Aceptar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
             <div class="mt-3">
-                <form onsubmit="search()">
+                <form action="<%=context%>/storage/search-exit" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-5 ms-4">Fecha de Inicio</div>
                         <div class="col-5 ms-1">Fecha Final</div>
@@ -295,19 +423,25 @@
                     <!--Input de Fecha de Inicio-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-5">
-                            <input type="date" class="form-control">
+                            <input type="date" name="fechaInicio" class="form-control">
                         </div>
 
                         <!--Input de Fecha Final-->
                         <div class="col-5">
-                            <input type="date" class="form-control">
+                            <input type="date" name="fechaFin" class="form-control">
                         </div>
                     </div>
+
                     <!--Botones -->
                     <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <button class="btn botonCafe mb-3" onsubmit="search()" id="botonCafe">Buscar
+                        <!-- Botón Buscar -->
+                        <button type="submit" class="btn botonCafe mb-3">
+                            Buscar
                         </button>
-                        <button class="btn botonGris btn-light mb-3" id="botonGris" onreset="reset()">Limpiar
+
+                        <!-- Botón Limpiar -->
+                        <button type="reset" class="btn botonGris btn-light mb-3">
+                            Limpiar
                         </button>
                     </div>
                 </form>
@@ -334,27 +468,26 @@
                     </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <c:forEach var="exit" items="${exits}">
-                            <tr>
-                                <th scope="row"><c:out value="${exit.id}"/></th>
-                                <td><c:out value="${exit.changeDate}"/></td>
-                                <td><c:out value="${exit.folioNumber}"/></td>
-                                <td><c:out value="${exit.invoiceNumber}"/></td>
-                                <td><c:out value="${exit.id}"/></td>
-                                <td><c:out value="${exit.quantity}"/></td>
-                                <td><c:out value="${exit.total_price}"/></td>
-                                <td><c:out value="${exit.id_provider}"/></td>
-                                <!--Columna de Botones de acción-->
-                                <td>
-                                <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()">
+                    <c:forEach var="exit" items="${exits2}">
+                        <tr>
+                            <th scope="row"><c:out value="${exit.idExit}"/></th>
+                            <td><c:out value="${exit.changeDate}"/></td>
+                            <td><c:out value="${exit.folioNumber}"/></td>
+                            <td><c:out value="${exit.invoiceNumber}"/></td>
+                            <td><c:out value="${exit.productName}"/></td>
+                            <td><c:out value="${exit.quantity}"/></td>
+                            <td><c:out value="${exit.totalPrice}"/></td>
+                            <td><c:out value="${exit.areaName}"/></td>
+                            <!--Columna de Botones de acción-->
+                            <td>
+                                <button class="btn btn-lg botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                                     </svg>
                                 </button>
-                                <button class="btn btn-lg botonEditar" id="botonEditar"
-                                        data-bs-toggle="modal" data-bs-target="#updateOutboundModal">
+                                <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateOutboundModal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -364,34 +497,6 @@
                             </td>
                         </tr>
                     </c:forEach>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>22/07/2024</td>
-                            <td>E2024F1KL</td>
-                            <td>#123456</td>
-                            <td>HJS</td>
-                            <td>10</td>
-                            <td>$100.00</td>
-                            <td>A-SUR</td>
-                            <!--Columna de Botones de acción-->
-                            <td>
-                                <button class="btn btn-lg botonVerMas" id="botonVerMas" onsubmit="viewMore()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                         fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                    </svg>
-                                </button>
-                                <button class="btn btn-lg botonEditar" id="botonEditar"
-                                        data-bs-toggle="modal" data-bs-target="#updateOutboundModal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                         fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -740,20 +845,13 @@
     function generateFolioNumber() {
         var year = new Date().getFullYear(); // Obtener el año actual
         var randomDigits = Math.floor(1000 + Math.random() * 9000); // Generar 4 números aleatorios
-        return "S" + year + randomDigits; // Concatenar E + año + 4 números
+        var folio = "S" + year + randomDigits; // Concatenar E + año + 4 números
+        document.getElementById('folioNumbere').value = folio
+        console.log(folio);
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var registerMovementButton = document.querySelector('[data-bs-target="#registerMovement"]');
-        var folioNumberInput = document.getElementById('folioNumber');
-
-        registerMovementButton.addEventListener('click', function() {
-            var folio = generateFolioNumber(); // Generar el folio
-            folioNumberInput.value = folio; // Asignar el folio al input
-        });
-    });
 </script>
 
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>
+S
