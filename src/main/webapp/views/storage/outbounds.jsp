@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" required readonly>
+                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumbere" placeholder="Folio" required readonly>
                                     </div>
                                     <div class="col me-2">
                                         <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" maxlength="9" placeholder="Facturación"

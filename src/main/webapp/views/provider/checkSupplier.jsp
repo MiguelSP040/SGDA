@@ -286,7 +286,6 @@
                                             formato: alguien@example.com
                                         </div>
                                     </div>
-                                    <input hidden id="u_status" name="status">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-secondary botonCafe" onclick="updateProvider(event)">
