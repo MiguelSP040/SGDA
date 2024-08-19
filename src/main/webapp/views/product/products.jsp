@@ -175,7 +175,6 @@
                                         Debe empezar con mayúscula.
                                     </div>
                                 </div>
-                                <input hidden id="u_status" name="status">
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="updateProduct(event)">
                                         Modificar
