@@ -16,6 +16,7 @@ public class DaoEntry {
     private CallableStatement cs;
     private ResultSet rs;
 
+    // Método para registrar una entrada
     public Boolean registerEntry(BeanEntry entry) {
         Boolean message = false;
         try {
@@ -33,13 +34,14 @@ public class DaoEntry {
                 message = true;
             }
         } catch (SQLException e){
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function save failed" + e.getMessage());
-        }finally {
+            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function save failed: " + e.getMessage());
+        } finally {
             closeConnection();
         }
         return message;
     }
 
+    // Método para listar todas las entradas
     public List<BeanEntry> listAll() {
         List<BeanEntry> entradas = null;
         try {
@@ -55,6 +57,7 @@ public class DaoEntry {
                         rs.getString("invoiceNumber"),
                         rs.getString("productName"),
                         rs.getInt("quantity"),
+                        rs.getDouble("unitPrice"),
                         rs.getDouble("total_price"),
                         rs.getString("providerName"),
                         rs.getString("userName"),
@@ -64,13 +67,47 @@ public class DaoEntry {
                 entradas.add(entrada);
             }
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed" + e.getMessage());
+            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed: " + e.getMessage());
         } finally {
-
+            closeConnection();
         }
         return entradas;
     }
 
+    // Método para listar una entrada específica
+    public BeanEntry listOne(int idEntry) {
+        BeanEntry entry = null;
+        try {
+            String query = "{CALL listOneEntry(?)}";
+            cs = conn.prepareCall(query);
+            cs.setInt(1, idEntry);
+            rs = cs.executeQuery();
+            if (rs.next()) {
+                entry = new BeanEntry(
+                        rs.getInt("id_entry"),
+                        rs.getString("changeDate"),
+                        rs.getString("folioNumber"),
+                        rs.getString("invoiceNumber"),
+                        rs.getString("productName"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("unitPrice"),
+                        rs.getDouble("total_price"),
+                        rs.getString("providerName"),
+                        rs.getString("userName"),
+                        rs.getString("userSurname"),
+                        rs.getString("metricName")
+                );
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return entry;
+    }
+
+
+    // Método para cerrar conexiones
     private void closeConnection() {
         try {
             if (cs != null) cs.close();
@@ -78,7 +115,8 @@ public class DaoEntry {
             if (ps != null) ps.close();
             if (conn != null) conn.close();
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection: " + e.getMessage());
+            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection: " + e.getMessage());
         }
     }
 }
+

@@ -21,18 +21,19 @@ public class BeanEntry {
     public BeanEntry() {
     }
 
-    public BeanEntry(int idEntry, String changeDate, String folioNumber, String invoiceNumber, String productName, int quantity, double totalPrice, String providerName, String userName, String userSurname, String metricName) {
+    public BeanEntry(int idEntry, String changeDate, String folioNumber, String invoiceNumber, String productName, int quantity, double unitPrice, double totalPrice, String providerName, String userName, String userSurname, String metricName) {
         this.idEntry = idEntry;
         this.changeDate = changeDate;
         this.folioNumber = folioNumber;
         this.invoiceNumber = invoiceNumber;
         this.productName = productName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.providerName = providerName;
         this.userName = userName;
-        this.metricName = metricName;
-        this.quantity = quantity;
         this.userSurname = userSurname;
+        this.metricName = metricName;
     }
 
     public BeanEntry(String folioNumber, String invoiceNumber, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
