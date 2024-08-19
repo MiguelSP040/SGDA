@@ -298,9 +298,11 @@ input, select{
     font-size: 16px;
 }
 
-.submenu {
+#sidebarAbierto .submenu {
     display: none;
     text-indent: 10%;
+    background-color: #F2F2F2;
+    box-shadow: inset 0 5px 5px -4px rgba(0, 0, 0, 0.2);
 }
 
 #sidebarAbierto .submenu a:hover {

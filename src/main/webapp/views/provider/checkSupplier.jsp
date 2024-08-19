@@ -76,7 +76,7 @@
                                     <div class="col-6">
                                         <div>
                                             <label for="name" class="col-form-label">Nombre del Proveedor*</label>
-                                            <input type="text" class="form-control" name="name" id="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                            <input type="text" class="form-control" name="name" id="name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]*\s*)*$">
                                             <div class="invalid-feedback">
                                                 Debe empezar con mayúscula.
                                             </div>
@@ -204,7 +204,7 @@
                                     <div class="col-6">
                                         <div>
                                             <label for="u_name" class="col-form-label">Nombre del Proveedor*</label>
-                                            <input type="text" class="form-control" name="name" id="u_name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                            <input type="text" class="form-control" name="name" id="u_name" required pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]*\s*)*$">
                                             <div class="invalid-feedback">
                                                 Debe empezar con mayúscula.
                                             </div>
@@ -413,14 +413,14 @@
                     <!--Clave del producto-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
-                            <input id="nameSupplier" type="text" class="form-control" placeholder="Nombre(s) Apellidos">
+                            <input name="name" type="text" class="form-control" placeholder="Nombre(s) Apellidos">
                         </div>
                         <div class="col-3">
-                            <input id="rfc" type="text" class="form-control" placeholder="RFC">
+                            <input name="rfc" type="text" class="form-control" placeholder="RFC">
                         </div>
                         <!--Proveedor-->
                         <div class="col-3">
-                            <input id="email" type="text" class="form-control" placeholder="alguien@example.com">
+                            <input name="email" type="text" class="form-control" placeholder="alguien@example.com">
                         </div>
                         <!--Estado-->
                         <div class="col-3">

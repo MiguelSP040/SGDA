@@ -184,7 +184,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
                 query.append(" AND name LIKE ?");
             }
             if (rfc != null && !rfc.isEmpty()) {
-                query.append(" AND rfc = ?");
+                query.append(" AND rfc LIKE ?");
             }
             if (email != null && !email.isEmpty()) {
                 query.append(" AND email LIKE ?");
@@ -200,7 +200,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps = conn.prepareStatement(query.toString());
 
             if (name != null && !name.isEmpty()) {
-                ps.setString(count++, name);
+                ps.setString(count++, "%" + name + "%");
             }
             if (rfc != null && !rfc.isEmpty()) {
                 ps.setString(count++, "%" + rfc + "%");

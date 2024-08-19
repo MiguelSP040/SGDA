@@ -92,7 +92,7 @@ public class ServletArea extends HttpServlet {
                 description = request.getParameter("description");
                 shortName = request.getParameter("shortName");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                area = new BeanArea(Long.parseLong(id), name, description, shortName, true);
+                area = new BeanArea(Long.parseLong(id), name, description, shortName, status);
                 if (new DaoArea().update(area)){
                     redirect = "/area/list-areas?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación al área realizada con éxito!", StandardCharsets.UTF_8);

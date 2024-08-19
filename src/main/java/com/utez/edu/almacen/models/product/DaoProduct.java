@@ -169,7 +169,7 @@ public class DaoProduct{
             StringBuilder query = new StringBuilder("SELECT * FROM products WHERE 1=1");
 
             if (code != null && !code.isEmpty()) {
-                query.append(" AND code = ?");
+                query.append(" AND code LIKE ?");
             }
             if (name != null && !name.isEmpty()) {
                 query.append(" AND name LIKE ?");
@@ -186,7 +186,7 @@ public class DaoProduct{
             ps = conn.prepareStatement(query.toString());
 
             if (code != null && !code.isEmpty()) {
-                ps.setString(count++, code);
+                ps.setString(count++, "%" + code + "%");
             }
             if (name != null && !name.isEmpty()) {
                 ps.setString(count++, "%" + name + "%");
