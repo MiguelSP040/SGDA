@@ -113,7 +113,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
     public boolean update(BeanProvider object) {
         try {
             String query = "UPDATE providers SET name = ?, socialCase = ?, rfc = ?, postCode = ?, address = ?," +
-                    "phone = ?, email = ?, contactName = ?, contactPhone = ?, contactEmail = ?, status = ? WHERE id_provider = ?";
+                    "phone = ?, email = ?, contactName = ?, contactPhone = ?, contactEmail = ? WHERE id_provider = ?";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getSocialCase());
@@ -125,8 +125,7 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
             ps.setString(8, object.getContactName());
             ps.setString(9, object.getContactPhone());
             ps.setString(10, object.getContactEmail());
-            ps.setBoolean(11, object.getStatus());
-            ps.setLong(12, object.getId());
+            ps.setLong(11, object.getId());
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function update failed" + e.getMessage());
