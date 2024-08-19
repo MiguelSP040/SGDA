@@ -200,7 +200,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="u_lastname" class="col">Apellido materno*</label>
+                            <label for="u_lastname" class="col">Apellido materno</label>
                             <label class="col" for="u_phone">Teléfono*</label>
                         </div>
                         <div class="row mb-3">
@@ -254,7 +254,7 @@
                         <input hidden id="p_email" name="email">
                         <div class="mb-1 text-start">
                             <!--Contraseña ACTUAL-->
-                            <label class="form-label" for="currentPassword">Ingrese su contraseña actual</label>
+                            <label class="form-label" for="currentPassword">Ingrese su contraseña actual*</label>
                             <div class="input-group mb-5">
 
                                 <input class="form-control" type="password" name="currentPassword" id="currentPassword" placeholder="Contraseña" required>
@@ -279,7 +279,7 @@
                             </div>
 
                             <!--Contraseña NUEVA-->
-                            <label class="form-label" for="password">Ingrese una nueva contraseña</label>
+                            <label class="form-label" for="password">Ingrese una nueva contraseña*</label>
                             <div class="input-group mb-5">
 
                                 <input  class="form-control" type="password" name="password" id="password" placeholder="Nueva contraseña" required>
@@ -304,7 +304,7 @@
                             </div>
 
                             <!--Contraseña CONFIRMAR NUEVA-->
-                            <label class="form-label" for="password2">Confirme su contraseña</label>
+                            <label class="form-label" for="password2">Confirme su contraseña*</label>
                             <div class="input-group mb-3">
 
                                 <input  class="form-control" type="password" name="password2" id="password2" placeholder="Confirmar nueva contraseña" required>

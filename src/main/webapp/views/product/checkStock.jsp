@@ -54,7 +54,7 @@
                         <div class="col-3">Clave del producto</div>
                         <div class="col-3">Nombre del producto</div>
                         <div class="col-3">Proveedor </div>
-                        <div class="col-3">Almacenista</div>
+                        <div class="col-3">Unidad de medida</div>
                     </div>
 
                     <!--Folio de la entrada-->

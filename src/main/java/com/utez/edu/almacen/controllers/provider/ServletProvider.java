@@ -107,7 +107,7 @@ public class ServletProvider extends HttpServlet {
                 contactPhone = request.getParameter("contactPhone");
                 contactEmail = request.getParameter("contactEmail");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, true);
+                provider = new BeanProvider(Long.parseLong(id), name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail, status);
                 if (new DaoProvider().update(provider)){
                     redirect = "/provider/list-providers?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación al proveedor realizada con éxito!", StandardCharsets.UTF_8);
