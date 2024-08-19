@@ -337,7 +337,7 @@
                             <div class="row d-flex justify-content-center">
                                 <div class="col-3"><label for="r_folioNumber">Folio</label></div>
                                 <div class="col-3"><label for="r_invoiceNumber">Facturación</label></div>
-                                <div class="col-3"><label for="r_id_provider">Proveedor</label></div>
+                                <div class="col-3"><label for="r_id_provider">Comprador</label></div>
                                 <div class="col-3"><label for="r_id_user">Almacenista</label></div>
                             </div>
                             <div class="d-flex align-items-center mb-4">
@@ -369,36 +369,26 @@
                                     </tr>
                                     </thead>
                                     <tbody class="align-middle">
-                                    <c:forEach var="exit" items="${exits}" varStatus="s">
                                         <tr>
-                                            <th scope="row"><c:out value="${s.count}"/></th>
+                                            <th scope="row">
+                                                <span id="r_id_Exit">Texto original</span>
+                                            </th>
                                             <td>
-                                                <select class="form-select" name="idProduct" id="r_idProduct" required>
-                                                    <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanProduct p : products) { %>
-                                                    <% if (p.getStatus()) { %>
-                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
-                                                    <% } %>
-                                                    <% } %>
-                                                </select>
+                                                <input class="form-control w-100 metric" type="text" name="id_product" id="r_idProduct" readonly disabled/>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric_${exit.id}" value="${exit.id_metric}" readonly/>
+                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric" readonly disabled/>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100" type="text" name="buyerName" id="r_buyerName_${exit.id}" value="${exit.buyerName}" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" max="9999999" min="0" step="0.01" required disabled title="Ingresa un valor.">
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice_${exit.id}" max="9999999" min="0" step="0.01" value="${exit.unitPrice}" required title="Ingresa un valor.">
+                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity" max="999999" min="1" step="1" required disabled title="Ingresa un valor.">
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity_${exit.id}" max="999999" min="1" step="1" value="${exit.quantity}" required title="Ingresa un valor.">
-                                            </td>
-                                            <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
+                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled readonly>
                                             </td>
                                         </tr>
-                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -480,7 +470,7 @@
                             <td><c:out value="${exit.areaName}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
-                                <button class="btn btn-lg botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
+                                <button class="btn btn-lg botonVerMas" onclick="showProducts('${exit.folioNumber}','${exit.invoiceNumber}','${exit.buyerName}','${exit.userName}',${exit.idExit},'${exit.productName}','${exit.metricName}',${exit.unitPrice},${exit.quantity},${exit.totalPrice})" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
@@ -850,7 +840,21 @@
         console.log(folio);
     }
 </script>
-
+<script>
+    function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
+        document.getElementById("r_folioNumber").value = folio;
+        document.getElementById("r_invoiceNumber").value = facturacion;
+        document.getElementById("r_id_provider").value = proovedor;
+        document.getElementById("r_id_user").value = almacenista;
+        document.getElementById("r_id_Exit").textContent = id;
+        document.getElementById("r_idProduct").value = producto;
+        document.getElementById("r_id_metric").value = medida;
+        document.getElementById("r_unitPrice").value = precio;
+        document.getElementById("r_quantity").value = cantidad;
+        document.getElementById("u_id").value = total;
+        console.log(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total);
+    }
+</script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>
