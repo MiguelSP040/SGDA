@@ -210,7 +210,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="updateEntryForm" method="post" action="/entry/update" novalidate>
+                            <form id="updateEntryForm" method="post" action="/storage/update-Entry" novalidate>
                                 <h5>Datos de la Entrada</h5>
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-3"><label for="u_folioNumber">Folio</label></div>
@@ -271,13 +271,13 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="id_metric_${entry.id}" value="${entry.id_metric}" readonly/>
+                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="u_id_metric" value="${entry.id_metric}" readonly/>
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="unitPrice_${entry.id}" max="9999999" min="0" step="0.01" value="${entry.unitPrice}" required title="Ingresa un valor.">
+                                                <input class="form-control unit-price" type="number" name="unitPrice" id="u_unitPrice" max="9999999" min="0" step="0.01" value="${entry.unitPrice}" required title="Ingresa un valor.">
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="quantity_${entry.id}" max="999999" min="1" step="1" value="${entry.quantity}" required title="Ingresa un valor.">
+                                                <input class="form-control quantity" type="number" name="quantity" id="u_quantity_${entry.id}" max="999999" min="1" step="1" value="${entry.quantity}" required title="Ingresa un valor.">
                                             </td>
                                             <td>
                                                 <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
@@ -544,7 +544,7 @@
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                                     </svg>
                                 </button>
-                                <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateEntryModal" onclick="updateEntry()">
+                                <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateEntryModal" data-id="${entry.idEntry}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -592,6 +592,16 @@
                 // Llama a la función para mostrar la información de la entrada
                 await showEntryInformation(entryId);
             }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Asocia un evento click a todos los botones de editar
+    document.querySelectorAll('.btn-editar').forEach(button => {
+        button.addEventListener('click', function () {
+            const entryId = this.getAttribute('data-id');
+            putEntryInformation(entryId);
         });
     });
 });

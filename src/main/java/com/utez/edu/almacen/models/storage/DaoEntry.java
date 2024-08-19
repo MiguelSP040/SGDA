@@ -106,6 +106,32 @@ public class DaoEntry {
         return entry;
     }
 
+    // Método para actualizar una entrada
+    public Boolean updateEntry(BeanEntry entry) {
+        Boolean message = false;
+        try {
+            cs = conn.prepareCall("{call updateEntry(?, ?, ?, ?, ?, ?, ?, ?)}");
+            cs.setInt(1, entry.getIdEntry());
+            cs.setString(2, entry.getFolioNumber());
+            cs.setString(3, entry.getInvoiceNumber());
+            cs.setInt(4, entry.getIdUser());
+            cs.setInt(5, entry.getIdProvider());
+            cs.setInt(6, entry.getIdProduct());
+            cs.setInt(7, entry.getQuantity());
+            cs.setDouble(8, entry.getUnitPrice());
+
+            boolean hasResults = cs.execute();
+            if (hasResults) {
+                message = true;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function updateEntry failed: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return message;
+    }
+
 
     // Método para cerrar conexiones
     private void closeConnection() {
