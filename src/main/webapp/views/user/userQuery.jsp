@@ -384,22 +384,43 @@
                     </c:forEach>
                     </tbody>
                 </table>
+                <c:if test="${empty users}">
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                        <div>
+                            &nbsp;Aún no hay registros
+                        </div>
+                    </div>
+                </c:if>
             </div>
             <!--Paginación al pie de Página -->
             <div class="pagination d-flex justify-content-center align-items-center mt-5">
-                <button class="btn btn-lg me-2" aria-label="Previous Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-                    </svg>
-                </button>
-                <input type="number" class="page-info form-control" style="width: 4rem" min="1" value="1"></input>
-                <button class="btn btn-lg ms-2" aria-label="Next Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                    </svg>
-                </button>
+                <c:if test="${not empty users and totalPaginas > 1}">
+                    <div class="pagination d-flex mt-2 mb-2">
+                        <div class="btn-group" role="group" aria-label="Botones de paginación">
+                            <c:if test="${paginaActual > 1}">
+                                <a href="/user/list-users?page=${paginaActual - 1}" class="btn btn-light border-black"><< Anterior</a>
+                            </c:if>
+
+                            <c:forEach begin="1" end="${totalPaginas}" var="numeroPagina">
+                                <c:choose>
+                                    <c:when test="${numeroPagina == paginaActual}">
+                                        <a href="/user/list-users?page=${numeroPagina}" class="btn btn-light active border-black">${numeroPagina}</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="/user/list-users?page=${numeroPagina}" class="btn btn-light border-black">${numeroPagina}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <c:if test="${paginaActual < totalPaginas}">
+                                <a href="/user/list-users?page=${paginaActual + 1}" class="btn btn-light border-black">Siguiente >></a>
+                            </c:if>
+                        </div>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>

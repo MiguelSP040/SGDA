@@ -27,6 +27,7 @@ public class ServletProvider extends HttpServlet {
     private BeanProvider provider;
     private String id, name, socialCase, rfc, postCode, address, phone, email, contactName, contactPhone, contactEmail;
     private boolean status;
+    private List<BeanProvider> providers;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,8 +35,23 @@ public class ServletProvider extends HttpServlet {
         action = request.getServletPath();
         switch (action){
             case "/provider/list-providers":
-                List<BeanProvider> providers = new DaoProvider().listAll();
+                int pagina = 1;
+                int limite = 5;
+                if (request.getParameter("page") != null) {
+                    pagina = Integer.parseInt(request.getParameter("page"));
+                }
+                int inicio = (pagina -1) * limite;
+
+                providers = new DaoProvider().listAll(inicio, limite);
+
                 request.setAttribute("providers", providers);
+                int totalRegistros = new DaoProvider().count();
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limite);
+
+                if (totalPaginas >= 1) {
+                    request.setAttribute("totalPaginas", totalPaginas);
+                    request.setAttribute("paginaActual", pagina);
+                }
                 redirect = "/views/provider/checkSupplier.jsp";
                 break;
             case "/provider/search":

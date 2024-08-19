@@ -26,6 +26,7 @@ public class ServletUser extends HttpServlet {
     private BeanUser user;
     private String id, name, surname, lastname, phone, email, password, role;
     private boolean status;
+    private List<BeanUser> users;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,9 +34,25 @@ public class ServletUser extends HttpServlet {
         action = request.getServletPath();
         switch (action) {
             case "/user/list-users":
-                String currentUserEmail = (String) request.getSession().getAttribute("user");
-                List<BeanUser> users = new DaoUser().listAll();
+                int pagina = 1;
+                int limite = 5;
+                if (request.getParameter("page") != null) {
+                    pagina = Integer.parseInt(request.getParameter("page"));
+                }
+                int inicio = (pagina -1) * limite;
+
+                //String currentUserEmail = (String) request.getSession().getAttribute("user");
+                List<BeanUser> users = new DaoUser().listAll(inicio, limite);
+
                 request.setAttribute("users", users);
+                int totalRegistros = new DaoUser().count();
+                //totalRegistros = totalRegistros +1;
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limite);
+
+                if (totalPaginas >= 1) {
+                    request.setAttribute("totalPaginas", totalPaginas);
+                    request.setAttribute("paginaActual", pagina);
+                }
                 redirect = "/views/user/userQuery.jsp";
             break;
 

@@ -6,10 +6,7 @@ import com.utez.edu.almacen.models.user.DaoUser;
 import com.utez.edu.almacen.templates.DaoTemplate;
 import com.utez.edu.almacen.utils.MySQLConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,15 +16,20 @@ public class DaoArea implements DaoTemplate<BeanArea> {
     private Connection conn = new MySQLConnection().getConnection();
     private PreparedStatement ps;
     private ResultSet rs;
+    private CallableStatement cstm;
 
     @Override
-    public List<BeanArea> listAll() {
+    public List<BeanArea> listAll(int inicio, int limite) {
         List<BeanArea> areas = null;
         try {
+            conn = new MySQLConnection().getConnection();
             areas = new ArrayList<>();
-            String query = "SELECT * FROM areas;";
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
+            String query = "call showAreas(?, ?)";
+            cstm = conn.prepareCall(query);
+            cstm.setInt(1, limite);
+            cstm.setInt(2, inicio);
+            cstm.execute();
+            rs = cstm.getResultSet();
             while (rs.next()) {
                 BeanArea area = new BeanArea();
                 area.setId(rs.getLong("id_area"));
@@ -198,6 +200,26 @@ public class DaoArea implements DaoTemplate<BeanArea> {
             closeConnection();
         }
         return areas;
+    }
+
+    public int count() {
+        int total = 0;
+        try {
+            conn = new MySQLConnection().getConnection();
+            String query = "call totalAreas()";
+            cstm = conn.prepareCall(query);
+            cstm.execute();
+            rs = cstm.getResultSet();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return total;
     }
 
     public void closeConnection(){

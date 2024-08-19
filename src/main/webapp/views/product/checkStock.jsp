@@ -18,8 +18,8 @@
     if (request.getSession(false).getAttribute("user") == null){
         response.sendRedirect(context+"/index.jsp");
     }
-    List<BeanMetric> metrics = new DaoMetric().listAll();
-    List<BeanProvider> providers = new DaoProvider().listAll();
+    List<BeanMetric> metrics = new DaoMetric().listAll(1,2);
+    List<BeanProvider> providers = new DaoProvider().listAll(1,2);
 %>
 <html>
 <head>

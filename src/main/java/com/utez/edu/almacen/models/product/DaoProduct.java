@@ -9,17 +9,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DaoProduct{
+public class DaoProduct implements DaoTemplate<BeanProduct>{
     private Connection conn = new MySQLConnection().getConnection();
     private PreparedStatement ps;
     private ResultSet rs;
-
-    public List<BeanProduct> listAll() {
+    private CallableStatement cstm;
+    public List<BeanProduct> listAll(int inicio, int limite) {
         List<BeanProduct> products = new ArrayList<>();
         try {
-            String query = "SELECT * FROM products;";
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
+            conn = new MySQLConnection().getConnection();
+            products = new ArrayList<>();
+            String query = "call showProducts(?, ?)";
+            cstm = conn.prepareCall(query);
+            cstm.setInt(1, limite);
+            cstm.setInt(2, inicio);
+            cstm.execute();
+            rs = cstm.getResultSet();
             while (rs.next()) {
                 BeanProduct product = new BeanProduct();
                 product.setId(rs.getLong("id_product"));
@@ -258,7 +263,25 @@ public class DaoProduct{
         return stocks;
     }
 
+    public int count() {
+        int total = 0;
+        try {
+            conn = new MySQLConnection().getConnection();
+            String query = "call totalProducts()";
+            cstm = conn.prepareCall(query);
+            cstm.execute();
+            rs = cstm.getResultSet();
 
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return total;
+    }
 
     public void closeConnection() {
         try {

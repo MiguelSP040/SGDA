@@ -1,10 +1,8 @@
 package com.utez.edu.almacen.models.user;
 
 import com.utez.edu.almacen.utils.MySQLConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,13 +12,20 @@ public class DaoUser{
     private Connection conn = new MySQLConnection().getConnection();
     private PreparedStatement ps;
     private ResultSet rs;
+    private CallableStatement cstm;
 
-    public List<BeanUser> listAll() {
+    public List<BeanUser> listAll( int inicio, int limite) {
         List<BeanUser> users = new ArrayList<>();
         try {
-            String query = "SELECT * FROM users;";
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
+            conn = new MySQLConnection().getConnection();
+            users = new ArrayList<>();
+            String query = "call showAllUsers(?, ?)";
+            cstm = conn.prepareCall(query);
+            cstm.setInt(1, limite);
+            cstm.setInt(2, inicio);
+            //cstm.setString(3, email);
+            cstm.execute();
+            rs = cstm.getResultSet();
             while (rs.next()) {
                 BeanUser user = new BeanUser();
                 user.setId(rs.getLong("id_user"));
@@ -36,7 +41,7 @@ public class DaoUser{
                 users.add(user);
             }
         } catch (SQLException e) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed" + e.getMessage());
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function listAllExcept0 failed" + e.getMessage());
         } finally {
             closeConnection();
         }
@@ -340,6 +345,27 @@ public class DaoUser{
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "ERROR. Function getUserByEmail failed: " + e.getMessage());
         }
         return user;
+    }
+
+    public int count() {
+        int total = 0;
+        try {
+            conn = new MySQLConnection().getConnection();
+            String query = "call totalAllUsers()";
+            cstm = conn.prepareCall(query);
+            //cstm.setString(1, email);
+            cstm.execute();
+            rs = cstm.getResultSet();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return total;
     }
 
     private void closeConnection() {

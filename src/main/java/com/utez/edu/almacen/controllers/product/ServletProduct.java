@@ -31,6 +31,7 @@ public class ServletProduct extends HttpServlet {
     private BeanProduct product;
     private String id, name, code, description, id_metric;
     private Boolean status;
+    private List<BeanProduct> products;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,8 +39,24 @@ public class ServletProduct extends HttpServlet {
         action = request.getServletPath();
         switch (action) {
             case "/product/list-products":
-                List<BeanProduct> products = new DaoProduct().listAll();
+                int pagina = 1;
+                int limite = 5;
+                if (request.getParameter("page") != null) {
+                    pagina = Integer.parseInt(request.getParameter("page"));
+                }
+                int inicio = (pagina -1) * limite;
+
+                products = new DaoProduct().listAll(inicio, limite);
+
                 request.setAttribute("products", products);
+                int totalRegistros = new DaoProduct().count();
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limite);
+
+                if (totalPaginas >= 1) {
+                    request.setAttribute("totalPaginas", totalPaginas);
+                    request.setAttribute("paginaActual", pagina);
+                    request.setAttribute("totalRegistros", totalRegistros);
+                }
                 redirect = "/views/product/products.jsp";
             break;
             case "/product/register":

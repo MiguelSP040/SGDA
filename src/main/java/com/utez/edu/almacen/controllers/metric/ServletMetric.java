@@ -25,6 +25,7 @@ public class ServletMetric extends HttpServlet {
     private BeanMetric metric;
     private String id, name, shortName;
     private boolean status;
+    private List<BeanMetric> metrics;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,8 +33,23 @@ public class ServletMetric extends HttpServlet {
         action = request.getServletPath();
         switch (action){
             case "/metric/list-metrics":
-                List<BeanMetric> metrics = new DaoMetric().listAll();
+                int pagina = 1;
+                int limite = 5;
+                if (request.getParameter("page") != null) {
+                    pagina = Integer.parseInt(request.getParameter("page"));
+                }
+                int inicio = (pagina -1) * limite;
+
+                metrics = new DaoMetric().listAll(inicio, limite);
+
                 request.setAttribute("metrics", metrics);
+                int totalRegistros = new DaoMetric().count();
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limite);
+
+                if (totalPaginas >= 1) {
+                    request.setAttribute("totalPaginas", totalPaginas);
+                    request.setAttribute("paginaActual", pagina);
+                }
                 redirect = "/views/metric/metrics.jsp";
                 break;
             case "/metric/search":

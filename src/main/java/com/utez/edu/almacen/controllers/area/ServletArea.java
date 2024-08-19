@@ -27,6 +27,7 @@ public class ServletArea extends HttpServlet {
     private BeanArea area;
     private String id, name, description, shortName;
     private boolean status;
+    private List<BeanArea> areas;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,8 +35,23 @@ public class ServletArea extends HttpServlet {
         action = request.getServletPath();
         switch (action){
             case "/area/list-areas":
-                List<BeanArea> areas = new DaoArea().listAll();
+                int pagina = 1;
+                int limite = 5;
+                if (request.getParameter("page") != null) {
+                    pagina = Integer.parseInt(request.getParameter("page"));
+                }
+                int inicio = (pagina -1) * limite;
+
+                areas = new DaoArea().listAll(inicio, limite);
+
                 request.setAttribute("areas", areas);
+                int totalRegistros = new DaoArea().count();
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limite);
+
+                if (totalPaginas >= 1) {
+                    request.setAttribute("totalPaginas", totalPaginas);
+                    request.setAttribute("paginaActual", pagina);
+                }
                 redirect = "/views/area/destinationAreas.jsp";
                 break;
             case "/area/search":
