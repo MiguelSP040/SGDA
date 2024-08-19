@@ -580,7 +580,7 @@
             title: '¡Error!',
             text: message,
             showConfirmButton: false,
-            timer: 2000,
+            timer: 3500,
             timerProgressBar: true,
             customClass: {
                 popup: 'no-select-popup colored-toast'

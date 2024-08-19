@@ -34,7 +34,7 @@ public class ServletUser extends HttpServlet {
         switch (action) {
             case "/user/list-users":
                 String currentUserEmail = (String) request.getSession().getAttribute("user");
-                List<BeanUser> users = new DaoUser().listAllExcept(currentUserEmail);
+                List<BeanUser> users = new DaoUser().listAll();
                 request.setAttribute("users", users);
                 redirect = "/views/user/userQuery.jsp";
             break;
@@ -93,26 +93,48 @@ public class ServletUser extends HttpServlet {
                 password = request.getParameter("password");
                 role = request.getParameter("role");
                 status = Boolean.parseBoolean(request.getParameter("status"));
-                user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email, password, role, true);
-                if (new DaoUser().update(user)) {
+
+                String currentUserEmail = (String) request.getSession().getAttribute("user");
+                DaoUser daoUser = new DaoUser();
+                BeanUser currentUser = daoUser.getUserByEmail(currentUserEmail);
+
+                BeanUser user = new BeanUser(Long.parseLong(id), name, surname, lastname, phone, email, password, role, status);
+
+                // Verifica si el usuario está tratando de actualizar su propio correo electrónico
+                if (currentUser != null && currentUser.getId().equals(Long.parseLong(id))) {
+                    if (!currentUser.getEmail().equals(email)) {
+                        redirect = "/user/list-users?result=" + false + "&message=" +
+                                URLEncoder.encode("¡ERROR! No puedes cambiar tu propio correo electrónico desde aquí, para ello dirígete a tu perfil.", StandardCharsets.UTF_8);
+                        break;
+                    }
+                }
+                if (daoUser.update(user)) {
                     redirect = "/user/list-users?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación al usuario realizada con éxito!", StandardCharsets.UTF_8);
                 } else {
                     redirect = "/user/list-users?result=" + false + "&message=" +
                             URLEncoder.encode("¡ERROR al modificar este usuario!", StandardCharsets.UTF_8);
                 }
-            break;
+                break;
 
             case "/user/delete":
                 id = request.getParameter("id");
-                if (new DaoUser().changeStatus(Long.parseLong(id))) {
-                    redirect = "/user/list-users?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Estado del usuario cambiado con éxito!", StandardCharsets.UTF_8);
-                } else {
+                 currentUserEmail = (String) request.getSession().getAttribute("user");
+                 daoUser = new DaoUser();
+                 currentUser = daoUser.getUserByEmail(currentUserEmail); // Obtén el usuario logueado por su email
+                if (currentUser != null && currentUser.getId().equals(Long.parseLong(id))) {
                     redirect = "/user/list-users?result=" + false + "&message=" +
-                            URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
+                            URLEncoder.encode("¡ERROR NO puedes desactivarte a ti mismo!", StandardCharsets.UTF_8);
+                } else {
+                    if (daoUser.changeStatus(Long.parseLong(id))) {
+                        redirect = "/user/list-users?result=" + true + "&message=" +
+                                URLEncoder.encode("¡Estado del usuario cambiado con éxito!", StandardCharsets.UTF_8);
+                    } else {
+                        redirect = "/user/list-users?result=" + false + "&message=" +
+                                URLEncoder.encode("¡ERROR al cambiar el estado!", StandardCharsets.UTF_8);
+                    }
                 }
-            break;
+                break;
 
             default:
                 System.out.println(action);
