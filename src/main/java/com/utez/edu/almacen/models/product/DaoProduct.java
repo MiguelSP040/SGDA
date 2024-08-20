@@ -109,14 +109,13 @@ public class DaoProduct{
 
     public boolean update(BeanProduct object) {
         try {
-            String query = "UPDATE products SET name = ?, code = ?, description = ?, id_metric = ?, status = ? WHERE id_product = ?;";
+            String query = "UPDATE products SET name = ?, code = ?, description = ?, id_metric = ? WHERE id_product = ?;";
             ps = conn.prepareStatement(query);
             ps.setString(1, object.getName());
             ps.setString(2, object.getCode());
             ps.setString(3, object.getDescription());
             ps.setString(4, object.getId_metric());
-            ps.setBoolean(5, object.getStatus());
-            ps.setLong(6, object.getId());
+            ps.setLong(5, object.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             Logger.getLogger(DaoProduct.class.getName()).log(Level.SEVERE, "ERROR. Function update failed: " + e.getMessage());
