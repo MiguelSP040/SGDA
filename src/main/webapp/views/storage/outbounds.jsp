@@ -9,19 +9,14 @@
 <%@ page import="com.utez.edu.almacen.models.area.BeanArea" %>
 <%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
 <%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: PC
-  Date: 04/08/2024
-  Time: 09:30 a. m.
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Salidas de almacén"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
     String email = (String) request.getSession(false).getAttribute("user");
+    String role = (String) request.getSession(false).getAttribute("role");
     if (email == null) {
         response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
@@ -41,7 +36,17 @@
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
+<%
+    if ("Administrador".equals(role)) {
+%>
 <jsp:include page="../../layouts/menu.jsp"/>
+<%
+} else if ("Almacenista".equals(role)) {
+%>
+<jsp:include page="../../layouts/menu2.jsp"/>
+<%
+    }
+%>
 
 
 <!--CONTENEDOR TOTAL-->

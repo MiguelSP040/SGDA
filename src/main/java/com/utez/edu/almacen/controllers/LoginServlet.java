@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
                 request.getSession(true);
             }
             request.getSession(false).setAttribute("user", email);
-            // Envía una respuesta JSON con la URL de redirección
+            request.getSession(false).setAttribute("role", result.getRole());
             out.write("{\"success\": true, \"redirectUrl\": \"/product/list-stocks\"}");
         } else {
             out.write("{\"success\": false, \"errorMessage\": \"" + result.getMessage() + "\"}");

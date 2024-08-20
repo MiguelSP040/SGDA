@@ -10,8 +10,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") == null){
-        response.sendRedirect(context+"/index.jsp");
+    String email = (String) request.getSession(false).getAttribute("user");
+    String role = (String) request.getSession(false).getAttribute("role");
+    if (email == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
 %>
 <html>
@@ -23,7 +26,17 @@
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
+<%
+    if ("Administrador".equals(role)) {
+%>
 <jsp:include page="../../layouts/menu.jsp"/>
+<%
+} else if ("Almacenista".equals(role)) {
+%>
+<jsp:include page="../../layouts/menu2.jsp"/>
+<%
+    }
+%>
 
 
 <div class="container">
