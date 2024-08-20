@@ -25,7 +25,8 @@ import static com.mysql.cj.conf.PropertyKey.logger;
 @WebServlet(name = "ServletEntry", urlPatterns = {
         "/storage/list-Entries",
         "/storage/save-Entry",
-        "/storage/search-Entry"
+        "/storage/search-Entry",
+        "/storage/update-Entry"
 })
 public class ServletEntry extends HttpServlet {
     private String action;
@@ -91,6 +92,32 @@ public class ServletEntry extends HttpServlet {
                             URLEncoder.encode("¡ERROR al registrar la Entrada!", StandardCharsets.UTF_8);
                 }
                 break;
+            case "/storage/update-Entry":
+                entry = new BeanEntry(
+                        Integer.parseInt(request.getParameter("idEntry")), // ID de la entrada a actualizar
+                        request.getParameter("changeDate"),
+                        request.getParameter("folioNumber"),
+                        request.getParameter("invoiceNumber"),
+                        request.getParameter("productName"),
+                        Integer.parseInt(request.getParameter("quantity")),
+                        Double.parseDouble(request.getParameter("unitPrice")),
+                        Double.parseDouble(request.getParameter("totalPrice")),
+                        request.getParameter("providerName"),
+                        request.getParameter("userName"),
+                        request.getParameter("userSurname"),
+                        request.getParameter("metricName"));
+
+                message = new DaoEntry().updateEntry(entry);
+                response.getWriter().println(message);
+                if (message) {
+                    redirect = "/storage/list-Entries?result=" + true + "&message=" +
+                            URLEncoder.encode("¡Entrada actualizada con éxito!", StandardCharsets.UTF_8);
+                } else {
+                    redirect = "/storage/list-Entries?result=" + false + "&message=" +
+                            URLEncoder.encode("¡ERROR al actualizar la Entrada!", StandardCharsets.UTF_8);
+                }
+                break;
+
             default:
                 System.out.println(action);
                 break;
