@@ -1,148 +1,204 @@
 
-package com.utez.edu.almacen.models.storage;
+    package com.utez.edu.almacen.models.storage;
 
-import com.utez.edu.almacen.models.user.DaoUser;
-import com.utez.edu.almacen.utils.MySQLConnection;
+    import com.utez.edu.almacen.models.user.DaoUser;
+    import com.utez.edu.almacen.utils.MySQLConnection;
+    import java.sql.*;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.logging.Level;
+    import java.util.logging.Logger;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+    public class DaoEntry {
+        private Connection conn = new MySQLConnection().getConnection();
+        private PreparedStatement ps;
+        private ResultSet rs;
 
-public class DaoEntry {
-    private Connection conn = new MySQLConnection().getConnection();
-    private PreparedStatement ps;
-    private CallableStatement cs;
-    private ResultSet rs;
+        // Método para listar todas las entradas
+        public List<BeanEntry> listAll() {
+            List<BeanEntry> entries = new ArrayList<>();
+            String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name AS userName, u.surname AS userSurname, p.name AS providerName, ep.total_price " +
+                    "FROM entries e " +
+                    "JOIN users u ON e.id_user = u.id_user " +
+                    "JOIN providers p ON e.id_provider = p.id_provider " +
+                    "JOIN entry_products ep ON e.id_entry = ep.id_entry ";
 
-    // Método para registrar una entrada
-    public Boolean registerEntry(BeanEntry entry) {
-        Boolean message = false;
-        try {
-            cs = conn.prepareCall("{call registerEntry(?, ?, ?, ?, ?, ?, ?)}");
-            cs.setString(1, entry.getFolioNumber());
-            cs.setString(2, entry.getInvoiceNumber());
-            cs.setInt(3, entry.getIdUser());
-            cs.setInt(4, entry.getIdProvider());
-            cs.setInt(5, entry.getIdProduct());
-            cs.setInt(6, entry.getQuantity());
-            cs.setDouble(7, entry.getUnitPrice());
+            try {
+                ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    BeanEntry entry = new BeanEntry();
+                    entry.setIdEntry(rs.getLong("id_entry"));
+                    entry.setChangeDate(rs.getString("changeDate"));
+                    entry.setInvoiceNumber(rs.getString("invoiceNumber"));
+                    entry.setFolioNumber(rs.getString("folioNumber"));
+                    entry.setUserName(rs.getString("userName"));
+                    entry.setUserSurname(rs.getString("userSurname"));
+                    entry.setProviderName(rs.getString("providerName"));
+                    entry.setTotalPrice(rs.getDouble("total_price"));
 
-            boolean hasResults = cs.execute();
-            if (hasResults) {
+                    entries.add(entry);
+                }
+            } catch (SQLException e) {
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed: " + e.getMessage());
+            } finally {
+                closeConnection();
+            }
+            return entries;
+        }
+
+        // Método para listar una entrada específica
+        public BeanEntry listOne(int idEntry) {
+            BeanEntry entry = null;
+            String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.userName, p.providerName " +
+                    "FROM entries e " +
+                    "JOIN users u ON e.id_user = u.id_user " +
+                    "JOIN providers p ON e.id_provider = p.id_provider " +
+                    "WHERE e.id_entry = ?";
+
+            try {
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, idEntry);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    entry = new BeanEntry();
+                    entry.setIdEntry(rs.getLong("id_entry"));
+                    entry.setChangeDate(rs.getString("changeDate"));
+                    entry.setInvoiceNumber(rs.getString("invoiceNumber"));
+                    entry.setFolioNumber(rs.getString("folioNumber"));
+                    entry.setUserName(rs.getString("userName"));
+                    entry.setProviderName(rs.getString("providerName"));
+                }
+            } catch (SQLException e) {
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());
+            } finally {
+                closeConnection();
+            }
+            return entry;
+        }
+
+
+        // Método para registrar una entrada
+        public Boolean registerEntry(BeanEntry entry, List<BeanEntryProducts> products) {
+            Boolean message = false;
+            String sqlEntry = "INSERT INTO entries (changeDate, invoiceNumber, folioNumber, id_user, id_provider) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+            String sqlEntryProduct = "INSERT INTO entry_products (id_entry, id_product, quantity, unitPrice, total_price) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+
+            try {
+                conn.setAutoCommit(false); // Start transaction
+
+                // Register Entry
+                ps = conn.prepareStatement(sqlEntry, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, entry.getChangeDate());
+                ps.setString(2, entry.getInvoiceNumber());
+                ps.setString(3, entry.getFolioNumber());
+                ps.setInt(4, entry.getIdUser());
+                ps.setInt(5, entry.getIdProvider());
+                ps.executeUpdate();
+
+                // Get generated ID for the entry
+                rs = ps.getGeneratedKeys();
+                long idEntry = 0;
+                if (rs.next()) {
+                    idEntry = rs.getLong(1);
+                }
+
+                // Register Products associated with the Entry
+                for (BeanEntryProducts product : products) {
+                    ps = conn.prepareStatement(sqlEntryProduct);
+                    ps.setLong(1, idEntry);
+                    ps.setLong(2, product.getIdProduct());
+                    ps.setInt(3, product.getQuantity());
+                    ps.setDouble(4, product.getUnitPrice());
+                    ps.setDouble(5, product.getTotalPrice());
+                    ps.executeUpdate();
+                }
+
+                conn.commit(); // Commit transaction
                 message = true;
+            } catch (SQLException e) {
+                try {
+                    conn.rollback(); // Rollback transaction in case of error
+                } catch (SQLException ex) {
+                    Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Transaction rollback failed: " + ex.getMessage());
+                }
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function registerEntry failed: " + e.getMessage());
+            } finally {
+                try {
+                    conn.setAutoCommit(true); // Reset to default auto-commit behavior
+                } catch (SQLException e) {
+                    Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Resetting auto-commit failed: " + e.getMessage());
+                }
+                closeConnection(); // Close connection
             }
-        } catch (SQLException e){
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function save failed: " + e.getMessage());
-        } finally {
-            closeConnection();
+            return message;
         }
-        return message;
-    }
 
-    // Método para listar todas las entradas
-    public List<BeanEntry> listAll() {
-        List<BeanEntry> entradas = null;
-        try {
-            entradas = new ArrayList<>();
-            String query = "{CALL listAllEntries()}";
-            cs = conn.prepareCall(query);
-            rs = cs.executeQuery();
-            while (rs.next()) {
-                BeanEntry entrada = new BeanEntry(
-                        rs.getInt("id_entry"),
-                        rs.getString("changeDate"),
-                        rs.getString("folioNumber"),
-                        rs.getString("invoiceNumber"),
-                        rs.getString("productName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("unitPrice"),
-                        rs.getDouble("total_price"),
-                        rs.getString("providerName"),
-                        rs.getString("userName"),
-                        rs.getString("userSurname"),
-                        rs.getString("metricName")
-                );
-                entradas.add(entrada);
+        public long getLastInsertedEntryId() {
+            long idEntry = 0;
+            String sql = "SELECT LAST_INSERT_ID()";
+            try {
+                ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    idEntry = rs.getLong(1);
+                }
+            } catch (SQLException e) {
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function getLastInsertedEntryId failed: " + e.getMessage());
+            } finally {
+                closeConnection();
             }
-        } catch (SQLException e) {
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listAll failed: " + e.getMessage());
-        } finally {
-            closeConnection();
+            return idEntry;
         }
-        return entradas;
-    }
 
-    // Método para listar una entrada específica
-    public BeanEntry listOne(int idEntry) {
-        BeanEntry entry = null;
-        try {
-            String query = "{CALL listOneEntry(?)}";
-            cs = conn.prepareCall(query);
-            cs.setInt(1, idEntry);
-            rs = cs.executeQuery();
-            if (rs.next()) {
-                entry = new BeanEntry(
-                        rs.getInt("id_entry"),
-                        rs.getString("changeDate"),
-                        rs.getString("folioNumber"),
-                        rs.getString("invoiceNumber"),
-                        rs.getString("productName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("unitPrice"),
-                        rs.getDouble("total_price"),
-                        rs.getString("providerName"),
-                        rs.getString("userName"),
-                        rs.getString("userSurname"),
-                        rs.getString("metricName")
-                );
+
+        // Método para cerrar conexiones
+        private void closeConnection() {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());
-        } finally {
-            closeConnection();
         }
-        return entry;
-    }
+        public static void main(String[] args) {
+            DaoEntry dao = new DaoEntry();
 
-    // Método para actualizar una entrada
-    public Boolean updateEntry(BeanEntry entry) {
-        Boolean message = false;
-        try {
-            cs = conn.prepareCall("{call updateEntry(?, ?, ?, ?, ?, ?, ?, ?)}");
-            cs.setInt(1, entry.getIdEntry());
-            cs.setString(2, entry.getFolioNumber());
-            cs.setString(3, entry.getInvoiceNumber());
-            cs.setInt(4, entry.getIdUser());
-            cs.setInt(5, entry.getIdProvider());
-            cs.setInt(6, entry.getIdProduct());
-            cs.setInt(7, entry.getQuantity());
-            cs.setDouble(8, entry.getUnitPrice());
+            // Crear y registrar la entrada
+            BeanEntry entry = new BeanEntry(
+                    null, // idEntry, se generará automáticamente
+                    "2024-08-20", // changeDate
+                    "INV12345", // invoiceNumber
+                    "E20249899", // folioNumber
+                    null, // totalPrice, puede ser calculado después
+                    "kg", // metricName
+                    1, // idUser
+                    1, // idProvider
+                    0, // idProduct, este valor es solo un placeholder
+                    0, // quantity, este valor es solo un placeholder
+                    0.0 // unitPrice, este valor es solo un placeholder
+            );
 
-            boolean hasResults = cs.execute();
-            if (hasResults) {
-                message = true;
+            // Crear una lista de BeanEntryProducts con el idEntry obtenido
+            List<BeanEntryProducts> products = new ArrayList<>();
+            products.add(new BeanEntryProducts(null, 0L, 1L, 10, 15.0, 150.0)); // Agregar producto
+            products.add(new BeanEntryProducts(null, 0L, 1L, 5, 25.0, 125.0)); // Otro producto
+
+            // Registrar la entrada y los productos
+            boolean result = dao.registerEntry(entry, products);
+            if (result) {
+                System.out.println("Entrada y productos registrados con éxito.");
+            } else {
+                System.out.println("Error al registrar la entrada o los productos.");
             }
-        } catch (SQLException e) {
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function updateEntry failed: " + e.getMessage());
-        } finally {
-            closeConnection();
-        }
-        return message;
-    }
 
-
-    // Método para cerrar conexiones
-    private void closeConnection() {
-        try {
-            if (cs != null) cs.close();
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function closeConnection: " + e.getMessage());
+            // Listar todas las entradas para verificar
+            List<BeanEntry> entries = dao.listAll();
+            for (BeanEntry e : entries) {
+                System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getUserName() + ", Provider: " + e.getProviderName() + ", Total Price: $" + e.getTotalPrice());
+            }
         }
     }
-}
-

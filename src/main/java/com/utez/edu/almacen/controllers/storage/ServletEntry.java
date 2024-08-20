@@ -1,11 +1,10 @@
-
 package com.utez.edu.almacen.controllers.storage;
 
 import com.utez.edu.almacen.models.storage.BeanEntry;
+import com.utez.edu.almacen.models.storage.BeanEntryProducts;
 import com.utez.edu.almacen.models.storage.DaoEntry;
 import com.utez.edu.almacen.models.user.BeanLoggedUser;
 import com.utez.edu.almacen.models.user.DaoLoggedUser;
-import com.utez.edu.almacen.models.user.DaoUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,16 +16,15 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.mysql.cj.conf.PropertyKey.logger;
-
 @WebServlet(name = "ServletEntry", urlPatterns = {
-        "/storage/list-Entries",
-        "/storage/save-Entry",
-        "/storage/search-Entry",
-        "/storage/update-Entry"
+        "/storage/list-Entries", // GET
+        "/storage/search", // GET
+        "/storage/save-Entry", // POST
+        "/storage/search-Entry", // POST
 })
 public class ServletEntry extends HttpServlet {
     private String action;
@@ -40,7 +38,6 @@ public class ServletEntry extends HttpServlet {
         action = request.getServletPath();
         switch (action) {
             case "/storage/list-Entries":
-
                 String currentUserEmail = (String) request.getSession().getAttribute("user");
 
                 if (currentUserEmail != null) {
@@ -59,6 +56,11 @@ public class ServletEntry extends HttpServlet {
                 request.setAttribute("entries2", entradas);
                 redirect = "/views/storage/entrys.jsp";
                 break;
+
+            case "/storage/search":
+                // Implementar la búsqueda si es necesario
+                break;
+
             default:
                 System.out.println(action);
         }
@@ -70,52 +72,70 @@ public class ServletEntry extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
-        action = request.getServletPath();
+        String action = request.getServletPath();
+        String redirect = "";
+
         switch (action) {
             case "/storage/save-Entry":
-                BeanEntry entry = new BeanEntry(
-                        request.getParameter("folioNumber"),
-                        request.getParameter("invoiceNumber"),
-                        Integer.parseInt(request.getParameter("id_user")),
-                        Integer.parseInt(request.getParameter("id_provider")),
-                        Integer.parseInt(request.getParameter("idProduct")),
-                        Integer.parseInt(request.getParameter("quantity")),
-                        Double.parseDouble(request.getParameter("unitPrice")));
+                BeanEntry entry = new BeanEntry();
 
-                Boolean message = new DaoEntry().registerEntry(entry);
-                response.getWriter().println(message);
-                if (message) {
-                    redirect = "/storage/list-Entries?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Entrada registrada con éxito!", StandardCharsets.UTF_8);
-                } else {
-                    redirect = "/storage/list-Entries?result=" + false + "&message=" +
-                            URLEncoder.encode("¡ERROR al registrar la Entrada!", StandardCharsets.UTF_8);
-                }
-                break;
-            case "/storage/update-Entry":
-                entry = new BeanEntry(
-                        Integer.parseInt(request.getParameter("idEntry")), // ID de la entrada a actualizar
-                        request.getParameter("changeDate"),
-                        request.getParameter("folioNumber"),
-                        request.getParameter("invoiceNumber"),
-                        request.getParameter("productName"),
-                        Integer.parseInt(request.getParameter("quantity")),
-                        Double.parseDouble(request.getParameter("unitPrice")),
-                        Double.parseDouble(request.getParameter("totalPrice")),
-                        request.getParameter("providerName"),
-                        request.getParameter("userName"),
-                        request.getParameter("userSurname"),
-                        request.getParameter("metricName"));
+                // Obtener la fecha actual del sistema en formato YYYY-MM-DD usando java.util.Date y SimpleDateFormat
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = sdf.format(new Date());
 
-                message = new DaoEntry().updateEntry(entry);
-                response.getWriter().println(message);
-                if (message) {
-                    redirect = "/storage/list-Entries?result=" + true + "&message=" +
-                            URLEncoder.encode("¡Entrada actualizada con éxito!", StandardCharsets.UTF_8);
+                entry.setChangeDate(formattedDate);
+                entry.setInvoiceNumber(request.getParameter("invoiceNumber"));
+                entry.setFolioNumber(request.getParameter("folioNumber"));
+                entry.setUserName(request.getParameter("userName"));
+                entry.setUserSurname(request.getParameter("userSurname"));
+                entry.setProviderName(request.getParameter("providerName"));
+
+                // Manejo de valores null y vacíos
+                String idUserStr = request.getParameter("idUser");
+                String idProviderStr = request.getParameter("idProvider");
+
+                if (idUserStr != null && !idUserStr.isEmpty()) {
+                    entry.setIdUser(Integer.parseInt(idUserStr));
                 } else {
-                    redirect = "/storage/list-Entries?result=" + false + "&message=" +
-                            URLEncoder.encode("¡ERROR al actualizar la Entrada!", StandardCharsets.UTF_8);
+                    entry.setIdUser(0); // O algún valor predeterminado o error
                 }
+
+                if (idProviderStr != null && !idProviderStr.isEmpty()) {
+                    entry.setIdProvider(Integer.parseInt(idProviderStr));
+                } else {
+                    entry.setIdProvider(0); // O algún valor predeterminado o error
+                }
+
+                // Obtener los productos de la entrada
+                String[] idProducts = request.getParameterValues("idProduct");
+                String[] metrics = request.getParameterValues("metric");
+                String[] unitPrices = request.getParameterValues("unitPrice");
+                String[] quantities = request.getParameterValues("quantity");
+                String[] totalPrices = request.getParameterValues("total_price");
+
+                List<BeanEntryProducts> products = new ArrayList<>();
+                    for (int i = 0; i < idProducts.length; i++) {
+                        BeanEntryProducts product = new BeanEntryProducts();
+                        try {
+                            product.setIdProduct(Long.parseLong(idProducts[i]));
+                            product.setQuantity(Integer.parseInt(quantities[i]));
+                            product.setUnitPrice(Double.parseDouble(unitPrices[i]));
+                            product.setTotalPrice(Double.parseDouble(totalPrices[i]));
+                            products.add(product);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                            response.sendRedirect(request.getContextPath() + "/storage/list-Entries?result=false&message=" + URLEncoder.encode("Error en datos de productos.", StandardCharsets.UTF_8));
+                            return;
+                        }
+                    }
+
+                    boolean message = new DaoEntry().registerEntry(entry, products);
+
+                    if (message) {
+                        redirect = "/storage/list-Entries?result=true&message=" + URLEncoder.encode("¡Entrada registrada con éxito!", StandardCharsets.UTF_8);
+                    } else {
+                        redirect = "/storage/list-Entries?result=false&message=" + URLEncoder.encode("¡ERROR al registrar la Entrada!", StandardCharsets.UTF_8);
+                    }
                 break;
 
             default:
