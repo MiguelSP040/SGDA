@@ -86,25 +86,8 @@ public class ServletEntry extends HttpServlet {
                 entry.setChangeDate(formattedDate);
                 entry.setInvoiceNumber(request.getParameter("invoiceNumber"));
                 entry.setFolioNumber(request.getParameter("folioNumber"));
-                entry.setUserName(request.getParameter("userName"));
-                entry.setUserSurname(request.getParameter("userSurname"));
-                entry.setProviderName(request.getParameter("providerName"));
-
-                // Manejo de valores null y vacíos
-                String idUserStr = request.getParameter("idUser");
-                String idProviderStr = request.getParameter("idProvider");
-
-                if (idUserStr != null && !idUserStr.isEmpty()) {
-                    entry.setIdUser(Integer.parseInt(idUserStr));
-                } else {
-                    entry.setIdUser(0); // O algún valor predeterminado o error
-                }
-
-                if (idProviderStr != null && !idProviderStr.isEmpty()) {
-                    entry.setIdProvider(Integer.parseInt(idProviderStr));
-                } else {
-                    entry.setIdProvider(0); // O algún valor predeterminado o error
-                }
+                entry.setIdUser(Integer.parseInt(request.getParameter("id_user")));
+                entry.setIdProvider(Integer.parseInt(request.getParameter("id_provider")));
 
                 // Obtener los productos de la entrada
                 String[] idProducts = request.getParameterValues("idProduct");

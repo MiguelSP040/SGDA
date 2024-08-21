@@ -18,6 +18,26 @@ public class BeanEntry {
     private int quantity;
     private double unitPrice;
 
+    @Override
+    public String toString() {
+        return "BeanEntry{" +
+                "idEntry=" + idEntry +
+                ", changeDate='" + changeDate + '\'' +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", folioNumber='" + folioNumber + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userSurname='" + userSurname + '\'' +
+                ", providerName='" + providerName + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", metricName='" + metricName + '\'' +
+                ", idUser=" + idUser +
+                ", idProvider=" + idProvider +
+                ", idProduct=" + idProduct +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                '}';
+    }
+
     public BeanEntry() {
     }
         public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, Double totalPrice, String metricName, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {

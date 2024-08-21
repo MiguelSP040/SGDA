@@ -86,34 +86,38 @@
             String sqlEntryProduct = "INSERT INTO entry_products (id_entry, id_product, quantity, unitPrice, total_price) " +
                     "VALUES (?, ?, ?, ?, ?)";
 
+            PreparedStatement psEntry = null;
+            PreparedStatement psEntryProduct = null;
+            ResultSet rs = null;
+
             try {
                 conn.setAutoCommit(false); // Start transaction
 
                 // Register Entry
-                ps = conn.prepareStatement(sqlEntry, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, entry.getChangeDate());
-                ps.setString(2, entry.getInvoiceNumber());
-                ps.setString(3, entry.getFolioNumber());
-                ps.setInt(4, entry.getIdUser());
-                ps.setInt(5, entry.getIdProvider());
-                ps.executeUpdate();
+                psEntry = conn.prepareStatement(sqlEntry, Statement.RETURN_GENERATED_KEYS);
+                psEntry.setString(1, entry.getChangeDate());
+                psEntry.setString(2, entry.getInvoiceNumber());
+                psEntry.setString(3, entry.getFolioNumber());
+                psEntry.setInt(4, entry.getIdUser());
+                psEntry.setInt(5, entry.getIdProvider());
+                psEntry.executeUpdate();
 
                 // Get generated ID for the entry
-                rs = ps.getGeneratedKeys();
+                rs = psEntry.getGeneratedKeys();
                 long idEntry = 0;
                 if (rs.next()) {
                     idEntry = rs.getLong(1);
                 }
 
                 // Register Products associated with the Entry
+                psEntryProduct = conn.prepareStatement(sqlEntryProduct);
                 for (BeanEntryProducts product : products) {
-                    ps = conn.prepareStatement(sqlEntryProduct);
-                    ps.setLong(1, idEntry);
-                    ps.setLong(2, product.getIdProduct());
-                    ps.setInt(3, product.getQuantity());
-                    ps.setDouble(4, product.getUnitPrice());
-                    ps.setDouble(5, product.getTotalPrice());
-                    ps.executeUpdate();
+                    psEntryProduct.setLong(1, idEntry);
+                    psEntryProduct.setLong(2, product.getIdProduct());
+                    psEntryProduct.setInt(3, product.getQuantity());
+                    psEntryProduct.setDouble(4, product.getUnitPrice()); // Use setBigDecimal if applicable
+                    psEntryProduct.setDouble(5, product.getTotalPrice()); // Use setBigDecimal if applicable
+                    psEntryProduct.executeUpdate();
                 }
 
                 conn.commit(); // Commit transaction
@@ -127,14 +131,18 @@
                 Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function registerEntry failed: " + e.getMessage());
             } finally {
                 try {
+                    if (rs != null) rs.close();
+                    if (psEntry != null) psEntry.close();
+                    if (psEntryProduct != null) psEntryProduct.close();
                     conn.setAutoCommit(true); // Reset to default auto-commit behavior
                 } catch (SQLException e) {
-                    Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Resetting auto-commit failed: " + e.getMessage());
+                    Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Closing resources failed: " + e.getMessage());
                 }
                 closeConnection(); // Close connection
             }
             return message;
         }
+
 
         public long getLastInsertedEntryId() {
             long idEntry = 0;
