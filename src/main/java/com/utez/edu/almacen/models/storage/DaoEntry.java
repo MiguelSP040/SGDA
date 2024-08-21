@@ -77,6 +77,43 @@
             return entry;
         }
 
+        public List<BeanEntry> searchByDateRange(String startDate, String endDate) {
+            List<BeanEntry> entries = new ArrayList<>();
+            String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name AS userName, u.surname AS userSurname, p.name AS providerName, ep.total_price " +
+                    "FROM entries e " +
+                    "JOIN users u ON e.id_user = u.id_user " +
+                    "JOIN providers p ON e.id_provider = p.id_provider " +
+                    "JOIN entry_products ep ON e.id_entry = ep.id_entry " +
+                    "WHERE e.changeDate BETWEEN ? AND ?";
+
+            try {
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, startDate);
+                ps.setString(2, endDate);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    BeanEntry entry = new BeanEntry();
+                    entry.setIdEntry(rs.getLong("id_entry"));
+                    entry.setChangeDate(rs.getString("changeDate"));
+                    entry.setInvoiceNumber(rs.getString("invoiceNumber"));
+                    entry.setFolioNumber(rs.getString("folioNumber"));
+                    entry.setUserName(rs.getString("userName"));
+                    entry.setUserSurname(rs.getString("userSurname"));
+                    entry.setProviderName(rs.getString("providerName"));
+                    entry.setTotalPrice(rs.getDouble("total_price"));
+
+                    entries.add(entry);
+                }
+            } catch (SQLException e) {
+                Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function searchByDateRange failed: " + e.getMessage());
+            } finally {
+                closeConnection();
+            }
+
+            return entries;
+        }
+
 
         // Método para registrar una entrada
         public Boolean registerEntry(BeanEntry entry, List<BeanEntryProducts> products) {

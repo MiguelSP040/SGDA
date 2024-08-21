@@ -351,7 +351,7 @@
 
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
             <div class="mt-3 ">
-                <form action="<%=context%>/storage/search-Entry" method="get">
+                <form action="<%=context%>/storage/search-entry" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-5 ms-4" > Fecha de Inicio</div>
                         <div class="col-5 ms-1">
@@ -364,10 +364,9 @@
                         <div class="col-5">
                             <input type="date" name="fechaInicio" id="fechaInicio" class="form-control">
                         </div>
-
                         <!--Input de Fecha Final-->
                         <div class="col-5">
-                            <input type="date" name="fechaFin" class="form-control">
+                            <input type="date" name="fechaFin" id="fechaFin" class="form-control">
                         </div>
                     </div>
 

@@ -57,9 +57,19 @@ public class ServletEntry extends HttpServlet {
                 redirect = "/views/storage/entrys.jsp";
                 break;
 
-            case "/storage/search":
-                // Implementar la búsqueda si es necesario
-                break;
+            case "/storage/search-entry":
+                String fechaInicio = request.getParameter("fechaInicio");
+                String fechaFin = request.getParameter("fechaFin");
+
+                if (fechaInicio != null && fechaFin != null) {
+                    List<BeanEntry> filteredEntries = new DaoEntry().searchByDateRange(fechaInicio, fechaFin);
+                    request.setAttribute("entries2", filteredEntries);
+                } else {
+                    request.setAttribute("entries2", new ArrayList<>()); // Lista vacía si no hay fechas
+                }
+
+                redirect = "/views/storage/entrys.jsp";
+            break;
 
             default:
                 System.out.println(action);
