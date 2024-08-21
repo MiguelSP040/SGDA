@@ -67,6 +67,30 @@ public class DaoMetric implements DaoTemplate<BeanMetric> {
         return null;
     }
 
+    public BeanMetric showMetric(Long id) {
+        try {
+            String query = "SELECT m.* FROM metrics m "
+                    + "JOIN products p ON p.id_metric = m.id_metric "
+                    + "WHERE p.id_product = ?";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+            BeanMetric metric = new BeanMetric();
+            if (rs.next()){
+                metric.setId(rs.getLong("id_metric"));
+                metric.setName(rs.getString("name"));
+                metric.setShortName(rs.getString("shortName"));
+                metric.setStatus(rs.getBoolean("status"));
+            }
+            return metric;
+        }catch (SQLException e){
+            Logger.getLogger(DaoMetric.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed" + e.getMessage());
+        }finally {
+            closeConnection();
+        }
+        return null;
+    }
+
     @Override
     public boolean save(BeanMetric object) {
         try{

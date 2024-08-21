@@ -32,6 +32,7 @@
     <link href="../../assets/css/estilos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
@@ -126,7 +127,7 @@
                                         <tr>
                                             <th scope="row">1</th>
                                             <td>
-                                                <select class="form-select" name="idProduct" id="idProduct" required title="Elige un producto.">
+                                                <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : products) { %>
                                                     <% if (p.getStatus()) { %>
@@ -136,14 +137,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select class="form-select" name="id_metric" id="id_metric" required>
-                                                    <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanMetric m : metrics) { %>
-                                                    <% if (m.getStatus()) { %>
-                                                    <option value="<%= m.getId() %>"><%= m.getName() %></option>
-                                                    <% } %>
-                                                    <% } %>
-                                                </select>
+                                                <input class="form-control product-metric" type="text" name="id_metric" required>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
@@ -249,26 +243,26 @@
                                     </tr>
                                     </thead>
                                     <tbody class="align-middle">
-                                    <c:forEach var="entry" items="${entries}" varStatus="s">
                                         <tr>
-                                            <th scope="row"><c:out value="${s.count}"/></th>
+                                            <th scope="row">
+                                                <span id="r_id_Entry"></span>
+                                            </th>
                                             <td>
                                                 <input class="form-control w-100" name="idProduct" id="r_idProduct" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric_${entry.id}" value="${entry.id_metric}" readonly disabled>
+                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice_${entry.id}" max="9999999" min="0" step="0.01" value="${entry.unitPrice}" readonly disabled>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" max="9999999" min="0" step="0.01"  readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity_${entry.id}" max="999999" min="1" step="1" value="${entry.quantity}" readonly disabled>
+                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity" max="999999" min="1" step="1" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly disabled>
+                                                <input class="form-control total-price" type="number" name="total_price" id="r_totalPrice" placeholder="$0.00" readonly disabled>
                                             </td>
                                         </tr>
-                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -418,7 +412,7 @@
                             <td><c:out value="${entry.totalPrice}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
-                                <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" data-id="${entry.idEntry}">
+                                <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="showProducts('${entry.folioNumber}','${entry.invoiceNumber}','${entry.providerName}','${entry.userName}',${entry.idEntry},'${entry.productName}','${entry.metricName}',${entry.unitPrice},${entry.quantity},${entry.totalPrice})" data-id="${entry.idEntry}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
@@ -826,7 +820,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $(document).on('change', '.product-select', function() {
+            var $row = $(this).closest('tr');
+            var idProducto = $(this).val();
+            var contextPath = '${pageContext.request.contextPath}';
+            var $metricField = $row.find('.product-metric');
 
+            console.log("ID Producto seleccionado:", idProducto);
+
+            if (idProducto) {
+                $.ajax({
+                    url: contextPath + '/ServletGetMetric',
+                    type: 'GET',
+                    data: { id_product: idProducto },
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+                        $metricField.val(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", status, error);
+                        $metricField.val('Error al cargar la métrica.');
+                    }
+                });
+            } else {
+                $metricField.val('');
+            }
+        });
+    });
+</script>
+<script>
+    function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
+        document.getElementById("r_folioNumber").value = folio;
+        document.getElementById("r_invoiceNumber").value = facturacion;
+        document.getElementById("r_id_provider").value = proovedor;
+        document.getElementById("r_id_user").value = almacenista;
+        document.getElementById("r_id_Entry").textContent = id;
+        document.getElementById("r_idProduct").value = producto;
+        document.getElementById("r_id_metric").value = medida;
+        document.getElementById("r_unitPrice").value = precio;
+        document.getElementById("r_quantity").value = cantidad;
+        document.getElementById("r_totalPrice").value = total;
+        console.log(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total);
+    }
+</script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>
