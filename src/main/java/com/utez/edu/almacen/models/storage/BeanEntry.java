@@ -1,17 +1,17 @@
-
 package com.utez.edu.almacen.models.storage;
 
 public class BeanEntry {
-    private int idEntry;
+    private Long idEntry;
     private String changeDate;
-    private String folioNumber;
     private String invoiceNumber;
-    private String productName;
-    private double totalPrice;
-    private String providerName;
+    private String folioNumber;
     private String userName;
     private String userSurname;
+    private String providerName;
+    private Double totalPrice;
     private String metricName;
+
+    // Campos que podrían ser necesarios si se usan en el DAO para facilitar la asociación
     private int idUser;
     private int idProvider;
     private int idProduct;
@@ -20,24 +20,29 @@ public class BeanEntry {
 
     public BeanEntry() {
     }
-
-    public BeanEntry(int idEntry, String changeDate, String folioNumber, String invoiceNumber, String productName, int quantity, double totalPrice, String providerName, String userName, String userSurname, String metricName) {
+        public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, Double totalPrice, String metricName, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
         this.idEntry = idEntry;
         this.changeDate = changeDate;
-        this.folioNumber = folioNumber;
         this.invoiceNumber = invoiceNumber;
-        this.productName = productName;
+        this.folioNumber = folioNumber;
         this.totalPrice = totalPrice;
-        this.providerName = providerName;
-        this.userName = userName;
         this.metricName = metricName;
+        this.idUser = idUser;
+        this.idProvider = idProvider;
+        this.idProduct = idProduct;
         this.quantity = quantity;
-        this.userSurname = userSurname;
+        this.unitPrice = unitPrice;
     }
-
-    public BeanEntry(String folioNumber, String invoiceNumber, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
-        this.folioNumber = folioNumber;
+    public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, String userName, String userSurname, String providerName, Double totalPrice, String metricName, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
+        this.idEntry = idEntry;
+        this.changeDate = changeDate;
         this.invoiceNumber = invoiceNumber;
+        this.folioNumber = folioNumber;
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.providerName = providerName;
+        this.totalPrice = totalPrice;
+        this.metricName = metricName;
         this.idUser = idUser;
         this.idProvider = idProvider;
         this.idProduct = idProduct;
@@ -45,11 +50,12 @@ public class BeanEntry {
         this.unitPrice = unitPrice;
     }
 
-    public int getIdEntry() {
+    // Getters and Setters
+    public Long getIdEntry() {
         return idEntry;
     }
 
-    public void setIdEntry(int idEntry) {
+    public void setIdEntry(Long idEntry) {
         this.idEntry = idEntry;
     }
 
@@ -61,14 +67,6 @@ public class BeanEntry {
         this.changeDate = changeDate;
     }
 
-    public String getFolioNumber() {
-        return folioNumber;
-    }
-
-    public void setFolioNumber(String folioNumber) {
-        this.folioNumber = folioNumber;
-    }
-
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -77,28 +75,12 @@ public class BeanEntry {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getFolioNumber() {
+        return folioNumber;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
+    public void setFolioNumber(String folioNumber) {
+        this.folioNumber = folioNumber;
     }
 
     public String getUserName() {
@@ -115,6 +97,22 @@ public class BeanEntry {
 
     public void setUserSurname(String userSurname) {
         this.userSurname = userSurname;
+    }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getMetricName() {

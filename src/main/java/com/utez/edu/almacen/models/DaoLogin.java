@@ -12,7 +12,7 @@ public class DaoLogin {
     private ResultSet rs;
     private final MySQLConnection DB_CONNECTION = new MySQLConnection();
     private final String [] QUERIES = {
-            "SELECT * FROM users WHERE email=?;" // Nueva query para solo buscar por email
+            "SELECT * FROM users WHERE email=?;"
     };
 
     public LoginResult findUser(String username, String password) {
@@ -24,6 +24,7 @@ public class DaoLogin {
 
             if (rs.next()) {
                 String dbPassword = rs.getString("password");
+                String role = rs.getString("role");
                 boolean isActive = rs.getBoolean("status");
 
                 if (!dbPassword.equals(password)) {
@@ -34,10 +35,12 @@ public class DaoLogin {
                     return new LoginResult(false, "Usuario inactivo.");
                 }
 
-                return new LoginResult(true, "Login exitoso.");
+                // Incluye el rol en el resultado
+                return new LoginResult(true, "Login exitoso.", role);
             } else {
                 return new LoginResult(false, "Usuario y/o contraseña incorrectos.");
             }
+
 
         } catch (SQLException e) {
             Logger.getLogger(DaoLogin.class.getName()).log(Level.SEVERE, "Error en el login: " + e.getMessage());
