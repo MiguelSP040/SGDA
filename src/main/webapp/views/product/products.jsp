@@ -14,6 +14,10 @@
         return;
     }
     List<BeanMetric> metrics = new DaoMetric().listAll();
+    BeanMetric selectedMetric = metrics.stream()
+            .filter(BeanMetric::getStatus)
+            .findFirst()
+            .orElse(null);
 %>
 <html>
 <head>
@@ -218,14 +222,8 @@
                             </div>
                             <div>
                                 <label for="r_id_metric" class="col-form-label">Unidad de medida</label>
-                                <select class="form-select" name="r_id_metric" id="r_id_metric" readonly disabled>
-                                    <option disabled selected value>Seleccionar opción</option>
-                                    <% for (BeanMetric m : metrics) { %>
-                                    <% if (m.getStatus()) { %>
-                                    <option value="<%= m.getId() %>"><%= m.getName() %></option>
-                                    <% } %>
-                                    <% } %>
-                                </select>
+                                <input type="hidden" name="r_id_metric" id="r_id_metric" value="<%= selectedMetric != null ? selectedMetric.getId() : "" %>">
+                                <input class="form-control w-100" value="<%= selectedMetric != null ? selectedMetric.getName() : "" %>" required disabled>
                             </div>
                             <div>
                                 <label for="r_description" class="col-form-label">Descripción</label>

@@ -1,7 +1,7 @@
 let data = {};
 
 const getProviderInformation = async id => {
-    await fetch (`http://localhost:8080//ServletGetProvider?id=${id}`, {
+    await fetch (`/ServletGetProvider?id=${id}`, {
         method: 'GET',
         headers: {
             "Accept": "application/json",

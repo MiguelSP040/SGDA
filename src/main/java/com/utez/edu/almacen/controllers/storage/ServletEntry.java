@@ -64,12 +64,11 @@ public class ServletEntry extends HttpServlet {
                 if (fechaInicio != null && fechaFin != null) {
                     List<BeanEntry> filteredEntries = new DaoEntry().searchByDateRange(fechaInicio, fechaFin);
                     request.setAttribute("entries2", filteredEntries);
-                } else {
-                    request.setAttribute("entries2", new ArrayList<>()); // Lista vacía si no hay fechas
-                }
 
-                redirect = "/views/storage/entrys.jsp";
-            break;
+                    // Redirigir o hacer forward a la vista adecuada
+                    request.getRequestDispatcher("/views/storage/entrys.jsp").forward(request, response);
+                }
+                break;
 
             default:
                 System.out.println(action);

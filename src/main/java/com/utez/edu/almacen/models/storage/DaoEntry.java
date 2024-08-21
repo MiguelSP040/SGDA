@@ -55,7 +55,7 @@
         // Método para listar una entrada específica
         public BeanEntry listOne(int idEntry) {
             BeanEntry entry = null;
-            String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.userName, p.providerName " +
+            String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name, p.providerName " +
                     "FROM entries e " +
                     "JOIN users u ON e.id_user = u.id_user " +
                     "JOIN providers p ON e.id_provider = p.id_provider " +
@@ -216,7 +216,7 @@
         }
         public static void main(String[] args) {
             DaoEntry dao = new DaoEntry();
-
+/*
             // Crear y registrar la entrada
             BeanEntry entry = new BeanEntry(
                     null, // idEntry, se generará automáticamente
@@ -248,6 +248,15 @@
             // Listar todas las entradas para verificar
             List<BeanEntry> entries = dao.listAll();
             for (BeanEntry e : entries) {
+                System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getUserName() + ", Provider: " + e.getProviderName() + ", Total Price: $" + e.getTotalPrice());
+            }
+*/
+            // Probar la función searchByDateRange
+            String startDate = "2024-08-19";
+            String endDate = "2024-08-21";
+            List<BeanEntry> entriesInRange = dao.searchByDateRange(startDate, endDate);
+            System.out.println("\nEntradas en el rango de fechas " + startDate + " a " + endDate + ":");
+            for (BeanEntry e : entriesInRange) {
                 System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getUserName() + ", Provider: " + e.getProviderName() + ", Total Price: $" + e.getTotalPrice());
             }
         }
