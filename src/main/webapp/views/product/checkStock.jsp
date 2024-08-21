@@ -58,52 +58,53 @@
             <div class="mt-3">
                 <form action="<%=context%>/product/searchStock" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-3">Clave del producto</div>
-                        <div class="col-3">Nombre del producto</div>
+                        <div class="col-3">Clave</div>
+                        <div class="col-3">Producto</div>
                         <div class="col-3">Proveedor </div>
+                        <div class="col-3">Unidad de medida </div>
+                    </div>
                         <!--Folio de la entrada-->
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-3">
-                                <input id="code" name="code" type="text" class="form-control" placeholder="Clave del producto">
-                            </div>
-                            <!--Nombre del producto-->
-                            <div class="col-3">
-                                <input id="id_product" name="name"  type="text" class="form-control" placeholder="Nombre del producto">
-                            </div>
-                            <!--Proveedor-->
-                            <div class="col-3">
-                                <select class="form-select" name="providerName" id="id_provider">
-                                    <option disabled selected value>Seleccionar Proveedor</option>
-                                    <% for (BeanProvider pr : providers) { %>
-                                    <% if (pr.getStatus()) { %>
-                                    <option value="<%=pr.getName()%>"><%=pr.getName()%></option>
-                                    <% } %>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <!--Almacenista-->
-                            <div class="col-3">
-                                <select class="form-select" name="id_metric" id="id_metric">
-                                    <option disabled selected value>Seleccionar opción</option>
-                                    <% for (BeanMetric m : metrics) { %>
-                                    <% if (m.getStatus()) { %>
-                                    <option value="<%= m.getName() %>"><%= m.getName() %></option>
-                                    <% } %>
-                                    <% } %>
-                                </select>
-                            </div>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-3">
+                            <input id="code" name="code" type="text" class="form-control" placeholder="Clave del producto">
+                        </div>
+                        <!--Nombre del producto-->
+                        <div class="col-3">
+                            <input id="id_product" name="name"  type="text" class="form-control" placeholder="Nombre del producto">
+                        </div>
+                        <!--Proveedor-->
+                        <div class="col-3">
+                            <select class="form-select" name="providerName" id="id_provider">
+                                <option disabled selected value>Seleccionar Proveedor</option>
+                                <% for (BeanProvider pr : providers) { %>
+                                <% if (pr.getStatus()) { %>
+                                <option value="<%=pr.getName()%>"><%=pr.getName()%></option>
+                                <% } %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <!--Almacenista-->
+                        <div class="col-3">
+                            <select class="form-select" name="id_metric" id="id_metric">
+                                <option disabled selected value>Seleccionar opción</option>
+                                <% for (BeanMetric m : metrics) { %>
+                                <% if (m.getStatus()) { %>
+                                <option value="<%= m.getName() %>"><%= m.getName() %></option>
+                                <% } %>
+                                <% } %>
+                            </select>
+                        </div>
 
-                            <!--Botones -->
-                            <div class="grid gap-2 d-flex justify-content-end mt-5">
-                                <!-- Botón Buscar -->
-                                <button type="submit" class="btn botonCafe mb-3">
-                                    Buscar
-                                </button>
-                                <!-- Botón Limpiar -->
-                                <button type="reset" class="btn botonGris btn-light mb-3">
-                                    Limpiar
-                                </button>
-                            </div>
+                        <!--Botones -->
+                        <div class="grid gap-2 d-flex justify-content-end mt-5">
+                            <!-- Botón Buscar -->
+                            <button type="submit" class="btn botonCafe mb-3">
+                                Buscar
+                            </button>
+                            <!-- Botón Limpiar -->
+                            <button type="reset" class="btn botonGris btn-light mb-3">
+                                Limpiar
+                            </button>
                         </div>
                     </div>
                 </form>
