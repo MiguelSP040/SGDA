@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "ServletGetMetric", value = "/ServletGetMetric")
 public class ServletGetMetric extends HttpServlet {
@@ -19,10 +20,18 @@ public class ServletGetMetric extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
 
-        Long id = Long.parseLong(request.getParameter("id"));
-        BeanMetric metric = new DaoMetric().listOne(id);
-        String json = new Gson().toJson(metric);
-        response.getWriter().write(json);
+        Long id = Long.parseLong(request.getParameter("id_product"));
+        BeanMetric metric = new DaoMetric().showMetric(id);
+
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+
+        if (metric != null) {
+            out.println(metric.getName());
+        } else {
+            out.println("No hay métricas disponibles.");
+        }
+
     }
 
     @Override

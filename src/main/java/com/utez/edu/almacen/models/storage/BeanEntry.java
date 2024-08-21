@@ -17,6 +17,7 @@ public class BeanEntry {
     private int idProduct;
     private int quantity;
     private double unitPrice;
+    private String productName;
 
     @Override
     public String toString() {
@@ -182,4 +183,8 @@ public class BeanEntry {
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+    public String getProductName() {return productName;}
+
+    public void setProductName(String productName) {this.productName = productName;}
 }
