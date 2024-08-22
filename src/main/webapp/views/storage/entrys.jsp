@@ -821,6 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 </script>
+<!--Colocar unidad de medida automáticamente-->
 <script>
     $(document).ready(function() {
         $(document).on('change', '.product-select', function() {
@@ -851,6 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 </script>
+<!--Abrir Modal de ver más-->
 <script>
     function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
         document.getElementById("r_folioNumber").value = folio;

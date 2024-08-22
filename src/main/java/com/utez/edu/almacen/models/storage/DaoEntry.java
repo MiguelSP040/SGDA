@@ -16,14 +16,10 @@ public class DaoEntry {
     public List<BeanEntry> listAll() {
         List<BeanEntry> entries = new ArrayList<>();
         String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name as userName, e.totalAllPrices," +
-                "p.name as providerName, ep.id_entry_product, ep.id_product, ep.quantity, ep.unitPrice, ep.total_price, " +
-                "pr.name as productName, m.name as metricName " +
+                "p.name as providerName " +
                 "FROM entries e " +
                 "JOIN users u ON e.id_user = u.id_user " +
-                "JOIN providers p ON e.id_provider = p.id_provider " +
-                "JOIN entry_products ep ON e.id_entry = ep.id_entry " +
-                "JOIN products pr ON ep.id_product = pr.id_product " +
-                "JOIN metrics m ON pr.id_metric = m.id_metric";
+                "JOIN providers p ON e.id_provider = p.id_provider ";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -37,23 +33,6 @@ public class DaoEntry {
                 entry.setUserName(rs.getString("userName"));
                 entry.setProviderName(rs.getString("providerName"));
                 entry.setTotalAllPrices(rs.getDouble("e.totalAllPrices"));
-
-                // Crear un BeanEntryProducts para cada producto asociado
-                BeanEntryProducts entryProduct = new BeanEntryProducts();
-                entryProduct.setIdProductEntry(rs.getLong("ep.id_entry_product"));
-                entryProduct.setIdEntry(rs.getLong("e.id_entry"));
-                entryProduct.setIdProduct(rs.getLong("ep.id_product"));
-                entryProduct.setQuantity(rs.getInt("ep.quantity"));
-                entryProduct.setUnitPrice(rs.getDouble("ep.unitPrice"));
-                entryProduct.setTotalPrice(rs.getDouble("ep.total_price"));
-
-                // Asignar los nombres del producto y la métrica al entry
-                entry.setProductName(rs.getString("productName"));
-                entry.setMetricName(rs.getString("metricName"));
-                entry.setUnitPrice(entryProduct.getUnitPrice());
-                entry.setQuantity(entryProduct.getQuantity());
-                entry.setTotalPrice(entryProduct.getTotalPrice());
-
                 entries.add(entry);
             }
         } catch (SQLException e) {
