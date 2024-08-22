@@ -66,7 +66,7 @@ public class ServletProduct extends HttpServlet {
 
                 request.setAttribute("stocks", inStockProducts);
                 redirect = "/views/product/checkStock.jsp";
-                break;
+            break;
             case "/product/search":
                 code = request.getParameter("code");
                 name = request.getParameter("name");
@@ -159,7 +159,8 @@ public class ServletProduct extends HttpServlet {
                 code = request.getParameter("code");
                 description = request.getParameter("description");
                 id_metric = request.getParameter("id_metric");
-                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, true);
+                status = Boolean.parseBoolean(request.getParameter("status"));
+                product = new BeanProduct(Long.parseLong(id), name, code, description, id_metric, status);
                 if (new DaoProduct().update(product)) {
                     redirect = "/product/list-products?result=" + true + "&message=" +
                             URLEncoder.encode("¡Modificación del producto realizada con éxito!", StandardCharsets.UTF_8);

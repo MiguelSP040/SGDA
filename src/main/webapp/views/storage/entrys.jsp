@@ -1,4 +1,5 @@
 <%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanLoggedUser" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.product.DaoProduct" %>
@@ -7,21 +8,19 @@
 <%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
 <%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
 <%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: PC
-  Date: 04/08/2024
-  Time: 09:30 a. m.
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Entradas de almacén"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") == null){
-        response.sendRedirect(context+"/index.jsp");
+    String email = (String) request.getSession(false).getAttribute("user");
+    String role = (String) request.getSession(false).getAttribute("role");
+    if (email == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
+    BeanLoggedUser user = (BeanLoggedUser) request.getAttribute("user");
     List<BeanMetric> metrics = new DaoMetric().listAll();
     List<BeanProduct> products = new DaoProduct().listAll();
     List<BeanProvider> providers = new DaoProvider().listAll();
@@ -33,10 +32,21 @@
     <link href="../../assets/css/estilos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
+<%
+    if ("Administrador".equals(role)) {
+%>
 <jsp:include page="../../layouts/menu.jsp"/>
+<%
+} else if ("Almacenista".equals(role)) {
+%>
+<jsp:include page="../../layouts/menu2.jsp"/>
+<%
+    }
+%>
 
 
 <!--CONTENEDOR TOTAL-->
@@ -51,44 +61,40 @@
 
             <!-- Botón para registrar movimiento -->
             <div class="position-absolute top-10 end-0">
-                <button class="btn btn-outline-secondary me-md-5" type="button" data-bs-toggle="modal"
-                        data-bs-target="#registerMovement">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                <button class="btn btn-outline-secondary me-md-5" type="button" data-bs-toggle="modal" data-bs-target="#registerMovement">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                     </svg>
                     Registrar entrada
                 </button>
             </div>
 
             <!-- Modal Registro de Entrada -->
-            <div class="modal fade " id="registerMovement" tabindex="-1" aria-labelledby="registerMovementLabel"
-                 aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal fade" id="registerMovement" tabindex="-1" aria-labelledby="registerMovementLabel" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content w-100">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="registerMovementLabel">Nueva Entrada</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="registerEntryForm" method="post" action="/entry/save" novalidate>
+                            <form id="registerEntryForm" method="post" action="${pageContext.request.contextPath}/storage/save-Entry" novalidate>
                                 <h5>Datos de la Entrada</h5>
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-3"><label for="folioNumber">Folio</label></div>
-                                    <div class="col-3"><label for="invoiceNumber">Facturación</label></div>
-                                    <div class="col-3"><label for="id_provider">Proveedor</label></div>
+                                    <div class="col-3"><label for="invoiceNumber">Facturación*</label></div>
+                                    <div class="col-3"><label for="id_provider">Proveedor*</label></div>
                                     <div class="col-3"><label for="id_user">Almacenista</label></div>
                                 </div>
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" disabled>
+                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" required readonly>
                                     </div>
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" maxlength="9" placeholder="Facturación" pattern="^[0-9]*$">
+                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" maxlength="9" placeholder="Facturación" required title="Solo se admiten números." pattern="^[0-9]*$">
                                     </div>
                                     <div class="col me-2">
-                                        <select class="form-select" name="id_provider" id="id_provider" required>
+                                        <select class="form-select" name="id_provider" id="id_provider" required title="Elige a un proveedor.">
                                             <option disabled selected value>Seleccionar opción</option>
                                             <% for (BeanProvider pr : providers) { %>
                                             <% if (pr.getStatus()) { %>
@@ -98,12 +104,12 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control w-100" name="id_user" id="id_user" placeholder="Almacenista logeado" val required disabled>
+                                        <input type="hidden" name="id_user" id="id_user" value="<%= user.getId() %>">
+                                        <input class="form-control w-100" value="<%= user.getName() %>" required disabled>
                                     </div>
                                 </div>
 
                                 <!-- Campos para Entrada -->
-
                                 <div class="table-responsive table-container">
                                     <table class="table table-bordered table-striped mt-0 text-center" id="entryTable">
                                         <thead class="thead-dark">
@@ -118,71 +124,66 @@
                                         </tr>
                                         </thead>
                                         <tbody class="align-middle">
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>
-                                                    <select class="form-select" name="idProduct" id="idProduct" required>
-                                                        <option disabled selected value>Seleccionar opción</option>
-                                                        <% for (BeanProduct p : products) { %>
-                                                        <% if (p.getStatus()) { %>
-                                                        <option value="<%= p.getId() %>"><%= p.getName() %></option>
-                                                        <% } %>
-                                                        <% } %>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="tipo" disabled>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control quantity" type="number" name="quantity" max="999999" min="1" step="1" placeholder="0" required>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled>
-                                                </td>
-                                                <td class="d-flex justify-content-end">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn botonVerMas" onclick="addRow(this)">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                                 fill="currentColor" class="bi bi-plus-circle-fill h-auto w-auto"
-                                                                 viewBox="0 0 16 16">
-                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                                                            </svg>
-                                                        </button>
-                                                        <button type="button" class="btn botonRojo me-2" onclick="removeRow(this)">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                                 fill="currentColor" class="bi bi-dash-circle-fill"
-                                                                 viewBox="0 0 16 16">
-                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>
+                                                <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
+                                                    <option disabled selected value>Seleccionar opción</option>
+                                                    <% for (BeanProduct p : products) { %>
+                                                    <% if (p.getStatus()) { %>
+                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                    <% } %>
+                                                    <% } %>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
+                                            </td>
+                                            <td>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
+                                            </td>
+                                            <td>
+                                                <input class="form-control quantity" type="number" name="quantity" max="999999" min="1" step="1" placeholder="0" required title="Ingresa un valor.">
+                                            </td>
+                                            <td>
+                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
+                                            </td>
+                                            <td class="d-flex justify-content-end">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn botonVerMas" onclick="addRow(this)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-circle-fill h-auto w-auto" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <button type="button" class="btn botonRojo me-2" onclick="removeRow(this)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="modal-footer d-flex">
                                     <div class="me-auto">
-                                    <div class="d-flex justify-content-start mt-4">
-                                        <button class="btn btn-outline-secondary" type="button" id="openNewProductModal">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
-                                                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
-                                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                            </svg>
-                                            Nuevo Producto
-                                        </button>
-                                    </div>
+                                        <div class="d-flex justify-content-start mt-4">
+                                            <button class="btn btn-outline-secondary" type="button" id="openNewProductModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                                    <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"/>
+                                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                </svg>
+                                                Nuevo Producto
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="d-flex flex-column align-items-start me-2">
                                         <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
-                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
+                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" readonly>
                                     </div>
                                     <div class="d-flex align-items-center mt-4">
-                                        <button type="submit" class="btn botonCafe me-2" id="registerButton" onclick="registerOutbound(event)">
+                                        <button type="submit" class="btn botonCafe me-2" onclick="registerEntry(event)">
                                             Registrar
                                         </button>
                                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -196,132 +197,13 @@
                 </div>
             </div>
 
-            <!-- Modal Actualizar Entrada -->
-            <div class="modal fade" id="updateEntryModal" tabindex="-1" aria-labelledby="updateEntryLabel"
-                 aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content w-100">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="updateEntryLabel">Editar información de Entrada</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="updateEntryForm" method="post" action="/entry/update" novalidate>
-                                <h5>Datos de la Entrada</h5>
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-3"><label for="u_folioNumber">Folio</label></div>
-                                    <div class="col-3"><label for="u_invoiceNumber">Facturación</label></div>
-                                    <div class="col-3"><label for="u_id_provider">Proveedor</label></div>
-                                    <div class="col-3"><label for="u_id_user">Almacenista</label></div>
-                                </div>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="folioNumber" id="u_folioNumber" placeholder="Folio" disabled>
-                                    </div>
-                                    <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="invoiceNumber" id="u_invoiceNumber" maxlength="9" placeholder="Facturación" pattern="^[0-9]*$">
-                                    </div>
-                                    <div class="col me-2">
-                                        <select class="form-select" name="id_provider" id="u_id_provider" required>
-                                            <option disabled selected value>Seleccionar opción</option>
-                                            <% for (BeanProvider pr : providers) { %>
-                                            <% if (pr.getStatus()) { %>
-                                            <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
-                                            <% } %>
-                                            <% } %>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control w-100" name="id_user" id="u_id_user" placeholder="Almacenista logeado" required disabled>
-                                    </div>
-                                </div>
-
-                                <!-- Campos para Entrada -->
-
-                                <div class="table-responsive table-container">
-                                    <table class="table table-bordered table-striped mt-0 text-center" id="updateEntryTable">
-                                        <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col" style="width: 3%" class="tableTitle">#</th>
-                                            <th scope="col" style="width: 25%" class="tableTitle"><label for="u_idProduct">Producto*</label></th>
-                                            <th scope="col" style="width: 18%" class="tableTitle"><label for="u_id_metric">Medida*</label></th>
-                                            <th scope="col" style="width: 10%" class="tableTitle"><label>Precio*</label></th>
-                                            <th scope="col" style="width: 10%" class="tableTitle"><label>Cantidad*</label></th>
-                                            <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
-                                            <th scope="col" style="width: 3%" class="tableTitle">Acciones*</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="align-middle">
-                                        <c:forEach var="entry" items="${entries}" varStatus="s">
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>
-                                                <select class="form-select" name="idProduct" id="u_idProduct" required>
-                                                    <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanProduct p : products) { %>
-                                                    <% if (p.getStatus()) { %>
-                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
-                                                    <% } %>
-                                                    <% } %>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="id_metric_${entry.id}" value="${entry.id_metric}" disabled/>
-                                            </td>
-                                            <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="unitPrice_${entry.id}" max="9999999" min="0" step="0.01" value="${entry.unitPrice}" required/>
-                                            </td>
-                                            <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="quantity_${entry.id}" max="999999" min="1" step="1" value="${entry.quantity}" required/>
-                                            </td>
-                                            <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled>
-                                                <!--<input class="form-control total-price" type="number" name="total-price" id="total-price_{entry.id}" value="{entry.total-price}" disabled/>-->
-                                            </td>
-                                            <td class="d-flex justify-content-end">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn botonVerMas" onclick="addRow(this)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             fill="currentColor" class="bi bi-plus-circle-fill h-auto w-auto"
-                                                             viewBox="0 0 16 16">
-                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button" class="btn botonRojo me-2" onclick="removeRow(this)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             fill="currentColor" class="bi bi-dash-circle-fill"
-                                                             viewBox="0 0 16 16">
-                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn botonCafe" id="updateEntryButton" onclick="updateEntry(event)">
-                                        Modificar
-                                    </button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Modal Revisar Entrada -->
             <div class="modal fade" id="reviewEntryModal" tabindex="-1" aria-labelledby="reviewEntryLabel"
                  aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content w-100">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="reviewEntryLabel">Editar información de Entrada</h1>
+                            <h1 class="modal-title fs-5" id="reviewEntryLabel">Más información</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -334,23 +216,16 @@
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly>
+                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly disabled>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly>
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly disabled>
                                 </div>
                                 <div class="col me-2">
-                                    <select class="form-select" name="id_provider" id="r_id_provider" readonly>
-                                        <option disabled selected value>Seleccionar opción</option>
-                                        <% for (BeanProvider pr : providers) { %>
-                                        <% if (pr.getStatus()) { %>
-                                        <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
-                                        <% } %>
-                                        <% } %>
-                                    </select>
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_id_provider" readonly disabled>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control w-100" name="id_user" id="r_id_user" placeholder="Almacenista logeado" readonly>
+                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly disabled>
                                 </div>
                             </div>
 
@@ -360,69 +235,40 @@
                                     <thead class="thead-dark">
                                     <tr>
                                         <th scope="col" style="width: 3%" class="tableTitle">#</th>
-                                        <th scope="col" style="width: 25%" class="tableTitle"><label>Producto*</label></th>
-                                        <th scope="col" style="width: 18%" class="tableTitle"><label>Medida*</label></th>
-                                        <th scope="col" style="width: 10%" class="tableTitle"><label>Precio*</label></th>
-                                        <th scope="col" style="width: 10%" class="tableTitle"><label>Cantidad*</label></th>
+                                        <th scope="col" style="width: 25%" class="tableTitle"><label for="r_idProduct">Producto*</label></th>
+                                        <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice_">Precio*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity_">Cantidad*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
-                                        <th scope="col" style="width: 3%" class="tableTitle">Acciones*</th>
                                     </tr>
                                     </thead>
                                     <tbody class="align-middle">
-                                    <c:forEach var="entry" items="${entries}" varStatus="s">
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row">
+                                                <span id="r_id_Entry"></span>
+                                            </th>
                                             <td>
-                                                <select class="form-select" name="idProduct" id="r_idProduct" readonly>
-                                                    <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanProduct p : products) { %>
-                                                    <% if (p.getStatus()) { %>
-                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
-                                                    <% } %>
-                                                    <% } %>
-                                                </select>
+                                                <input class="form-control w-100" name="idProduct" id="r_idProduct" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="id_metric_${entry.id}" value="${entry.id_metric}" readonly/>
+                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="unitPrice_${entry.id}" max="9999999" min="0" step="0.01" value="${entry.unitPrice}" readonly/>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" max="9999999" min="0" step="0.01"  readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="quantity_${entry.id}" max="999999" min="1" step="1" value="${entry.quantity}" readonly/>
+                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity" max="999999" min="1" step="1" readonly disabled>
                                             </td>
                                             <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
-                                            </td>
-                                            <td class="d-flex justify-content-end">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn botonVerMas" onclick="addRow(this)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             fill="currentColor" class="bi bi-plus-circle-fill h-auto w-auto"
-                                                             viewBox="0 0 16 16">
-                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button" class="btn botonRojo me-2" onclick="removeRow(this)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             fill="currentColor" class="bi bi-dash-circle-fill"
-                                                             viewBox="0 0 16 16">
-                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"/>
-                                                        </svg>
-                                                    </button>
-                                                </div>
+                                                <input class="form-control total-price" type="number" name="total_price" id="r_totalPrice" placeholder="$0.00" readonly disabled>
                                             </td>
                                         </tr>
-                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn botonCafe" id="updateEntryButton" onclick="updateEntry(event)">
-                                    Modificar
-                                </button>
-                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                    Cancelar
+                                <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
+                                    Aceptar
                                 </button>
                             </div>
                         </div>
@@ -443,15 +289,24 @@
                         <div class="modal-body">
                             <form id="newProductForm" method="post" action="/product/saveout" novalidate>
                                 <h5>Datos de Producto</h5>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="name" class="col-form-label">Nombre del Producto*</label>
                                     <input type="text" class="form-control" name="name" id="name" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="code" class="col-form-label">Acrónimo*</label>
                                     <input type="text" class="form-control" name="code" id="code" required pattern="^([A-ZÁÉÍÓÚÑ]{1}\s*)*$">
+                                    <div class="invalid-feedback">
+                                        Solo se admiten mayúsculas.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="id_metric" class="col-form-label">Unidad de medida*</label>
                                     <select class="form-select" name="id_metric" id="id_metric" required>
                                         <option disabled selected value>Seleccionar opción</option>
@@ -461,11 +316,19 @@
                                         <% } %>
                                         <% } %>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Este campo no puede estar vacío.
+                                    </div>
                                 </div>
-                                <div class="mb-3">
+
+                                <div>
                                     <label for="description" class="col-form-label">Descripción*</label>
-                                    <textarea class="form-control" name="description" id="description" required></textarea>
+                                    <textarea class="form-control" name="description" id="description" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$"></textarea>
+                                    <div class="invalid-feedback">
+                                        Debe empezar con mayúscula.
+                                    </div>
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="submit" class="btn botonCafe" onclick="registerProduct(event)">
                                         Registrar
@@ -482,29 +345,37 @@
 
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
             <div class="mt-3 ">
-                <form onsubmit="search()">
+                <form id="searchEntryForm" action="/storage/search-entry" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5 ms-4"> Fecha de Inicio</div>
-                        <div class="col-5 ms-1">Fecha Final</div>
+                        <div class="col-5">
+                            <label for="fechaInicio">Fecha Inicio</label>
+                        </div>
+                        <div class="col-5">
+                            <label for="fechaFin">Fecha Final</label>
+                        </div>
                     </div>
 
                     <!--Input de Fecha de Inicio-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-5">
-                            <input type="date" class="form-control">
+                            <input type="date" name="fechaInicio" id="fechaInicio" class="form-control">
                         </div>
-
                         <!--Input de Fecha Final-->
                         <div class="col-5">
-                            <input type="date" class="form-control">
+                            <input type="date" name="fechaFin" id="fechaFin" class="form-control">
                         </div>
                     </div>
 
                     <!--Botones -->
                     <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <button type="submit" class="btn botonCafe mb-3" onsubmit="search()" id="botonCafe">Buscar
+                        <!-- Botón Buscar -->
+                        <button type="submit" class="btn botonCafe mb-3">
+                            Buscar
                         </button>
-                        <button type="reset" class="btn botonGris btn-light mb-3" id="botonGris">Limpiar
+
+                        <!-- Botón Limpiar -->
+                        <button type="reset" class="btn botonGris btn-light mb-3">
+                            Limpiar
                         </button>
                     </div>
                 </form>
@@ -515,7 +386,7 @@
                 <table class="table table-bordered table-striped mt-0 text-center">
                     <thead class="thead-dark">
                     <tr>
-                        <th scope="col" colspan="9" class="tableTitle">
+                        <th scope="col" colspan="8" class="tableTitle">
                             REPORTE DE ENTRADAS
                         </th>
                     </tr>
@@ -524,94 +395,69 @@
                         <th scope="col" class="thead">Fecha</th>
                         <th scope="col" class="thead">Folio</th>
                         <th scope="col" class="thead">Facturación</th>
-                        <th scope="col" class="thead">Producto</th>
-                        <th scope="col" class="thead">Cantidad</th>
-                        <th scope="col" class="thead">Precio Total</th>
                         <th scope="col" class="thead">Proveedor</th>
+                        <th scope="col" class="thead">Almacenista</th>
+                        <th scope="col" class="thead">Precio Total</th>
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <c:forEach var="entry" items="${entries}">
-                            <tr>
-                                <th scope="row"><c:out value="${entry.id}"/></th>
-                                <td><c:out value="${entry.changeDate}"/></td>
-                                <td><c:out value="${entry.folioNumber}"/></td>
-                                <td><c:out value="${entry.invoiceNumber}"/></td>
-                                <td><c:out value="${entry.id}"/></td>
-                                <td><c:out value="${entry.quantity}"/></td>
-                                <td><c:out value="${entry.total_price}"/></td>
-                                <td><c:out value="${entry.id_provider}"/></td>
-                                <!--Columna de Botones de acción-->
-                                <td>
-                                    <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="viewMore()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-                                        </svg>
-                                    </button>
-                                    <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateEntryModal" onclick="updateEntryModal()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>22/07/2024</td>
-                                <td>E2024F1KL</td>
-                                <td>#123456</td>
-                                <td>HJS</td>
-                                <td>10</td>
-                                <td>$100.00</td>
-                                <td>MAPED</td>
-                                <!--Columna de Botones de acción-->
-                                <td>
-                                    <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="viewMore()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-                                        </svg>
-                                    </button>
-                                    <button class="btn botonEditar" data-bs-toggle="modal" data-bs-target="#updateEntryModal" onclick="updateEntryModal()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
+                    <c:forEach var="entry" items="${entries2}" varStatus="s">
+                        <tr>
+                            <th scope="row"><c:out value="${s.count}"/></th>
+                            <td><c:out value="${entry.changeDate}"/></td>
+                            <td><c:out value="${entry.folioNumber}"/></td>
+                            <td><c:out value="${entry.invoiceNumber}"/></td>
+                            <td><c:out value="${entry.providerName}"/></td>
+                            <td><c:out value="${entry.userName}"/></td>
+                            <td><c:out value="${entry.totalAllPrices}"/></td>
+                            <!--Columna de Botones de acción-->
+                            <td>
+                                <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="showProducts('${entry.folioNumber}','${entry.invoiceNumber}','${entry.providerName}','${entry.userName}',${entry.idEntry},'${entry.productName}','${entry.metricName}',${entry.unitPrice},${entry.quantity},${entry.totalPrice})" data-id="${entry.idEntry}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
-            </div>
-            <!--Paginación al pie de Página -->
-            <div class="pagination d-flex justify-content-center align-items-center mt-5">
-                <button class="btn btn-lg me-2" aria-label="Previous Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                    </svg>
-                </button>
-                <input type="number" class="page-info form-control" style="width: 4rem" min="1" value="1"/>
-                <button class="btn btn-lg ms-2" aria-label="Next Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../assets/js/updateEntries.js"></script>
 <script src="../../assets/js/funciones.js"></script>
+
+<!--ESTE SCRIPT HACE QUE FUNCIONE TODO EL MODAL DE VER MÁS-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Asocia un evento click a los botones que abren el modal
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+        button.addEventListener('click', async function() {
+            // Obtiene el id del botón
+            const entryId = this.getAttribute('data-id');
+            if (entryId) {
+                // Llama a la función para mostrar la información de la entrada
+                await showEntryInformation(entryId);
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Asocia un evento click a todos los botones de editar
+    document.querySelectorAll('.btn-editar').forEach(button => {
+        button.addEventListener('click', function () {
+            const entryId = this.getAttribute('data-id');
+            putEntryInformation(entryId);
+        });
+    });
+});
+</script>
 <!--Validar formularios-->
 <script>
     // Función para validar un campo individualmente en tiempo real
@@ -681,7 +527,6 @@
     // Configura la validación en tiempo real al cargar la página
     document.addEventListener('DOMContentLoaded', () => {
         setupRealTimeValidation('registerEntryForm');
-        setupRealTimeValidation('updateEntryForm');
         setupRealTimeValidation('newProductForm');
     });
 
@@ -976,7 +821,53 @@
         });
     });
 </script>
+<!--Colocar unidad de medida automáticamente-->
+<script>
+    $(document).ready(function() {
+        $(document).on('change', '.product-select', function() {
+            var $row = $(this).closest('tr');
+            var idProducto = $(this).val();
+            var contextPath = '${pageContext.request.contextPath}';
+            var $metricField = $row.find('.product-metric');
 
+            console.log("ID Producto seleccionado:", idProducto);
+
+            if (idProducto) {
+                $.ajax({
+                    url: contextPath + '/ServletGetMetric',
+                    type: 'GET',
+                    data: { id_product: idProducto },
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+                        $metricField.val(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", status, error);
+                        $metricField.val('Error al cargar la métrica.');
+                    }
+                });
+            } else {
+                $metricField.val('');
+            }
+        });
+    });
+</script>
+<!--Abrir Modal de ver más-->
+<script>
+    function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
+        document.getElementById("r_folioNumber").value = folio;
+        document.getElementById("r_invoiceNumber").value = facturacion;
+        document.getElementById("r_id_provider").value = proovedor;
+        document.getElementById("r_id_user").value = almacenista;
+        document.getElementById("r_id_Entry").textContent = id;
+        document.getElementById("r_idProduct").value = producto;
+        document.getElementById("r_id_metric").value = medida;
+        document.getElementById("r_unitPrice").value = precio;
+        document.getElementById("r_quantity").value = cantidad;
+        document.getElementById("r_totalPrice").value = total;
+        console.log(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total);
+    }
+</script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>

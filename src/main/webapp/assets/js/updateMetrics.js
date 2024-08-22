@@ -1,7 +1,7 @@
 let data = {};
 
 const getMetricInfo = async id => {
-    await fetch(`http://localhost:8080/ServletGetMetric?id=${id}`, {
+    await fetch(`/ServletGetMetric?id=${id}`, {
         method: 'GET',
         headers: {
             "Accept": "application/json",

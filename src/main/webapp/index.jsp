@@ -60,7 +60,7 @@
                                 <label class="mb-2 text-muted" for="email">Correo Electrónico</label>
                                 <input id="email" type="email" class="form-control" name="email" required autofocus>
                                 <div class="invalid-feedback">
-                                    Correo electrónico no registrado
+                                    Usuario no registrado.
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -83,7 +83,7 @@
                                         </svg>
                                     </button>
                                     <div class="invalid-feedback">
-                                        Ingrese su contraseña
+                                        Ingrese su contraseña.
                                     </div>
                                 </div>
                             </div>

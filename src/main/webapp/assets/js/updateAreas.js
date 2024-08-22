@@ -1,7 +1,7 @@
 let data = {};
 
 const getAreaInfo = async id => {
-    await fetch(`http://localhost:8080/ServletGetArea?id=${id}`, {
+    await fetch(`/ServletGetArea?id=${id}`, {
         method: 'GET',
         headers: {
             "Accept": "application/json",

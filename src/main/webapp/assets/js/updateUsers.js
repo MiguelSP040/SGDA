@@ -1,7 +1,7 @@
 let data = {};
 
 const getUserInformation = async id => {
-    await fetch (`http://localhost:8080/ServletGetUser?id=${id}`, {
+    await fetch (`/ServletGetUser?id=${id}`, {
         method: 'GET',
         headers: {
             "Accept": "application/json",

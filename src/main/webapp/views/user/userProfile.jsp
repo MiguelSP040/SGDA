@@ -1,17 +1,12 @@
 <%@ page import="com.utez.edu.almacen.models.user.BeanLoggedUser" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: DS
-  Date: 8/4/2024
-  Time: 3:14 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Perfil de usuario"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
     String email = (String) request.getSession(false).getAttribute("user");
+    String role = (String) request.getSession(false).getAttribute("role");
     if (email == null) {
         response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
@@ -25,7 +20,17 @@
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
+<%
+    if ("Administrador".equals(role)) {
+%>
 <jsp:include page="../../layouts/menu.jsp"/>
+<%
+} else if ("Almacenista".equals(role)) {
+%>
+<jsp:include page="../../layouts/menu2.jsp"/>
+<%
+    }
+%>
 
 <div class="container">
     <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
@@ -200,7 +205,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="u_lastname" class="col">Apellido materno*</label>
+                            <label for="u_lastname" class="col">Apellido materno</label>
                             <label class="col" for="u_phone">Teléfono*</label>
                         </div>
                         <div class="row mb-3">
@@ -254,7 +259,7 @@
                         <input hidden id="p_email" name="email">
                         <div class="mb-1 text-start">
                             <!--Contraseña ACTUAL-->
-                            <label class="form-label" for="currentPassword">Ingrese su contraseña actual</label>
+                            <label class="form-label" for="currentPassword">Ingrese su contraseña actual*</label>
                             <div class="input-group mb-5">
 
                                 <input class="form-control" type="password" name="currentPassword" id="currentPassword" placeholder="Contraseña" required>
@@ -279,7 +284,7 @@
                             </div>
 
                             <!--Contraseña NUEVA-->
-                            <label class="form-label" for="password">Ingrese una nueva contraseña</label>
+                            <label class="form-label" for="password">Ingrese una nueva contraseña*</label>
                             <div class="input-group mb-5">
 
                                 <input  class="form-control" type="password" name="password" id="password" placeholder="Nueva contraseña" required>
@@ -304,7 +309,7 @@
                             </div>
 
                             <!--Contraseña CONFIRMAR NUEVA-->
-                            <label class="form-label" for="password2">Confirme su contraseña</label>
+                            <label class="form-label" for="password2">Confirme su contraseña*</label>
                             <div class="input-group mb-3">
 
                                 <input  class="form-control" type="password" name="password2" id="password2" placeholder="Confirmar nueva contraseña" required>

@@ -1,22 +1,20 @@
-<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
+<%@ page import="com.utez.edu.almacen.models.user.BeanLoggedUser" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.utez.edu.almacen.models.metric.BeanMetric" %>
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
 <%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: migue
-  Date: 05/08/2024
-  Time: 10:05 a. m.
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Stock"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String context = request.getContextPath();
-    if (request.getSession(false).getAttribute("user") == null){
-        response.sendRedirect(context+"/index.jsp");
+    String email = (String) request.getSession(false).getAttribute("user");
+    String role = (String) request.getSession(false).getAttribute("role");
+    if (email == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
     List<BeanMetric> metrics = new DaoMetric().listAll();
     List<BeanProvider> providers = new DaoProvider().listAll();
@@ -28,8 +26,17 @@
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
+<%
+    if ("Administrador".equals(role)) {
+%>
 <jsp:include page="../../layouts/menu.jsp"/>
-
+<%
+} else if ("Almacenista".equals(role)) {
+%>
+<jsp:include page="../../layouts/menu2.jsp"/>
+<%
+    }
+%>
 
 <!--Contenido Total, sin contemplar sidebar y navbar -->
 <div class="container">
@@ -51,13 +58,12 @@
             <div class="mt-3">
                 <form action="<%=context%>/product/searchStock" method="get">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-3">Clave del producto</div>
-                        <div class="col-3">Nombre del producto</div>
+                        <div class="col-3">Clave</div>
+                        <div class="col-3">Producto</div>
                         <div class="col-3">Proveedor </div>
-                        <div class="col-3">Almacenista</div>
+                        <div class="col-3">Unidad de medida </div>
                     </div>
-
-                    <!--Folio de la entrada-->
+                        <!--Folio de la entrada-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-3">
                             <input id="code" name="code" type="text" class="form-control" placeholder="Clave del producto">

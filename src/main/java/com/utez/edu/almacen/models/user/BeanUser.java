@@ -11,6 +11,21 @@ public class BeanUser {
     private String role;
     private Boolean status;
 
+    @Override
+    public String toString() {
+        return "BeanUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
     public BeanUser(){
 
     }
