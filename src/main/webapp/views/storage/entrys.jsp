@@ -137,7 +137,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control product-metric" type="text" name="id_metric" required>
+                                                <input class="form-control product-metric" type="text" name="id_metric" required readonly>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
@@ -180,7 +180,7 @@
                                     </div>
                                     <div class="d-flex flex-column align-items-start me-2">
                                         <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
-                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
+                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" readonly>
                                     </div>
                                     <div class="d-flex align-items-center mt-4">
                                         <button type="submit" class="btn botonCafe me-2" onclick="registerEntry(event)">
@@ -410,7 +410,7 @@
                             <td><c:out value="${entry.invoiceNumber}"/></td>
                             <td><c:out value="${entry.providerName}"/></td>
                             <td><c:out value="${entry.userName}"/></td>
-                            <td><c:out value="${entry.totalPrice}"/></td>
+                            <td><c:out value="${entry.totalAllPrices}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
                                 <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="showProducts('${entry.folioNumber}','${entry.invoiceNumber}','${entry.providerName}','${entry.userName}',${entry.idEntry},'${entry.productName}','${entry.metricName}',${entry.unitPrice},${entry.quantity},${entry.totalPrice})" data-id="${entry.idEntry}">

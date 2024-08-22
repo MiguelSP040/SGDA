@@ -66,7 +66,7 @@ public class ServletProduct extends HttpServlet {
 
                 request.setAttribute("stocks", inStockProducts);
                 redirect = "/views/product/checkStock.jsp";
-                break;
+            break;
             case "/product/search":
                 code = request.getParameter("code");
                 name = request.getParameter("name");

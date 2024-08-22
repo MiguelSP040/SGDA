@@ -22,26 +22,23 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "ServletEntry", urlPatterns = {
         "/storage/list-Entries", // GET
-        "/storage/search", // GET
         "/storage/save-Entry", // POST
-        "/storage/search-Entry", // POST
 })
 public class ServletEntry extends HttpServlet {
-    private String action;
-    private String redirect = "/storage/list-Entries";
-    private BeanLoggedUser loggedUser;
     private static final Logger logger = Logger.getLogger(ServletEntry.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        action = request.getServletPath();
+        String action = request.getServletPath();
+        String redirect = "";
+
         switch (action) {
             case "/storage/list-Entries":
                 String currentUserEmail = (String) request.getSession().getAttribute("user");
 
                 if (currentUserEmail != null) {
-                    loggedUser = new DaoLoggedUser().findUserByEmail(currentUserEmail);
+                    BeanLoggedUser loggedUser = new DaoLoggedUser().findUserByEmail(currentUserEmail);
 
                     if (loggedUser != null) {
                         request.setAttribute("user", loggedUser);
@@ -57,21 +54,8 @@ public class ServletEntry extends HttpServlet {
                 redirect = "/views/storage/entrys.jsp";
                 break;
 
-            case "/storage/search-entry":
-                String fechaInicio = request.getParameter("fechaInicio");
-                String fechaFin = request.getParameter("fechaFin");
-
-                if (fechaInicio != null && fechaFin != null) {
-                    List<BeanEntry> filteredEntries = new DaoEntry().searchByDateRange(fechaInicio, fechaFin);
-                    request.setAttribute("entries2", filteredEntries);
-
-                    // Redirigir o hacer forward a la vista adecuada
-                    request.getRequestDispatcher("/views/storage/entrys.jsp").forward(request, response);
-                }
-                break;
-
             default:
-                System.out.println(action);
+                logger.warning("Acción no reconocida: " + action);
         }
         request.getRequestDispatcher(redirect).forward(request, response);
     }
@@ -86,17 +70,32 @@ public class ServletEntry extends HttpServlet {
 
         switch (action) {
             case "/storage/save-Entry":
+                // Crear una instancia de BeanEntry
                 BeanEntry entry = new BeanEntry();
 
                 // Obtener la fecha actual del sistema en formato YYYY-MM-DD usando java.util.Date y SimpleDateFormat
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String formattedDate = sdf.format(new Date());
 
+                // Establecer los valores en el objeto entry
                 entry.setChangeDate(formattedDate);
                 entry.setInvoiceNumber(request.getParameter("invoiceNumber"));
                 entry.setFolioNumber(request.getParameter("folioNumber"));
-                entry.setIdUser(Integer.parseInt(request.getParameter("id_user")));
-                entry.setIdProvider(Integer.parseInt(request.getParameter("id_provider")));
+
+                try {
+                    entry.setIdUser(Integer.parseInt(request.getParameter("id_user")));
+                    entry.setIdProvider(Integer.parseInt(request.getParameter("id_provider")));
+
+                    // Obtener y mostrar el valor de totalAllPrices para depuración
+                    String totalAllPricesStr = request.getParameter("totalAllPrices");
+                    System.out.println("Total All Prices (Servlet): " + totalAllPricesStr);
+
+                    entry.setTotalAllPrices(Double.parseDouble(totalAllPricesStr)); // Obtener totalAllPrices del request
+                } catch (NumberFormatException e) {
+                    logger.severe("Error en datos de usuario, proveedor o totalAllPrices: " + e.getMessage());
+                    response.sendRedirect(request.getContextPath() + "/storage/list-Entries?result=false&message=" + URLEncoder.encode("Error en datos de usuario, proveedor o totalAllPrices.", StandardCharsets.UTF_8));
+                    return;
+                }
 
                 // Obtener los productos de la entrada
                 String[] idProducts = request.getParameterValues("idProduct");
@@ -106,34 +105,47 @@ public class ServletEntry extends HttpServlet {
                 String[] totalPrices = request.getParameterValues("total_price");
 
                 List<BeanEntryProducts> products = new ArrayList<>();
-                    for (int i = 0; i < idProducts.length; i++) {
-                        BeanEntryProducts product = new BeanEntryProducts();
-                        try {
-                            product.setIdProduct(Long.parseLong(idProducts[i]));
-                            product.setQuantity(Integer.parseInt(quantities[i]));
-                            product.setUnitPrice(Double.parseDouble(unitPrices[i]));
-                            product.setTotalPrice(Double.parseDouble(totalPrices[i]));
-                            products.add(product);
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
+
+                for (int i = 0; i < idProducts.length; i++) {
+                    BeanEntryProducts product = new BeanEntryProducts();
+                    try {
+                        Long idProduct = idProducts[i] != null && !idProducts[i].trim().isEmpty() ? Long.parseLong(idProducts[i]) : null;
+                        Integer quantity = quantities[i] != null && !quantities[i].trim().isEmpty() ? Integer.parseInt(quantities[i]) : null;
+                        Double unitPrice = unitPrices[i] != null && !unitPrices[i].trim().isEmpty() ? Double.parseDouble(unitPrices[i]) : null;
+                        Double totalPrice = totalPrices[i] != null && !totalPrices[i].trim().isEmpty() ? Double.parseDouble(totalPrices[i]) : null;
+
+                        if (idProduct == null || quantity == null || unitPrice == null || totalPrice == null) {
                             response.sendRedirect(request.getContextPath() + "/storage/list-Entries?result=false&message=" + URLEncoder.encode("Error en datos de productos.", StandardCharsets.UTF_8));
                             return;
                         }
-                    }
 
-                    boolean message = new DaoEntry().registerEntry(entry, products);
-
-                    if (message) {
-                        redirect = "/storage/list-Entries?result=true&message=" + URLEncoder.encode("¡Entrada registrada con éxito!", StandardCharsets.UTF_8);
-                    } else {
-                        redirect = "/storage/list-Entries?result=false&message=" + URLEncoder.encode("¡ERROR al registrar la Entrada!", StandardCharsets.UTF_8);
+                        product.setIdProduct(idProduct);
+                        product.setQuantity(quantity);
+                        product.setUnitPrice(unitPrice);
+                        product.setTotalPrice(totalPrice);
+                        products.add(product);
+                    } catch (NumberFormatException e) {
+                        logger.severe("Error en datos de productos: " + e.getMessage());
+                        response.sendRedirect(request.getContextPath() + "/storage/list-Entries?result=false&message=" + URLEncoder.encode("Error en datos de productos.", StandardCharsets.UTF_8));
+                        return;
                     }
-                break;
+                }
+
+                // Registrar la entrada
+                boolean success = new DaoEntry().registerEntry(entry, products);
+
+                // Redirigir según el resultado
+                if (success) {
+                    redirect = "/storage/list-Entries?result=true&message=" + URLEncoder.encode("¡Entrada registrada con éxito!", StandardCharsets.UTF_8);
+                } else {
+                    redirect = "/storage/list-Entries?result=false&message=" + URLEncoder.encode("¡ERROR al registrar la Entrada!", StandardCharsets.UTF_8);
+                }
+                response.sendRedirect(request.getContextPath() + redirect);
+            break;
 
             default:
-                System.out.println(action);
+                logger.warning("Acción no reconocida: " + action);
                 break;
         }
-        response.sendRedirect(request.getContextPath() + redirect);
     }
 }

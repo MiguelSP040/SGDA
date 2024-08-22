@@ -3,75 +3,76 @@ package com.utez.edu.almacen.models.storage;
 public class BeanEntry {
     private Long idEntry;
     private String changeDate;
-    private String invoiceNumber;
     private String folioNumber;
-    private String userName;
-    private String userSurname;
+    private String invoiceNumber;
+    private int idProvider;
     private String providerName;
-    private Double totalPrice;
-    private String metricName;
+    private int idUser;
+    private String userName;
+    private Double totalAllPrices;
+
+
 
     // Campos que podrían ser necesarios si se usan en el DAO para facilitar la asociación
-    private int idUser;
-    private int idProvider;
     private int idProduct;
-    private int quantity;
-    private double unitPrice;
     private String productName;
+    private String metricName;
+    private double unitPrice;
+    private int quantity;
+    private Double totalPrice;
 
-    @Override
-    public String toString() {
-        return "BeanEntry{" +
-                "idEntry=" + idEntry +
-                ", changeDate='" + changeDate + '\'' +
-                ", invoiceNumber='" + invoiceNumber + '\'' +
-                ", folioNumber='" + folioNumber + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userSurname='" + userSurname + '\'' +
-                ", providerName='" + providerName + '\'' +
-                ", totalPrice=" + totalPrice +
-                ", metricName='" + metricName + '\'' +
-                ", idUser=" + idUser +
-                ", idProvider=" + idProvider +
-                ", idProduct=" + idProduct +
-                ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
-                '}';
-    }
-
+    // Constructor vacío
     public BeanEntry() {
     }
-        public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, Double totalPrice, String metricName, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
+
+    // Si te soy sincero no sé para qué sirve este constructor, pero si es necesario
+    public BeanEntry(Long idEntry, String changeDate, String folioNumber, String invoiceNumber, int idProvider, int idUser, Double totalAllPrices, int idProduct, String metricName, double unitPrice, int quantity, Double totalPrice) {
         this.idEntry = idEntry;
         this.changeDate = changeDate;
-        this.invoiceNumber = invoiceNumber;
         this.folioNumber = folioNumber;
-        this.totalPrice = totalPrice;
-        this.metricName = metricName;
-        this.idUser = idUser;
-        this.idProvider = idProvider;
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
-    public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, String userName, String userSurname, String providerName, Double totalPrice, String metricName, int idUser, int idProvider, int idProduct, int quantity, double unitPrice) {
-        this.idEntry = idEntry;
-        this.changeDate = changeDate;
         this.invoiceNumber = invoiceNumber;
-        this.folioNumber = folioNumber;
-        this.userName = userName;
-        this.userSurname = userSurname;
-        this.providerName = providerName;
-        this.totalPrice = totalPrice;
-        this.metricName = metricName;
-        this.idUser = idUser;
         this.idProvider = idProvider;
+        this.idUser = idUser;
+        this.totalAllPrices = totalAllPrices;
         this.idProduct = idProduct;
-        this.quantity = quantity;
+        this.metricName = metricName;
         this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
     }
 
-    // Getters and Setters
+    // Constructor con todos los campos
+    public BeanEntry(Long idEntry, String changeDate, String folioNumber, String invoiceNumber, int idProvider, String providerName, int idUser, String userName, Double totalAllPrices, int idProduct, String productName, String metricName, double unitPrice, int quantity, Double totalPrice) {
+        this.idEntry = idEntry;
+        this.changeDate = changeDate;
+        this.folioNumber = folioNumber;
+        this.invoiceNumber = invoiceNumber;
+        this.idProvider = idProvider;
+        this.providerName = providerName;
+        this.idUser = idUser;
+        this.userName = userName;
+        this.totalAllPrices = totalAllPrices;
+        this.idProduct = idProduct;
+        this.productName = productName;
+        this.metricName = metricName;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+    }
+
+    public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, Double totalAllPrices, Integer idUser, Integer idProvider) {
+        this.idEntry = idEntry;
+        this.changeDate = changeDate;
+        this.invoiceNumber = invoiceNumber;
+        this.folioNumber = folioNumber;
+        this.totalAllPrices = totalAllPrices;
+        this.idUser = idUser;
+        this.idProvider = idProvider;
+    }
+
+
+    // Constructor para registro de entradas
+
     public Long getIdEntry() {
         return idEntry;
     }
@@ -88,14 +89,6 @@ public class BeanEntry {
         this.changeDate = changeDate;
     }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
     public String getFolioNumber() {
         return folioNumber;
     }
@@ -104,52 +97,12 @@ public class BeanEntry {
         this.folioNumber = folioNumber;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserSurname() {
-        return userSurname;
-    }
-
-    public void setUserSurname(String userSurname) {
-        this.userSurname = userSurname;
-    }
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getMetricName() {
-        return metricName;
-    }
-
-    public void setMetricName(String metricName) {
-        this.metricName = metricName;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
     public int getIdProvider() {
@@ -160,6 +113,38 @@ public class BeanEntry {
         this.idProvider = idProvider;
     }
 
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Double getTotalAllPrices() {
+        return totalAllPrices;
+    }
+
+    public void setTotalAllPrices(Double totalAllPrices) {
+        this.totalAllPrices = totalAllPrices;
+    }
+
     public int getIdProduct() {
         return idProduct;
     }
@@ -168,12 +153,20 @@ public class BeanEntry {
         this.idProduct = idProduct;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getMetricName() {
+        return metricName;
+    }
+
+    public void setMetricName(String metricName) {
+        this.metricName = metricName;
     }
 
     public double getUnitPrice() {
@@ -184,7 +177,41 @@ public class BeanEntry {
         this.unitPrice = unitPrice;
     }
 
-    public String getProductName() {return productName;}
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public void setProductName(String productName) {this.productName = productName;}
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    // Método para generar una cadena de texto representativa del objeto
+    @Override
+    public String toString() {
+        return "BeanEntry{" +
+                "idEntry=" + idEntry +
+                ", changeDate='" + changeDate + '\'' +
+                ", folioNumber='" + folioNumber + '\'' +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", idProvider=" + idProvider +
+                ", providerName='" + providerName + '\'' +
+                ", idUser=" + idUser +
+                ", userName='" + userName + '\'' +
+                ", totalAllPrices=" + totalAllPrices +
+                ", idProduct=" + idProduct +
+                ", productName='" + productName + '\'' +
+                ", metricName='" + metricName + '\'' +
+                ", unitPrice=" + unitPrice +
+                ", quantity=" + quantity +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }

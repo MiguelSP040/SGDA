@@ -20,6 +20,9 @@ public class BeanEntryProducts {
         this.totalPrice = totalPrice;
     }
 
+    public BeanEntryProducts(Object o, long l, int i, double v, double v1) {
+    }
+
     public Long getIdProductEntry() {
         return idProductEntry;
     }
@@ -66,5 +69,17 @@ public class BeanEntryProducts {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "BeanEntryProducts{" +
+                "idProductEntry=" + idProductEntry +
+                ", idEntry=" + idEntry +
+                ", idProduct=" + idProduct +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }
