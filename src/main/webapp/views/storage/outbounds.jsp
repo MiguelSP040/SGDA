@@ -5,6 +5,8 @@
 <%@ page import="com.utez.edu.almacen.models.metric.DaoMetric" %>
 <%@ page import="com.utez.edu.almacen.models.product.DaoProduct" %>
 <%@ page import="com.utez.edu.almacen.models.product.BeanProduct" %>
+<%@ page import="com.utez.edu.almacen.models.provider.DaoProvider" %>
+<%@ page import="com.utez.edu.almacen.models.provider.BeanProvider" %>
 <%@ page import="com.utez.edu.almacen.models.area.DaoArea" %>
 <%@ page import="com.utez.edu.almacen.models.area.BeanArea" %>
 <%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
@@ -24,6 +26,7 @@
     BeanLoggedUser user = (BeanLoggedUser) request.getAttribute("user");
     List<BeanMetric> metrics = new DaoMetric().listAll();
     List<BeanProduct> products = new DaoProduct().listAll();
+    List<BeanProvider> providers = new DaoProvider().listAll();
     List<BeanArea> areas = new DaoArea().listAll();
     List<BeanUser> users = new DaoUser().listAll();
 %>
@@ -85,7 +88,7 @@
                             <form id="registerOutboundForm" method="post" action="<%=context%>/storage/save-Exit">
                                 <h5>Datos de la Salida</h5>
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-3"><label for="folioNumber">Folio</label></div>
+                                    <div class="col-3"><label for=  "folioNumber">Folio</label></div>
                                     <div class="col-3"><label for="invoiceNumber">Facturación</label></div>
                                     <div class="col-3"><label for="id_area">Área</label></div>
                                     <div class="col-3"><label for="id_user">Almacenista</label></div>
@@ -121,8 +124,7 @@
                                         <tr>
                                             <th scope="col" style="width: 3%" class="tableTitle">#</th>
                                             <th scope="col" style="width: 25%" class="tableTitle"><label for="id_product">Producto*</label></th>
-                                            <th scope="col" style="width: 13%" class="tableTitle"><label for="id_metric">Medida*</label></th>
-                                            <th scope="col" style="width: 15%" class="tableTitle"><label for="buyerName">Receptor*</label></th>
+                                            <th scope="col" style="width: 18%" class="tableTitle"><label for="id_metric">Medida*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="quantity">Cantidad*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="total_price">Precio total*</label></th>
@@ -143,10 +145,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="tipo" readonly>
-                                            </td>
-                                            <td>
-                                                <input class="form-control w-100" type="text" name="buyerName" id="buyerName" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                                <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="Automático" readonly>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
@@ -179,10 +178,29 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="modal-footer d-flex align-items-center">
+                                <div class="modal-footer d-flex">
+                                    <div class="me-auto">
+                                        <div class="d-flex flex-column justify-content-start">
+                                            <label for="buyerName" class="mb-0 mt-1">Proveedor:</label>
+                                            <select class="form-select mb-2" name="id_provider" id="id_provider" required title="Elige a un proveedor.">
+                                                <option disabled selected value>Seleccionar opción</option>
+                                                <% for (BeanProvider pr : providers) { %>
+                                                <% if (pr.getStatus()) { %>
+                                                <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                                <% } %>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="me-auto">
+                                        <div class="d-flex flex-column justify-content-start">
+                                            <label for="buyerName" class="mb-0 mt-1">Receptor:</label>
+                                            <input class="form-control w-100 mb-2" type="text" name="buyerName" id="buyerName" placeholder="Receptor" required title="Debe empezar con mayúscula." pattern="^([A-ZÁÉÍÓÚÑ]{1}[a-záéíóúñ]+\s*)*$">
+                                        </div>
+                                    </div>
                                     <div class="d-flex flex-column align-items-start me-2">
                                         <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
-                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" disabled>
+                                        <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="totalAllPrices" placeholder="Total" readonly>
                                     </div>
                                     <div class="d-flex align-items-center mt-4">
                                         <button type="submit" class="btn botonCafe me-2" onclick="registerOutbound(event)">
@@ -326,10 +344,9 @@
                         <th scope="col" class="thead">Fecha</th>
                         <th scope="col" class="thead">Folio</th>
                         <th scope="col" class="thead">Facturación</th>
-                        <th scope="col" class="thead">Producto</th>
+                        <th scope="col" class="thead">Destino</th>
                         <th scope="col" class="thead">Cantidad</th>
                         <th scope="col" class="thead">Precio Total</th>
-                        <th scope="col" class="thead">Destino</th>
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
                     </thead>
@@ -340,10 +357,9 @@
                             <td><c:out value="${exit.changeDate}"/></td>
                             <td><c:out value="${exit.folioNumber}"/></td>
                             <td><c:out value="${exit.invoiceNumber}"/></td>
-                            <td><c:out value="${exit.productName}"/></td>
+                            <td><c:out value="${exit.areaName}"/></td>
                             <td><c:out value="${exit.quantity}"/></td>
                             <td><c:out value="${exit.totalPrice}"/></td>
-                            <td><c:out value="${exit.areaName}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
                                 <button class="btn btn-lg botonVerMas" onclick="showProducts('${exit.folioNumber}','${exit.invoiceNumber}','${exit.buyerName}','${exit.userName}',${exit.idExit},'${exit.productName}','${exit.metricName}',${exit.unitPrice},${exit.quantity},${exit.totalPrice})" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
@@ -351,13 +367,6 @@
                                          fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                    </svg>
-                                </button>
-                                <button class="btn btn-lg botonEditar" data-bs-toggle="modal" data-bs-target="#updateOutboundModal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                         fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                     </svg>
                                 </button>
                             </td>

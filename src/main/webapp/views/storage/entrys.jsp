@@ -137,7 +137,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control product-metric" type="text" name="id_metric" required readonly>
+                                                <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
