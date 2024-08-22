@@ -1,63 +1,56 @@
-
 package com.utez.edu.almacen.models.storage;
 
 public class BeanExit {
-    private int idExit;
+    private Long idExit;
     private String changeDate;
     private String folioNumber;
     private String invoiceNumber;
-    private String productName;
-    private double totalPrice;
+    private int idProvider;
     private String providerName;
+    private int idUser;
     private String userName;
-    private String userSurname;
-    private String metricName;
+    private int idArea;
     private String areaName;
     private String buyerName;
-    private int idUser;
-    private int idArea;
+    private Double totalAllPrices;
+
+    // Campos que podrían ser necesarios si se usan en el DAO para facilitar la asociación con la tabla entry products
     private int idProduct;
-    private int quantity;
+    private String productName;
+    private String metricName;
     private double unitPrice;
+    private int quantity;
+    private Double totalPrice;
 
     public BeanExit() {
     }
 
-    public BeanExit(int idExit, String changeDate, String invoiceNumber, String folioNumber, int idUser, String userName, String userSurname, int idArea, String areaName, String buyerName, int idProduct, String productName, String metricName, int quantity, double unitPrice, double totalPrice ) {
+    public BeanExit(Long idExit, String changeDate, String folioNumber, String invoiceNumber, int idProvider, String providerName, int idUser, String userName, int idArea, String areaName, String buyerName, Double totalAllPrices, int idProduct, String productName, String metricName, double unitPrice, int quantity, Double totalPrice) {
         this.idExit = idExit;
         this.changeDate = changeDate;
         this.folioNumber = folioNumber;
         this.invoiceNumber = invoiceNumber;
-        this.productName = productName;
-        this.totalPrice = totalPrice;
+        this.idProvider = idProvider;
+        this.providerName = providerName;
+        this.idUser = idUser;
         this.userName = userName;
-        this.userSurname = userSurname;
-        this.metricName = metricName;
+        this.idArea = idArea;
         this.areaName = areaName;
         this.buyerName = buyerName;
-        this.idUser = idUser;
-        this.idArea = idArea;
+        this.totalAllPrices = totalAllPrices;
         this.idProduct = idProduct;
-        this.quantity = quantity;
+        this.productName = productName;
+        this.metricName = metricName;
         this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
     }
 
-    public BeanExit(String folioNumber, String invoiceNumber, int idUser, int idArea, String buyerName, int idProduct, int quantity, double unitPrice) {
-        this.folioNumber = folioNumber;
-        this.invoiceNumber = invoiceNumber;
-        this.idUser = idUser;
-        this.idArea = idArea;
-        this.buyerName = buyerName;
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
-
-    public int getIdExit() {
+    public Long getIdExit() {
         return idExit;
     }
 
-    public void setIdExit(int idExit) {
+    public void setIdExit(Long idExit) {
         this.idExit = idExit;
     }
 
@@ -85,20 +78,12 @@ public class BeanExit {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public String getProductName() {
-        return productName;
+    public int getIdProvider() {
+        return idProvider;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setIdProvider(int idProvider) {
+        this.idProvider = idProvider;
     }
 
     public String getProviderName() {
@@ -109,6 +94,14 @@ public class BeanExit {
         this.providerName = providerName;
     }
 
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -117,20 +110,12 @@ public class BeanExit {
         this.userName = userName;
     }
 
-    public String getUserSurname() {
-        return userSurname;
+    public int getIdArea() {
+        return idArea;
     }
 
-    public void setUserSurname(String userSurname) {
-        this.userSurname = userSurname;
-    }
-
-    public String getMetricName() {
-        return metricName;
-    }
-
-    public void setMetricName(String metricName) {
-        this.metricName = metricName;
+    public void setIdArea(int idArea) {
+        this.idArea = idArea;
     }
 
     public String getAreaName() {
@@ -149,20 +134,12 @@ public class BeanExit {
         this.buyerName = buyerName;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public Double getTotalAllPrices() {
+        return totalAllPrices;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public int getIdArea() {
-        return idArea;
-    }
-
-    public void setIdArea(int idArea) {
-        this.idArea = idArea;
+    public void setTotalAllPrices(Double totalAllPrices) {
+        this.totalAllPrices = totalAllPrices;
     }
 
     public int getIdProduct() {
@@ -173,12 +150,20 @@ public class BeanExit {
         this.idProduct = idProduct;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getMetricName() {
+        return metricName;
+    }
+
+    public void setMetricName(String metricName) {
+        this.metricName = metricName;
     }
 
     public double getUnitPrice() {
@@ -187,5 +172,43 @@ public class BeanExit {
 
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "BeanExit{" +
+                "idExit=" + idExit +
+                ", changeDate='" + changeDate + '\'' +
+                ", folioNumber='" + folioNumber + '\'' +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", idUser=" + idUser +
+                ", userName='" + userName + '\'' +
+                ", idArea=" + idArea +
+                ", areaName='" + areaName + '\'' +
+                ", buyerName='" + buyerName + '\'' +
+                ", totalAllPrices=" + totalAllPrices +
+                ", idProduct=" + idProduct +
+                ", productName='" + productName + '\'' +
+                ", metricName='" + metricName + '\'' +
+                ", unitPrice=" + unitPrice +
+                ", quantity=" + quantity +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }

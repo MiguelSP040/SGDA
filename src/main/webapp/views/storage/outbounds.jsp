@@ -36,6 +36,7 @@
     <link href="../../assets/css/estilos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
 <body>
@@ -88,14 +89,14 @@
                             <form id="registerOutboundForm" method="post" action="<%=context%>/storage/save-Exit">
                                 <h5>Datos de la Salida</h5>
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-3"><label for=  "folioNumber">Folio</label></div>
+                                    <div class="col-3"><label for="folioNumber">Folio</label></div>
                                     <div class="col-3"><label for="invoiceNumber">Facturación</label></div>
                                     <div class="col-3"><label for="id_area">Área</label></div>
                                     <div class="col-3"><label for="id_user">Almacenista</label></div>
                                 </div>
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="col me-2">
-                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumbere" placeholder="Folio" required readonly>
+                                        <input class="form-control w-100" type="text" name="folioNumber" id="folioNumber" placeholder="Folio" required readonly>
                                     </div>
                                     <div class="col me-2">
                                         <input class="form-control w-100" type="text" name="invoiceNumber" id="invoiceNumber" maxlength="9" placeholder="Facturación"
@@ -113,7 +114,7 @@
                                     </div>
                                     <div class="col">
                                         <input type="hidden" name="id_user" id="id_user" value="<%= user.getId() %>">
-                                        <input class="form-control w-100" value="<%= user.getName() %>" placeholder="" val required disabled>
+                                        <input class="form-control w-100" value="<%= user.getName() %>" required disabled>
                                     </div>
                                 </div>
 
@@ -135,7 +136,7 @@
                                         <tr>
                                             <th scope="row">1</th>
                                             <td>
-                                                <select class="form-select" name="id_product" id="id_product" required title="Elige un producto.">
+                                                <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : products) { %>
                                                     <% if (p.getStatus()) { %>
@@ -145,7 +146,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input class="form-control w-100 metric" name="id_metric" id="id_metric" placeholder="Automático" readonly>
+                                                <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
@@ -227,29 +228,29 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <h5>Datos de la Entrada</h5>
+                            <h5>Datos de la Salida</h5>
                             <div class="row d-flex justify-content-center">
                                 <div class="col-3"><label for="r_folioNumber">Folio</label></div>
                                 <div class="col-3"><label for="r_invoiceNumber">Facturación</label></div>
-                                <div class="col-3"><label for="r_id_provider">Comprador</label></div>
+                                <div class="col-3"><label for="r_id_area">Área</label></div>
                                 <div class="col-3"><label for="r_id_user">Almacenista</label></div>
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly disabled>
+                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly disabled>
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_id_provider" readonly disabled>
+                                    <input class="form-control w-100" type="text" name="id_area" id="r_id_area" readonly>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly disabled>
+                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly>
                                 </div>
                             </div>
 
-                            <!-- Campos para Entrada -->
+                            <!-- Campos para Salida -->
                             <div class="table-responsive table-container">
                                 <table class="table table-bordered table-striped mt-0 text-center" id="reviewEntryTable">
                                     <thead class="thead-dark">
@@ -259,37 +260,47 @@
                                         <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice">Precio*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity">Cantidad*</label></th>
-                                        <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_total_price">Precio total*</label></th>
                                     </tr>
                                     </thead>
                                     <tbody class="align-middle">
-                                        <tr>
-                                            <th scope="row">
-                                                <span id="r_id_Exit">Texto original</span>
-                                            </th>
-                                            <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_product" id="r_idProduct" readonly disabled/>
-                                            </td>
-                                            <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric" readonly disabled/>
-                                            </td>
-                                            <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" max="9999999" min="0" step="0.01" required disabled title="Ingresa un valor.">
-                                            </td>
-                                            <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity" max="999999" min="1" step="1" required disabled title="Ingresa un valor.">
-                                            </td>
-                                            <td>
-                                                <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" disabled readonly>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <input class="form-control w-100 metric" type="text" name="id_product" id="r_idProduct" readonly/>
+                                        </td>
+                                        <td>
+                                            <input class="form-control w-100 metric" name="id_metric" id="r_id_metric" placeholder="Automático" readonly>
+                                        </td>
+                                        <td>
+                                            <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" placeholder="$0.00" readonly>
+                                        </td>
+                                        <td>
+                                            <input class="form-control quantity" type="number" name="quantity" id="r_quantity" placeholder="0" readonly>
+                                        </td>
+                                        <td>
+                                            <input class="form-control total-price" type="number" name="total_price" id="r_total_price" placeholder="$0.00" readonly>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
-                                    Aceptar
-                                </button>
+                            <div class="modal-footer d-flex">
+                                <div class="me-auto">
+                                    <div class="d-flex flex-column justify-content-start">
+                                        <label for="buyerName" class="mb-0 mt-1">Receptor:</label>
+                                        <input class="form-control w-100 mb-2" type="text" name="buyerName" id="r_buyerName" placeholder="Receptor" readonly>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-start me-2">
+                                    <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
+                                    <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="r_totalAllPrices" placeholder="Total" readonly>
+                                </div>
+                                <div class="d-flex align-items-center mt-4">
+                                    <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
+                                        Aceptar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -351,15 +362,15 @@
                     </tr>
                     </thead>
                     <tbody class="align-middle">
-                    <c:forEach var="exit" items="${exits2}">
+                    <c:forEach var="exit" items="${exits2}" varStatus="s">
                         <tr>
-                            <th scope="row"><c:out value="${exit.idExit}"/></th>
+                            <th scope="row"><c:out value="${s.count}"/></th>
                             <td><c:out value="${exit.changeDate}"/></td>
                             <td><c:out value="${exit.folioNumber}"/></td>
                             <td><c:out value="${exit.invoiceNumber}"/></td>
                             <td><c:out value="${exit.areaName}"/></td>
                             <td><c:out value="${exit.userName}"/></td>
-                            <td><c:out value="${exit.totalPrice}"/></td>
+                            <td><c:out value="${exit.totalAllPrices}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
                                 <button class="btn btn-lg botonVerMas" onclick="showProducts('${exit.folioNumber}','${exit.invoiceNumber}','${exit.buyerName}','${exit.userName}',${exit.idExit},'${exit.productName}','${exit.metricName}',${exit.unitPrice},${exit.quantity},${exit.totalPrice})" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
@@ -721,15 +732,45 @@
         var year = new Date().getFullYear(); // Obtener el año actual
         var randomDigits = Math.floor(1000 + Math.random() * 9000); // Generar 4 números aleatorios
         var folio = "S" + year + randomDigits; // Concatenar E + año + 4 números
-        document.getElementById('folioNumbere').value = folio
+        document.getElementById('folioNumber').value = folio
         console.log(folio);
     }
+</script>
+<!--Colocar unidad de medida automáticamente-->
+<script>
+    $(document).ready(function() {
+        $(document).on('change', '.product-select', function() {
+            var $row = $(this).closest('tr');
+            var idProducto = $(this).val();
+            var contextPath = '${pageContext.request.contextPath}';
+            var $metricField = $row.find('.product-metric');
+
+            console.log("ID Producto seleccionado:", idProducto);
+
+            if (idProducto) {
+                $.ajax({
+                    url: contextPath + '/ServletGetMetric',
+                    type: 'GET',
+                    data: { id_product: idProducto },
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+                        $metricField.val(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", status, error);
+                        $metricField.val('Error al cargar la métrica.');
+                    }
+                });
+            } else {
+                $metricField.val('');
+            }
+        });
+    });
 </script>
 <script>
     function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
         document.getElementById("r_folioNumber").value = folio;
         document.getElementById("r_invoiceNumber").value = facturacion;
-        document.getElementById("r_id_provider").value = proovedor;
         document.getElementById("r_id_user").value = almacenista;
         document.getElementById("r_id_Exit").textContent = id;
         document.getElementById("r_idProduct").value = producto;

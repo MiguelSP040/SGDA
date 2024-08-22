@@ -222,7 +222,7 @@
                                     <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly disabled>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_id_provider" readonly disabled>
+                                    <input class="form-control w-100" type="text" name="id_provider" id="r_id_provider" readonly disabled>
                                 </div>
                                 <div class="col">
                                     <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly disabled>
@@ -237,8 +237,8 @@
                                         <th scope="col" style="width: 3%" class="tableTitle">#</th>
                                         <th scope="col" style="width: 25%" class="tableTitle"><label for="r_idProduct">Producto*</label></th>
                                         <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
-                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice_">Precio*</label></th>
-                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity_">Cantidad*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice">Precio*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity">Cantidad*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
                                     </tr>
                                     </thead>
@@ -266,10 +266,16 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
-                                    Aceptar
-                                </button>
+                            <div class="modal-footer d-flex">
+                                <div class="d-flex flex-column align-items-start me-2">
+                                    <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
+                                    <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="r_totalAllPrices" placeholder="Total" readonly disabled>
+                                </div>
+                                <div class="d-flex align-items-center mt-4">
+                                    <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
+                                        Aceptar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
