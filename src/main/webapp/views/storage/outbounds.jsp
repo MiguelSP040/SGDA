@@ -345,7 +345,7 @@
                         <th scope="col" class="thead">Folio</th>
                         <th scope="col" class="thead">Facturación</th>
                         <th scope="col" class="thead">Destino</th>
-                        <th scope="col" class="thead">Cantidad</th>
+                        <th scope="col" class="thead">Almacenista</th>
                         <th scope="col" class="thead">Precio Total</th>
                         <th scope="col" class="thead">Acciones</th>
                     </tr>
@@ -358,7 +358,7 @@
                             <td><c:out value="${exit.folioNumber}"/></td>
                             <td><c:out value="${exit.invoiceNumber}"/></td>
                             <td><c:out value="${exit.areaName}"/></td>
-                            <td><c:out value="${exit.quantity}"/></td>
+                            <td><c:out value="${exit.userName}"/></td>
                             <td><c:out value="${exit.totalPrice}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
