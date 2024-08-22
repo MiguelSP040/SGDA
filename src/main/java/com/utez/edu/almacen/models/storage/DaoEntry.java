@@ -97,11 +97,11 @@ public class DaoEntry {
 
     public List<BeanEntry> searchByDateRange(String startDate, String endDate) {
         List<BeanEntry> entries = new ArrayList<>();
-        String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, p.name AS providerName, ep.total_price " +
+        String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name as userName, e.totalAllPrices," +
+                "p.name as providerName " +
                 "FROM entries e " +
                 "JOIN users u ON e.id_user = u.id_user " +
                 "JOIN providers p ON e.id_provider = p.id_provider " +
-                "JOIN entry_products ep ON e.id_entry = ep.id_entry " +
                 "WHERE e.changeDate BETWEEN ? AND ?";
 
         try {
@@ -117,7 +117,7 @@ public class DaoEntry {
                 entry.setInvoiceNumber(rs.getString("invoiceNumber"));
                 entry.setFolioNumber(rs.getString("folioNumber"));
                 entry.setProviderName(rs.getString("providerName"));
-                entry.setTotalPrice(rs.getDouble("total_price"));
+                entry.setTotalAllPrices(rs.getDouble("totalAllPrices"));
 
                 entries.add(entry);
             }
@@ -237,7 +237,7 @@ public class DaoEntry {
     }
         public static void main(String[] args) {
             DaoEntry dao = new DaoEntry();
-
+/*
             // Crear y registrar la entrada
             BeanEntry entry = new BeanEntry(
                     null, // idEntry, se generará automáticamente
@@ -266,11 +266,11 @@ public class DaoEntry {
             List<BeanEntry> entries = dao.listAll();
             for (BeanEntry e : entries) {
                 System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getIdUser() + ", Provider: " + e.getIdProvider() + ", Total Price: $" + e.getTotalAllPrices());
-            }
+            } */
 
             // Probar la función searchByDateRange
             String startDate = "2024-08-19";
-            String endDate = "2024-08-21";
+            String endDate = "2024-08-24";
             List<BeanEntry> entriesInRange = dao.searchByDateRange(startDate, endDate);
             System.out.println("\nEntradas en el rango de fechas " + startDate + " a " + endDate + ":");
             for (BeanEntry e : entriesInRange) {
