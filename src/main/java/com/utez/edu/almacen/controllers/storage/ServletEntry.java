@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "ServletEntry", urlPatterns = {
         "/storage/list-Entries", // GET
-        "/storage/save-Entry", // POST
+        "/storage/save-Entry" // POST
 })
 public class ServletEntry extends HttpServlet {
     private static final Logger logger = Logger.getLogger(ServletEntry.class.getName());
