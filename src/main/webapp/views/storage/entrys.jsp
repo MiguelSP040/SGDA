@@ -32,6 +32,8 @@
     <link href="../../assets/css/estilos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <jsp:include page="../../layouts/header.jsp"/>
 </head>
@@ -242,27 +244,8 @@
                                         <th scope="col" style="width: 10%" class="tableTitle"><label>Precio total*</label></th>
                                     </tr>
                                     </thead>
-                                    <tbody class="align-middle">
-                                        <tr>
-                                            <th scope="row">
-                                                <span id="r_id_Entry"></span>
-                                            </th>
-                                            <td>
-                                                <input class="form-control w-100" name="idProduct" id="r_idProduct" readonly disabled>
-                                            </td>
-                                            <td>
-                                                <input class="form-control w-100 metric" type="text" name="id_metric" id="r_id_metric" readonly disabled>
-                                            </td>
-                                            <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" max="9999999" min="0" step="0.01"  readonly disabled>
-                                            </td>
-                                            <td>
-                                                <input class="form-control quantity" type="number" name="quantity" id="r_quantity" max="999999" min="1" step="1" readonly disabled>
-                                            </td>
-                                            <td>
-                                                <input class="form-control total-price" type="number" name="total_price" id="r_totalPrice" placeholder="$0.00" readonly disabled>
-                                            </td>
-                                        </tr>
+                                    <tbody class="align-middle" id="reviewEntryTableBody">
+
                                     </tbody>
                                 </table>
                             </div>
@@ -351,7 +334,7 @@
 
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
             <div class="mt-3 ">
-                <form id="searchEntryForm" action="/storage/search-entry" method="get">
+                <form id="searchEntryForm" action="<%=context%>/storage/search" method="get">
                     <div class="row d-flex justify-content-center">
                         <div class="col-5">
                             <label for="fechaInicio">Fecha Inicio</label>
@@ -364,11 +347,11 @@
                     <!--Input de Fecha de Inicio-->
                     <div class="row d-flex justify-content-center">
                         <div class="col-5">
-                            <input type="date" name="fechaInicio" id="fechaInicio" class="form-control">
+                            <input type="text" name="fechaInicio" id="fechaInicio" class="form-control">
                         </div>
                         <!--Input de Fecha Final-->
                         <div class="col-5">
-                            <input type="date" name="fechaFin" id="fechaFin" class="form-control">
+                            <input type="text" name="fechaFin" id="fechaFin" class="form-control">
                         </div>
                     </div>
 
@@ -419,7 +402,7 @@
                             <td><c:out value="${entry.totalAllPrices}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
-                                <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="showProducts('${entry.folioNumber}','${entry.invoiceNumber}','${entry.providerName}','${entry.userName}',${entry.idEntry},'${entry.productName}','${entry.metricName}',${entry.unitPrice},${entry.quantity},${entry.totalPrice})" data-id="${entry.idEntry}">
+                                <button class="btn botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewEntryModal" onclick="loadProductDetails('${entry.folioNumber}','${entry.invoiceNumber}','${entry.providerName}','${entry.userName}')" data-id="${entry.idEntry}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
                                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
@@ -438,32 +421,6 @@
 <script src="../../assets/js/updateEntries.js"></script>
 <script src="../../assets/js/funciones.js"></script>
 
-<!--ESTE SCRIPT HACE QUE FUNCIONE TODO EL MODAL DE VER MÁS-->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Asocia un evento click a los botones que abren el modal
-    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-        button.addEventListener('click', async function() {
-            // Obtiene el id del botón
-            const entryId = this.getAttribute('data-id');
-            if (entryId) {
-                // Llama a la función para mostrar la información de la entrada
-                await showEntryInformation(entryId);
-            }
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Asocia un evento click a todos los botones de editar
-    document.querySelectorAll('.btn-editar').forEach(button => {
-        button.addEventListener('click', function () {
-            const entryId = this.getAttribute('data-id');
-            putEntryInformation(entryId);
-        });
-    });
-});
-</script>
 <!--Validar formularios-->
 <script>
     // Función para validar un campo individualmente en tiempo real
@@ -879,6 +836,37 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("r_totalPrice").value = total;
         console.log(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total);
     }
+</script>
+<script>
+    function loadProductDetails(folio, facturacion, proovedor, almacenista,) {
+        document.getElementById("r_folioNumber").value = folio;
+        document.getElementById("r_invoiceNumber").value = facturacion;
+        document.getElementById("r_id_provider").value = proovedor;
+        document.getElementById("r_id_user").value = almacenista;
+        var contextPath = '${pageContext.request.contextPath}';
+        $.ajax({
+            url: contextPath + '/ServletGetEntry',
+            type: 'GET',
+            data: { id: folio },
+            success: function(response) {
+                console.log("Datos recibidos del servidor:", response);
+                $('#reviewEntryTableBody').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", status, error);
+            }
+        });
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#fechaInicio", {
+            dateFormat: "Y-m-d"
+        });
+        flatpickr("#fechaFin", {
+            dateFormat: "Y-m-d"
+        });
+    });
 </script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
