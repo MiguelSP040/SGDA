@@ -44,8 +44,8 @@ public class DaoEntry {
     }
 
     // Método para listar una entrada específica
-    public BeanEntry listOne(int idEntry) {
-        BeanEntry entry = null;
+    public List<BeanEntry> listOne(String id) {
+        List<BeanEntry> entries = new ArrayList<>();
         String sql = "SELECT e.id_entry, e.changeDate, e.invoiceNumber, e.folioNumber, u.name as userName, e.totalAllPrices," +
                 "p.name as providerName, ep.id_entry_product, ep.id_product, ep.quantity, ep.unitPrice, ep.total_price, " +
                 "pr.name as productName, m.name as metricName " +
@@ -55,44 +55,27 @@ public class DaoEntry {
                 "JOIN entry_products ep ON e.id_entry = ep.id_entry " +
                 "JOIN products pr ON ep.id_product = pr.id_product " +
                 "JOIN metrics m ON pr.id_metric = m.id_metric " +
-                "WHERE e.id_entry = ?";
+                "WHERE e.folioNumber = ?";
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, idEntry);
+            ps.setString(1, id);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                entry = new BeanEntry();
-                entry.setIdEntry(rs.getLong("e.id_entry"));
-                entry.setChangeDate(rs.getString("e.changeDate"));
-                entry.setInvoiceNumber(rs.getString("e.invoiceNumber"));
-                entry.setFolioNumber(rs.getString("e.folioNumber"));
-                entry.setUserName(rs.getString("userName"));
-                entry.setProviderName(rs.getString("providerName"));
-                entry.setTotalAllPrices(rs.getDouble("e.totalAllPrices"));
-
-                // Crear un BeanEntryProducts para cada producto asociado
-                BeanEntryProducts entryProduct = new BeanEntryProducts();
-                entryProduct.setIdProductEntry(rs.getLong("ep.id_entry_product"));
-                entryProduct.setIdEntry(rs.getLong("e.id_entry"));
-                entryProduct.setIdProduct(rs.getLong("ep.id_product"));
-                entryProduct.setQuantity(rs.getInt("ep.quantity"));
-                entryProduct.setUnitPrice(rs.getDouble("ep.unitPrice"));
-                entryProduct.setTotalPrice(rs.getDouble("ep.total_price"));
-
-                // Asignar los nombres del producto y la métrica al entry
+            while (rs.next()) {
+                BeanEntry entry = new BeanEntry();
                 entry.setProductName(rs.getString("productName"));
                 entry.setMetricName(rs.getString("metricName"));
-                entry.setUnitPrice(entryProduct.getUnitPrice());
-                entry.setQuantity(entryProduct.getQuantity());
-                entry.setTotalPrice(entryProduct.getTotalPrice());
+                entry.setUnitPrice(rs.getDouble("ep.unitPrice"));
+                entry.setQuantity(rs.getInt("ep.quantity"));
+                entry.setTotalPrice(rs.getDouble("ep.total_price"));
+                entries.add(entry);
             }
         } catch (SQLException e) {
             Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());
         } finally {
             closeConnection();
         }
-        return entry;
+        return entries;
     }
 
     public List<BeanEntry> searchByDateRange(String startDate, String endDate) {
@@ -235,47 +218,4 @@ public class DaoEntry {
             Logger.getLogger(DaoEntry.class.getName()).log(Level.SEVERE, "ERROR. Connection close failed: " + e.getMessage());
         }
     }
-        public static void main(String[] args) {
-            DaoEntry dao = new DaoEntry();
-
-            // Crear y registrar la entrada
-            BeanEntry entry = new BeanEntry(
-                    null, // idEntry, se generará automáticamente
-                    "2024-08-20", // changeDate
-                    "INV12345", // invoiceNumber
-                    "E20242208", // folioNumber
-                    275.0, // totalAllPrices
-                    1, // idUser
-                    1 // idProvider
-            );
-
-            // Crear una lista de BeanEntryProducts
-            List<BeanEntryProducts> products = new ArrayList<>();
-            products.add(new BeanEntryProducts(null, 1L, 10, 15.0, 150.0)); // Agregar producto
-            products.add(new BeanEntryProducts(null, 2L, 5, 25.0, 125.0)); // Otro producto
-
-            // Registrar la entrada y los productos
-            boolean result = dao.registerEntry(entry, products);
-            if (result) {
-                System.out.println("Entrada y productos registrados con éxito.");
-            } else {
-                System.out.println("Error al registrar la entrada o los productos.");
-            }
-
-            // Listar todas las entradas para verificar
-            List<BeanEntry> entries = dao.listAll();
-            for (BeanEntry e : entries) {
-                System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getIdUser() + ", Provider: " + e.getIdProvider() + ", Total Price: $" + e.getTotalAllPrices());
-            }
-
-            // Probar la función searchByDateRange
-            String startDate = "2024-08-19";
-            String endDate = "2024-08-21";
-            List<BeanEntry> entriesInRange = dao.searchByDateRange(startDate, endDate);
-            System.out.println("\nEntradas en el rango de fechas " + startDate + " a " + endDate + ":");
-            for (BeanEntry e : entriesInRange) {
-                System.out.println("ID: " + e.getIdEntry() + ", Change Date: " + e.getChangeDate() + ", Invoice Number: " + e.getInvoiceNumber() + ", Folio Number: " + e.getFolioNumber() + ", User: " + e.getIdUser() + ", Provider: " + e.getIdProvider() + ", Total Price: $" + e.getTotalAllPrices());
-            }
-        }
-
-    }
+}
