@@ -11,6 +11,7 @@
 <%@ page import="com.utez.edu.almacen.models.area.BeanArea" %>
 <%@ page import="com.utez.edu.almacen.models.user.DaoUser" %>
 <%@ page import="com.utez.edu.almacen.models.user.BeanUser" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% request.setAttribute("pageTitle", "Salidas de almacén"); %>
@@ -141,9 +142,17 @@
                                                 <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : stocks) { %>
-                                                    <option value="<%= p.getId() %>" data-stock="<%= p.getQuantity() %>">
+                                                    <% if (p.getQuantity() != 0) { %>
+                                                    <option
+                                                            value="<%= p.getId() %>"
+                                                            data-stock="<%= p.getQuantity() %>"
+                                                            data-id-stock="<%= p.getIdStock() %>"
+                                                            data-provider-id="<%= p.getIdProvider() %>"
+                                                            data-provider-name="<%= p.getProviderName() %>"
+                                                    >
                                                         <%= p.getName() %> (Stock: <%= p.getQuantity() %>)
                                                     </option>
+                                                    <% } %>
                                                     <% } %>
                                                 </select>
                                             </td>
@@ -151,10 +160,17 @@
                                                 <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control stock-id_provider" type="text" name="id_provider" placeholder="Automático" required readonly>
+                                                <!-- Input oculto para id_stock -->
+                                                <input type="hidden" class="stock-id" name="id_stock" value="">
+
+                                                <!-- Input oculto para id_provider -->
+                                                <input type="hidden" class="provider-id" name="id_provider" value="">
+
+                                                <!-- Input de texto para el proveedor (muestra el nombre del proveedor) -->
+                                                <input type="text" class="form-control provider-input" name="providerName" placeholder="Automático" value="" readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" placeholder="$0.00" required readonly>
+                                                <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
                                             </td>
                                             <td>
                                                 <input class="form-control quantity-input" type="number" name="quantity" min="1" step="1" placeholder="0" required title="Selecciona un producto primero">
@@ -628,7 +644,7 @@
         // Función para actualizar el precio total en una fila de la tabla
         function updateTableTotalPrice(row) {
             const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
-            const quantity = parseInt(row.querySelector('.quantity').value, 10) || 0;
+            const quantity = parseInt(row.querySelector('.quantity-input').value, 10) || 0;
             const totalPrice = unitPrice * quantity;
             row.querySelector('.total-price').value = totalPrice.toFixed(2); // Ajusta a dos decimales
             updateTotalAllPrices(); // Actualiza el total de todos los precios
@@ -653,7 +669,7 @@
 
         // Event listeners para inputs en la tabla
         document.querySelector('#outboundTable tbody').addEventListener('input', (event) => {
-            if (event.target.classList.contains('unit-price') || event.target.classList.contains('quantity')) {
+            if (event.target.classList.contains('unit-price') || event.target.classList.contains('quantity-input')) {
                 // Encuentra la fila actual
                 const row = event.target.closest('tr');
                 updateTableTotalPrice(row);
@@ -731,7 +747,7 @@
         console.log(folio);
     }
 </script>
-<!--Colocar unidad de medida automáticamente-->
+<!-- Script para llenar el proveedor automáticamente basado en el producto y el stock -->
 <script>
     $(document).ready(function() {
         $(document).on('change', '.product-select', function() {
@@ -739,6 +755,9 @@
             var idProducto = $(this).val();
             var contextPath = '';
             var $metricField = $row.find('.product-metric');
+            var $providerInput = $row.find('.provider-input');
+            var $stockIdInput = $row.find('.stock-id');
+            var $providerIdInput = $row.find('.provider-id');
 
             console.log("ID Producto seleccionado:", idProducto);
 
@@ -750,7 +769,6 @@
                     success: function(response) {
                         console.log("Respuesta del servidor:", response);
 
-                        // Verifica si la respuesta es válida y establece el valor de la métrica
                         if (response && response.name) {
                             $metricField.val(response.name);
                         } else {
@@ -762,67 +780,47 @@
                         $metricField.val('Error al cargar la métrica.');
                     }
                 });
+
+                // Actualiza el proveedor y el stock en la misma fila
+                var selectedOption = $(this).find('option:selected');
+                var providerName = selectedOption.data('provider-name');
+                var providerId = selectedOption.data('provider-id');
+                var stockId = selectedOption.data('id-stock');
+
+                $providerInput.val(providerName);
+                $providerIdInput.val(providerId);
+                $stockIdInput.val(stockId);
+
+                // Verifica valores asignados
+                console.log("Nombre del proveedor:", providerName);
+                console.log("ID de proveedor:", providerId);
+                console.log("ID de stock:", stockId);
             } else {
                 $metricField.val('');
+                $providerInput.val('');
+                $providerIdInput.val('');
+                $stockIdInput.val('');
             }
         });
-    });
-</script>
-<!--Colocar proveedor automáticamente-->
-<script>
-    $(document).ready(function() {
-        $(document).on('change', '.product-select', function() {
-            var $row = $(this).closest('tr');
-            var idProducto = $(this).val();
-            var contextPath = '';
-            var $priceField = $row.find('.product-price');
 
-            console.log("ID Producto seleccionado:", idProducto);
+        // Actualiza la cantidad máxima en función del stock
+        document.addEventListener('change', function(event) {
+            if (event.target.classList.contains('product-select')) {
+                var selectedOption = event.target.options[event.target.selectedIndex];
+                var maxStock = selectedOption.getAttribute('data-stock');
+                var quantityInput = event.target.closest('tr').querySelector('.quantity-input');
 
-            if (idProducto) {
-                $.ajax({
-                    url: contextPath + '/ServletPutExit',
-                    type: 'GET',
-                    data: { id_product: idProducto },
-                    success: function(response) {
-                        console.log("Respuesta del servidor:", response);
-
-                        // Verifica si la respuesta es válida y establece el valor de la métrica
-                        if (response && response.name) {
-                            $priceField.val(response.name);
-                        } else {
-                            $priceField.val('Métrica no encontrada.');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error en la solicitud AJAX:", status, error);
-                        $priceField.val('Error al cargar la métrica.');
-                    }
-                });
-            } else {
-                $priceField.val('');
+                if (maxStock) {
+                    quantityInput.max = maxStock;
+                    quantityInput.title = "Cantidad disponible: " + maxStock;
+                } else {
+                    quantityInput.max = '';
+                    quantityInput.title = 'Selecciona un producto primero';
+                }
             }
         });
-    });
-</script>
-<script>
-    document.addEventListener('change', function(event) {
-        if (event.target.classList.contains('product-select')) {
-            const selectedOption = event.target.options[event.target.selectedIndex];
-            const maxStock = selectedOption.getAttribute('data-stock');
-            const quantityInput = event.target.closest('tr').querySelector('.quantity-input');
-
-            if (maxStock) {
-                quantityInput.max = maxStock;
-                quantityInput.title = "Cantidad máxima: " + maxStock;
-            } else {
-                quantityInput.max = '';
-                quantityInput.title = 'Selecciona un producto primero';
-            }
-        }
     });
 </script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
 </html>
-S

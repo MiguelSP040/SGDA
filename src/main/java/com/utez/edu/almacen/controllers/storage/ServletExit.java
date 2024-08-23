@@ -85,7 +85,6 @@ public class ServletExit extends HttpServlet {
                 exit.setIdUser(Integer.parseInt(request.getParameter("id_user")));
                 exit.setIdArea(Integer.parseInt(request.getParameter("id_area")));
                 exit.setBuyerName(request.getParameter("buyerName"));
-                exit.setIdProvider(Integer.parseInt(request.getParameter("id_provider")));
 
                 // Obtener y mostrar el valor de totalAllPrices para depuración
                 String totalAllPricesStr = request.getParameter("totalAllPrices");
@@ -100,6 +99,7 @@ public class ServletExit extends HttpServlet {
 
                 // Obtener los productos de la salida
                 String[] idProducts = request.getParameterValues("idProduct");
+                String[] idProviders = request.getParameterValues("id_provider");
                 String[] quantities = request.getParameterValues("quantity");
                 String[] unitPrices = request.getParameterValues("unitPrice");
                 String[] totalPrices = request.getParameterValues("total_price");
@@ -110,6 +110,7 @@ public class ServletExit extends HttpServlet {
                     BeanExitProducts product = new BeanExitProducts();
                     try {
                         Long idProduct = idProducts[i] != null && !idProducts[i].trim().isEmpty() ? Long.parseLong(idProducts[i]) : null;
+                        Long idProvider = idProviders[i] != null && !idProviders[i].trim().isEmpty() ? Long.parseLong(idProviders[i]) : null;
                         Integer quantity = quantities[i] != null && !quantities[i].trim().isEmpty() ? Integer.parseInt(quantities[i]) : null;
                         Double unitPrice = unitPrices[i] != null && !unitPrices[i].trim().isEmpty() ? Double.parseDouble(unitPrices[i]) : null;
                         Double totalPrice = totalPrices[i] != null && !totalPrices[i].trim().isEmpty() ? Double.parseDouble(totalPrices[i]) : null;
@@ -120,6 +121,7 @@ public class ServletExit extends HttpServlet {
                         }
 
                         product.setIdProduct(idProduct);
+                        product.setIdProvider(idProvider);
                         product.setQuantity(quantity);
                         product.setUnitPrice(unitPrice);
                         product.setTotalPrice(totalPrice);

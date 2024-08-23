@@ -77,8 +77,10 @@ public class DaoProduct{
                 stock.setCode(rs.getString("productCode"));
                 stock.setName(rs.getString("productName"));
                 stock.setMetricName(rs.getString("metricName"));
+                stock.setIdProvider(rs.getLong("idProvider"));
                 stock.setProviderName(rs.getString("providerName"));
                 stock.setQuantity(rs.getInt("quantity"));
+                stock.setIdStock(rs.getLong("id_stock"));
                 stocks.add(stock);
             }
         } catch (SQLException e) {

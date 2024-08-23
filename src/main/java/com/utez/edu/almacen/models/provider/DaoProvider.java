@@ -164,6 +164,31 @@ public class DaoProvider implements DaoTemplate<BeanProvider> {
         }
     }
 
+    public BeanProvider getProviderByProductAndStock(Long idProduct, Long idStock) {
+        try {
+            String query = "SELECT p.* FROM providers p " +
+                    "JOIN stock s ON p.id_provider = s.id_provider " +
+                    "WHERE s.id_product = ? AND s.id_stock = ? AND p.status = true;";
+            ps = conn.prepareStatement(query);
+            ps.setLong(1, idProduct);
+            ps.setLong(2, idStock);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                BeanProvider provider = new BeanProvider();
+                provider.setId(rs.getLong("id_provider"));
+                provider.setName(rs.getString("name"));
+                // Rellenar otros campos de provider si es necesario
+                return provider;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(DaoProvider.class.getName()).log(Level.SEVERE, "ERROR. Function getProviderByProductAndStock failed" + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+
     public List<BeanProvider> search(String name, String rfc, String email, String status){
         List<BeanProvider> providers = new ArrayList<>();
         int count = 1;

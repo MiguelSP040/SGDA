@@ -97,7 +97,7 @@
 
                                         <div>
                                             <label for="socialCase" class="col-form-label">Razón social*</label>
-                                            <input type="text" class="form-control" name="socialCase" id="socialCase" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                            <input type="text" class="form-control" name="socialCase" id="socialCase" required pattern="^[A-Z][A-Za-z0-9.,\s]*$">
                                             <div class="invalid-feedback">
                                                 Debe empezar con mayúscula.
                                             </div>
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="text-align-center">
                                         <label for="address" class="col-form-label">Dirección*</label>
-                                        <input type="text" class="form-control" name="address" id="address" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                        <input type="text" class="form-control" name="address" id="address" required pattern="^[A-Z][A-Za-z0-9.,\s]*$">
                                         <div class="invalid-feedback">
                                             Debe empezar con mayúscula.
                                         </div>
@@ -225,7 +225,7 @@
 
                                         <div>
                                             <label for="u_socialCase" class="col-form-label">Razón social*</label>
-                                            <input type="text" class="form-control" name="socialCase" id="u_socialCase" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                            <input type="text" class="form-control" name="socialCase" id="u_socialCase" required pattern="^[A-Z][A-Za-z0-9.,\s]*$">
                                             <div class="invalid-feedback">
                                                 Debe empezar con mayúscula.
                                             </div>
@@ -267,7 +267,7 @@
                                     </div>
                                     <div class="text-align-center">
                                         <label for="u_address" class="col-form-label">Dirección*</label>
-                                        <input type="text" class="form-control" name="address" id="u_address" required pattern="^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{1,}(\s[A-ZÁÉÍÓÚÑa-záéíóúñ]*)*$">
+                                        <input type="text" class="form-control" name="address" id="u_address" required pattern="^[A-Z][A-Za-z0-9.,\s]*$">
                                         <div class="invalid-feedback">
                                             Debe empezar con mayúscula.
                                         </div>

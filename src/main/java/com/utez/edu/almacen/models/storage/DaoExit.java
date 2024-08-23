@@ -131,14 +131,14 @@ public class DaoExit {
         ResultSet rs = null;
 
         try {
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false);
             System.out.println("ID Usuario: " + exit.getIdUser());
             System.out.println("ID Área: " + exit.getIdArea());
             System.out.println("Nombre del Comprador: " + exit.getBuyerName());
             System.out.println("Total de Precios: " + exit.getTotalAllPrices());
 
 
-            // Register Exit
+            // Registrar salida
             psExit = conn.prepareStatement(sqlExit, Statement.RETURN_GENERATED_KEYS);
             psExit.setString(1, exit.getChangeDate());
             psExit.setString(2, exit.getInvoiceNumber());
@@ -148,12 +148,12 @@ public class DaoExit {
             psExit.setString(6, exit.getBuyerName());
             psExit.setDouble(7, exit.getTotalAllPrices());
 
-            // Debugging output to confirm all parameters are set
+            // Salida para debugging
             System.out.println("PreparedStatement for exit: " + psExit.toString());
 
             psExit.executeUpdate();
 
-            // Get generated ID for the exit
+            // Obtener un id para la salida
             rs = psExit.getGeneratedKeys();
             long idExit = 0;
             if (rs.next()) {
@@ -173,7 +173,7 @@ public class DaoExit {
                 // Check stock
                 psStockCheck = conn.prepareStatement(sqlStockCheck);
                 psStockCheck.setLong(1, product.getIdProduct());
-                psStockCheck.setLong(2, exit.getIdProvider());
+                psStockCheck.setLong(2, product.getIdProvider());
                 rs = psStockCheck.executeQuery();
 
                 if (rs.next()) {
@@ -181,7 +181,7 @@ public class DaoExit {
                     psStockUpdate = conn.prepareStatement(sqlStockUpdate);
                     psStockUpdate.setInt(1, product.getQuantity());
                     psStockUpdate.setLong(2, product.getIdProduct());
-                    psStockUpdate.setInt(3, exit.getIdProvider());
+                    psStockUpdate.setLong(3, product.getIdProvider());
                     psStockUpdate.setInt(4, product.getQuantity());
                     psStockUpdate.executeUpdate();
                 } else {

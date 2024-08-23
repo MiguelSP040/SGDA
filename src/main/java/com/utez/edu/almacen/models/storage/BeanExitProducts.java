@@ -4,6 +4,7 @@ public class BeanExitProducts {
     private Long idProductExit;
     private Long idExit;
     private Long idProduct;
+    private Long idProvider;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
@@ -11,13 +12,14 @@ public class BeanExitProducts {
     public BeanExitProducts() {
     }
 
-    public BeanExitProducts(Long idProductExit, Long idExit, Long idProduct, int quantity, double unitPrice, double totalPrice) {
+    public BeanExitProducts(Long idProductExit, Long idExit, Long idProduct, int quantity, double unitPrice, double totalPrice, Long idProvider) {
         this.idProductExit = idProductExit;
         this.idExit = idExit;
         this.idProduct = idProduct;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
+        this.idProvider = idProvider;
     }
 
     public Long getIdProductExit() {
@@ -66,6 +68,14 @@ public class BeanExitProducts {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Long getIdProvider() {
+        return idProvider;
+    }
+
+    public void setIdProvider(Long idProvider) {
+        this.idProvider = idProvider;
     }
 
     @Override

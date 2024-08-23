@@ -2,11 +2,13 @@ package com.utez.edu.almacen.models.product;
 
 public class BeanProduct {
     private Long id;
+    private Long IdStock;
     private String name;
     private String code;
     private String description;
     private String id_metric;
     private String metricName;
+    private Long idProvider;
     private String providerName;
     private int quantity;
     private Boolean status;
@@ -16,6 +18,16 @@ public class BeanProduct {
 
     public BeanProduct(Long id, String name, String code, String metricName, String providerName, int quantity) {
         this.id = id;
+        this.name = name;
+        this.code = code;
+        this.metricName = metricName;
+        this.providerName = providerName;
+        this.quantity = quantity;
+    }
+
+    public BeanProduct(Long id, Long idStock, String name, String code, String metricName, String providerName, int quantity) {
+        this.id = id;
+        this.IdStock = idStock;
         this.name = name;
         this.code = code;
         this.metricName = metricName;
@@ -102,5 +114,21 @@ public class BeanProduct {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public Long getIdStock() {
+        return IdStock;
+    }
+
+    public void setIdStock(Long idStock) {
+        IdStock = idStock;
+    }
+
+    public Long getIdProvider() {
+        return idProvider;
+    }
+
+    public void setIdProvider(Long idProvider) {
+        this.idProvider = idProvider;
     }
 }
