@@ -126,7 +126,8 @@
                                         <tr>
                                             <th scope="col" style="width: 3%" class="tableTitle">#</th>
                                             <th scope="col" style="width: 25%" class="tableTitle"><label for="id_product">Producto*</label></th>
-                                            <th scope="col" style="width: 18%" class="tableTitle"><label for="id_metric">Medida*</label></th>
+                                            <th scope="col" style="width: 10%" class="tableTitle"><label for="id_metric">Medida*</label></th>
+                                            <th scope="col" style="width: 18%" class="tableTitle"><label for="id_provider">Proveedor*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="unitPrice">Precio*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="quantity">Cantidad*</label></th>
                                             <th scope="col" style="width: 10%" class="tableTitle"><label for="total_price">Precio total*</label></th>
@@ -141,13 +142,23 @@
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : stocks) { %>
                                                     <% if (p.getQuantity() != 0) { %>
-                                                    <option value="<%= p.getId() %>"><%= p.getName() %></option>
+                                                    <option value="<%= p.getId() %>"><%= p.getName() %> Stock: <%=p.getQuantity()%></option>
                                                     <% } %>
                                                     <% } %>
                                                 </select>
                                             </td>
                                             <td>
                                                 <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
+                                            </td>
+                                            <td>
+                                                <select class="form-select mb-2" name="id_provider" id="id_provider" required title="Elige a un proveedor.">
+                                                    <option disabled selected value>Seleccionar opción</option>
+                                                    <% for (BeanProvider pr : providers) { %>
+                                                    <% if (pr.getStatus()) { %>
+                                                    <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
+                                                    <% } %>
+                                                    <% } %>
+                                                </select>
                                             </td>
                                             <td>
                                                 <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
@@ -181,19 +192,6 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer d-flex">
-                                    <div class="me-auto">
-                                        <div class="d-flex flex-column justify-content-start">
-                                            <label for="buyerName" class="mb-0 mt-1">Proveedor:</label>
-                                            <select class="form-select mb-2" name="id_provider" id="id_provider" required title="Elige a un proveedor.">
-                                                <option disabled selected value>Seleccionar opción</option>
-                                                <% for (BeanProvider pr : providers) { %>
-                                                <% if (pr.getStatus()) { %>
-                                                <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
-                                                <% } %>
-                                                <% } %>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="me-auto">
                                         <div class="d-flex flex-column justify-content-start">
                                             <label for="buyerName" class="mb-0 mt-1">Receptor:</label>
