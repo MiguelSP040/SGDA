@@ -11,9 +11,7 @@ public class BeanEntry {
     private String userName;
     private Double totalAllPrices;
 
-
-
-    // Campos que podrían ser necesarios si se usan en el DAO para facilitar la asociación
+    // Campos que podrían ser necesarios si se usan en el DAO para facilitar la asociación con la tabla entry products
     private int idProduct;
     private String productName;
     private String metricName;
@@ -23,22 +21,6 @@ public class BeanEntry {
 
     // Constructor vacío
     public BeanEntry() {
-    }
-
-    // Si te soy sincero no sé para qué sirve este constructor, pero si es necesario
-    public BeanEntry(Long idEntry, String changeDate, String folioNumber, String invoiceNumber, int idProvider, int idUser, Double totalAllPrices, int idProduct, String metricName, double unitPrice, int quantity, Double totalPrice) {
-        this.idEntry = idEntry;
-        this.changeDate = changeDate;
-        this.folioNumber = folioNumber;
-        this.invoiceNumber = invoiceNumber;
-        this.idProvider = idProvider;
-        this.idUser = idUser;
-        this.totalAllPrices = totalAllPrices;
-        this.idProduct = idProduct;
-        this.metricName = metricName;
-        this.unitPrice = unitPrice;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
     }
 
     // Constructor con todos los campos
@@ -60,6 +42,7 @@ public class BeanEntry {
         this.totalPrice = totalPrice;
     }
 
+    // Constructor para registro de entradas
     public BeanEntry(Long idEntry, String changeDate, String invoiceNumber, String folioNumber, Double totalAllPrices, Integer idUser, Integer idProvider) {
         this.idEntry = idEntry;
         this.changeDate = changeDate;
@@ -69,9 +52,6 @@ public class BeanEntry {
         this.idUser = idUser;
         this.idProvider = idProvider;
     }
-
-
-    // Constructor para registro de entradas
 
     public Long getIdEntry() {
         return idEntry;
