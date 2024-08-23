@@ -29,6 +29,7 @@
     List<BeanProvider> providers = new DaoProvider().listAll();
     List<BeanArea> areas = new DaoArea().listAll();
     List<BeanUser> users = new DaoUser().listAll();
+    List<BeanProduct> stocks = new DaoProduct().listAllStock();
 %>
 <html>
 <head>
@@ -138,8 +139,8 @@
                                             <td>
                                                 <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanProduct p : products) { %>
-                                                    <% if (p.getStatus()) { %>
+                                                    <% for (BeanProduct p : stocks) { %>
+                                                    <% if (p.getQuantity() != 0) { %>
                                                     <option value="<%= p.getId() %>"><%= p.getName() %></option>
                                                     <% } %>
                                                     <% } %>
