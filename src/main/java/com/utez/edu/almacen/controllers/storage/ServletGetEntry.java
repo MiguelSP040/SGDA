@@ -26,11 +26,11 @@ public class ServletGetEntry extends HttpServlet {
             for (BeanEntry entrada : entry) {
                 out.println("<tr>");
                 out.println("<th scope='row'>" + count + "</th>");
-                out.println("<td><input class='form-control w-100' value='" + entrada.getProductName() + "' readonly></td>");
-                out.println("<td><input class='form-control w-100' value='" + entrada.getMetricName() + "' readonly></td>");
-                out.println("<td><input class='form-control' type='number' value='" + entrada.getUnitPrice() + "' readonly></td>");
-                out.println("<td><input class='form-control' type='number' value='" + entrada.getQuantity() + "' readonly></td>");
-                out.println("<td><input class='form-control' type='number' value='" + entrada.getTotalPrice() + "' readonly></td>");
+                out.println("<td><input class='form-control w-100' value='" + entrada.getProductName() + "' readonly disabled></td>");
+                out.println("<td><input class='form-control w-100' value='" + entrada.getMetricName() + "' readonly disabled></td>");
+                out.println("<td><input class='form-control' type='number' value='" + entrada.getUnitPrice() + "' readonly disabled></td>");
+                out.println("<td><input class='form-control' type='number' value='" + entrada.getQuantity() + "' readonly disabled></td>");
+                out.println("<td><input class='form-control' type='number' value='" + entrada.getTotalPrice() + "' readonly disabled></td>");
                 out.println("</tr>");
                 count++;
             }

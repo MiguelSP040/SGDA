@@ -25,7 +25,7 @@
     }
     BeanLoggedUser user = (BeanLoggedUser) request.getAttribute("user");
     List<BeanMetric> metrics = new DaoMetric().listAll();
-    List<BeanProduct> products = new DaoProduct().listAll();
+    List<BeanProduct> product = new DaoProduct().listAll();
     List<BeanProvider> providers = new DaoProvider().listAll();
     List<BeanArea> areas = new DaoArea().listAll();
     List<BeanUser> users = new DaoUser().listAll();
@@ -141,9 +141,9 @@
                                                 <select class="form-select product-select" name="idProduct" required title="Elige un producto.">
                                                     <option disabled selected value>Seleccionar opción</option>
                                                     <% for (BeanProduct p : stocks) { %>
-                                                    <% if (p.getQuantity() != 0) { %>
-                                                    <option value="<%= p.getId() %>"><%= p.getName() %> Stock: <%=p.getQuantity()%></option>
-                                                    <% } %>
+                                                    <option value="<%= p.getId() %>" data-stock="<%= p.getQuantity() %>">
+                                                        <%= p.getName() %> (Stock: <%= p.getQuantity() %>)
+                                                    </option>
                                                     <% } %>
                                                 </select>
                                             </td>
@@ -151,20 +151,13 @@
                                                 <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" required readonly>
                                             </td>
                                             <td>
-                                                <select class="form-select mb-2" name="id_provider" id="id_provider" required title="Elige a un proveedor.">
-                                                    <option disabled selected value>Seleccionar opción</option>
-                                                    <% for (BeanProvider pr : providers) { %>
-                                                    <% if (pr.getStatus()) { %>
-                                                    <option value="<%= pr.getId() %>"><%= pr.getName() %></option>
-                                                    <% } %>
-                                                    <% } %>
-                                                </select>
+                                                <input class="form-control stock-id_provider" type="text" name="id_provider" placeholder="Automático" required readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control unit-price" type="number" name="unitPrice" max="9999999" min="0" step="0.01" placeholder="$0.00" required title="Ingresa un valor.">
+                                                <input class="form-control unit-price" type="number" name="unitPrice" placeholder="$0.00" required readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control quantity" type="number" name="quantity" max="999999" min="1" step="1" placeholder="0" required title="Ingresa un valor.">
+                                                <input class="form-control quantity-input" type="number" name="quantity" min="1" step="1" placeholder="0" required title="Selecciona un producto primero">
                                             </td>
                                             <td>
                                                 <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
@@ -269,16 +262,19 @@
                                             <input class="form-control w-100 metric" type="text" name="id_product" id="r_idProduct" readonly/>
                                         </td>
                                         <td>
-                                            <input class="form-control w-100 metric" name="id_metric" id="r_id_metric" placeholder="Automático" readonly>
+                                            <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" readonly>
                                         </td>
                                         <td>
-                                            <input class="form-control unit-price" type="number" name="unitPrice" id="r_unitPrice" placeholder="$0.00" readonly>
+                                            <input class="form-control stock-id_provider" type="text" name="id_provider" placeholder="Automático" readonly>
                                         </td>
                                         <td>
-                                            <input class="form-control quantity" type="number" name="quantity" id="r_quantity" placeholder="0" readonly>
+                                            <input class="form-control unit-price" type="number" name="unitPrice" placeholder="$0.00" readonly>
                                         </td>
                                         <td>
-                                            <input class="form-control total-price" type="number" name="total_price" id="r_total_price" placeholder="$0.00" readonly>
+                                            <input class="form-control quantity" type="number" name="quantity" placeholder="0">
+                                        </td>
+                                        <td>
+                                            <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -772,19 +768,59 @@
         });
     });
 </script>
+<!--Colocar proveedor automáticamente-->
 <script>
-    function showProducts(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total) {
-        document.getElementById("r_folioNumber").value = folio;
-        document.getElementById("r_invoiceNumber").value = facturacion;
-        document.getElementById("r_id_user").value = almacenista;
-        document.getElementById("r_id_Exit").textContent = id;
-        document.getElementById("r_idProduct").value = producto;
-        document.getElementById("r_id_metric").value = medida;
-        document.getElementById("r_unitPrice").value = precio;
-        document.getElementById("r_quantity").value = cantidad;
-        document.getElementById("u_id").value = total;
-        console.log(folio, facturacion, proovedor, almacenista, id, producto, medida, precio, cantidad, total);
-    }
+    $(document).ready(function() {
+        $(document).on('change', '.product-select', function() {
+            var $row = $(this).closest('tr');
+            var idProducto = $(this).val();
+            var contextPath = '';
+            var $priceField = $row.find('.product-price');
+
+            console.log("ID Producto seleccionado:", idProducto);
+
+            if (idProducto) {
+                $.ajax({
+                    url: contextPath + '/ServletPutExit',
+                    type: 'GET',
+                    data: { id_product: idProducto },
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+
+                        // Verifica si la respuesta es válida y establece el valor de la métrica
+                        if (response && response.name) {
+                            $priceField.val(response.name);
+                        } else {
+                            $priceField.val('Métrica no encontrada.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud AJAX:", status, error);
+                        $priceField.val('Error al cargar la métrica.');
+                    }
+                });
+            } else {
+                $priceField.val('');
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('change', function(event) {
+        if (event.target.classList.contains('product-select')) {
+            const selectedOption = event.target.options[event.target.selectedIndex];
+            const maxStock = selectedOption.getAttribute('data-stock');
+            const quantityInput = event.target.closest('tr').querySelector('.quantity-input');
+
+            if (maxStock) {
+                quantityInput.max = maxStock;
+                quantityInput.title = "Cantidad máxima: " + maxStock;
+            } else {
+                quantityInput.max = '';
+                quantityInput.title = 'Selecciona un producto primero';
+            }
+        }
+    });
 </script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>

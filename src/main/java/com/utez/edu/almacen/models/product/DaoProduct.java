@@ -258,8 +258,6 @@ public class DaoProduct{
         return stocks;
     }
 
-
-
     public void closeConnection() {
         try {
             if (conn != null) conn.close();

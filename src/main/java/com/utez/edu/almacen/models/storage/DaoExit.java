@@ -43,12 +43,13 @@ public class DaoExit {
     }
 
     // Método para listar una salida específica
-    public BeanExit listOne(int idExit) {
-        BeanExit exit = null;
+    public List<BeanExit> listOne(String id) {
+        List<BeanExit> exits = new ArrayList<>();
         String sql = "SELECT e.id_exit, e.changeDate, e.invoiceNumber, e.folioNumber, u.name as userName, e.totalAllPrices," +
                 "p.name as providerName, ep.id_exit_product, ep.id_product, ep.quantity, ep.unitPrice, ep.total_price, " +
-                "pr.name as productName, m.name as metricName " +
+                "pr.name as productName, m.name as metricName, a.name " +
                 "FROM exits e " +
+                "JOIN areas a ON e.id_area = a.id_area " +
                 "JOIN users u ON e.id_user = u.id_user " +
                 "JOIN providers p ON e.id_provider = p.id_provider " +
                 "JOIN exit_products ep ON e.id_exit = ep.id_exit " +
@@ -58,18 +59,10 @@ public class DaoExit {
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, idExit);
+            ps.setString(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                exit = new BeanExit();
-                exit.setIdExit(rs.getLong("e.id_exit"));
-                exit.setChangeDate(rs.getString("e.changeDate"));
-                exit.setInvoiceNumber(rs.getString("e.invoiceNumber"));
-                exit.setFolioNumber(rs.getString("e.folioNumber"));
-                exit.setUserName(rs.getString("userName"));
-                exit.setProviderName(rs.getString("providerName"));
-                exit.setTotalAllPrices(rs.getDouble("e.totalAllPrices"));
-
+                BeanExit exit = new BeanExit();
                 // Crear un BeanExitProducts para cada producto asociado
                 BeanExitProducts exitProduct = new BeanExitProducts();
                 exitProduct.setIdProductExit(rs.getLong("ep.id_exit_product"));
@@ -78,20 +71,13 @@ public class DaoExit {
                 exitProduct.setQuantity(rs.getInt("ep.quantity"));
                 exitProduct.setUnitPrice(rs.getDouble("ep.unitPrice"));
                 exitProduct.setTotalPrice(rs.getDouble("ep.total_price"));
-
-                // Asignar los nombres del producto y la métrica al exit
-                exit.setProductName(rs.getString("productName"));
-                exit.setMetricName(rs.getString("metricName"));
-                exit.setUnitPrice(exitProduct.getUnitPrice());
-                exit.setQuantity(exitProduct.getQuantity());
-                exit.setTotalPrice(exitProduct.getTotalPrice());
             }
         } catch (SQLException e) {
             Logger.getLogger(DaoExit.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());
         } finally {
             closeConnection();
         }
-        return exit;
+        return exits;
     }
 
     public List<BeanExit> searchByDateRange(String startDate, String endDate) {
