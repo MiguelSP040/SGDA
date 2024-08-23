@@ -63,7 +63,7 @@
         <div class="card contenidoTotal shadow-lg p-5">
 
             <!--SECCION DE TITULO DE LA CARD Y BOTON QUE ACTIVA EL MODAL DE REGISTRO DE UN MOVIMIENTO {ENTRADA/SALIDA}-->
-            <div class="position-relative">
+            <div class="position-relative mb-5">
                 <h3>Consulta de salidas</h3>
             </div>
 
@@ -247,16 +247,16 @@
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly>
+                                    <input class="form-control w-100" type="text" name="folioNumber" id="r_folioNumber" readonly disabled>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly>
+                                    <input class="form-control w-100" type="text" name="invoiceNumber" id="r_invoiceNumber" readonly disabled>
                                 </div>
                                 <div class="col me-2">
-                                    <input class="form-control w-100" type="text" name="id_area" id="r_id_area" readonly>
+                                    <input class="form-control w-100" type="text" name="id_area" id="r_id_area" readonly disabled>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly>
+                                    <input class="form-control w-100" type="text" name="id_user" id="r_id_user" readonly disabled>
                                 </div>
                             </div>
 
@@ -282,12 +282,12 @@
                                 <div class="me-auto">
                                     <div class="d-flex flex-column justify-content-start">
                                         <label for="buyerName" class="mb-0 mt-1">Receptor:</label>
-                                        <input class="form-control w-100 mb-2" type="text" name="buyerName" id="r_buyerName" placeholder="Receptor" readonly>
+                                        <input class="form-control w-100 mb-2" type="text" name="buyerName" id="r_buyerName" placeholder="Receptor" readonly disabled>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column align-items-start me-2">
                                     <label for="totalAllPrices" class="mb-0 mt-1">Total General:</label>
-                                    <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="r_totalAllPrices" placeholder="Total" readonly>
+                                    <input class="form-control totalAllPrices mb-2" type="number" name="totalAllPrices" id="r_totalAllPrices" placeholder="Total" readonly disabled>
                                 </div>
                                 <div class="d-flex align-items-center mt-4">
                                     <button type="button" class="btn botonCafe" data-bs-dismiss="modal">
@@ -301,38 +301,7 @@
             </div>
 
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
-            <div class="mt-3">
-                <form action="<%=context%>/storage/search-exit" method="get">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-5 ms-4">Fecha de Inicio</div>
-                        <div class="col-5 ms-1">Fecha Final</div>
-                    </div>
-
-                    <!--Input de Fecha de Inicio-->
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-5">
-                            <input type="date" name="fechaInicio" class="form-control">
-                        </div>
-
-                        <!--Input de Fecha Final-->
-                        <div class="col-5">
-                            <input type="date" name="fechaFin" class="form-control">
-                        </div>
-                    </div>
-
-                    <!--Botones -->
-                    <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <!-- Botón Buscar -->
-                        <button type="submit" class="btn botonCafe mb-3">
-                            Buscar
-                        </button>
-
-                        <!-- Botón Limpiar -->
-                        <button type="reset" class="btn botonGris btn-light mb-3">
-                            Limpiar
-                        </button>
-                    </div>
-                </form>
+            <div class="mt-5">
             </div>
 
             <div class="table-responsive table-container" id="contenedor">
@@ -380,21 +349,6 @@
                 </table>
             </div>
             <!--Paginación al pie de Página -->
-            <div class="pagination d-flex justify-content-center align-items-center mt-5">
-                <button class="btn btn-lg me-2" aria-label="Previous Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                    </svg>
-                </button>
-                <input type="number" class="page-info form-control" style="width: 4rem" min="1" value="1"/>
-                <button class="btn btn-lg ms-2" aria-label="Next Page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                    </svg>
-                </button>
-            </div>
         </div>
     </div>
 </div>

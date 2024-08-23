@@ -57,7 +57,7 @@
         <div class="card contenidoTotal shadow-lg p-5">
 
             <!--SECCION DE TITULO DE LA CARD Y BOTON QUE ACTIVA EL MODAL DE REGISTRO DE UN MOVIMIENTO {ENTRADA/SALIDA}-->
-            <div class="position-relative">
+            <div class="position-relative mb-5">
                 <h3>Consulta de entradas</h3>
             </div>
 
@@ -333,41 +333,8 @@
             </div>
 
             <!--FILTRO POR FECHA DE INICIO Y FECHA FIN-->
-            <div class="mt-3 ">
-                <form id="searchEntryForm" action="<%=context%>/storage/search" method="get">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-5">
-                            <label for="fechaInicio">Fecha Inicio</label>
-                        </div>
-                        <div class="col-5">
-                            <label for="fechaFin">Fecha Final</label>
-                        </div>
-                    </div>
+            <div class="mt-5 ">
 
-                    <!--Input de Fecha de Inicio-->
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-5">
-                            <input type="text" name="fechaInicio" id="fechaInicio" class="form-control">
-                        </div>
-                        <!--Input de Fecha Final-->
-                        <div class="col-5">
-                            <input type="text" name="fechaFin" id="fechaFin" class="form-control">
-                        </div>
-                    </div>
-
-                    <!--Botones -->
-                    <div class="grid gap-2 d-flex justify-content-end mt-5">
-                        <!-- Botón Buscar -->
-                        <button type="submit" class="btn botonCafe mb-3">
-                            Buscar
-                        </button>
-
-                        <!-- Botón Limpiar -->
-                        <button type="reset" class="btn botonGris btn-light mb-3">
-                            Limpiar
-                        </button>
-                    </div>
-                </form>
             </div>
 
             <!--TABLA DE ENTRADAS-->
