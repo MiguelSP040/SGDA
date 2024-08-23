@@ -10,46 +10,42 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-@WebServlet(name = "ServletGetMetric", value = "/ServletGetMetric")
-public class ServletGetMetric extends HttpServlet {
+@WebServlet(name = "ServletPutMetric", value = "/ServletPutMetric")
+public class ServletPutMetric extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
 
-        String idParam = request.getParameter("id");
+        String idProductParam = request.getParameter("id_product");
 
-        // Validar que el parámetro no sea nulo o vacío
-        if (idParam == null || idParam.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID es requerido.");
+        if (idProductParam == null || idProductParam.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID del producto es requerido.");
             return;
         }
 
-        Long id;
+        Long idProduct;
         try {
-            id = Long.parseLong(idParam);
+            idProduct = Long.parseLong(idProductParam);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID no es válido.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID del producto no es válido.");
             return;
         }
 
-        BeanMetric metric = new DaoMetric().listOne(id);
+        BeanMetric metric = new DaoMetric().listOne(idProduct);
 
-        // Validar si el objeto metric es nulo
-        if (metric == null) {
+        if (metric != null) {
+            String json = new Gson().toJson(metric);
+            response.getWriter().write(json);
+        } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Métrica no encontrada.");
-            return;
         }
-
-        String json = new Gson().toJson(metric);
-        response.getWriter().write(json);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Aquí puedes implementar la lógica para manejar las solicitudes POST si es necesario
+        // No se utiliza en este caso.
     }
 }

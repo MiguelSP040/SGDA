@@ -742,19 +742,25 @@
         $(document).on('change', '.product-select', function() {
             var $row = $(this).closest('tr');
             var idProducto = $(this).val();
-            var contextPath = '${pageContext.request.contextPath}';
+            var contextPath = '';
             var $metricField = $row.find('.product-metric');
 
             console.log("ID Producto seleccionado:", idProducto);
 
             if (idProducto) {
                 $.ajax({
-                    url: contextPath + '/ServletGetMetric',
+                    url: contextPath + '/ServletPutMetric',
                     type: 'GET',
                     data: { id_product: idProducto },
                     success: function(response) {
                         console.log("Respuesta del servidor:", response);
-                        $metricField.val(response);
+
+                        // Verifica si la respuesta es válida y establece el valor de la métrica
+                        if (response && response.name) {
+                            $metricField.val(response.name);
+                        } else {
+                            $metricField.val('Métrica no encontrada.');
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("Error en la solicitud AJAX:", status, error);
