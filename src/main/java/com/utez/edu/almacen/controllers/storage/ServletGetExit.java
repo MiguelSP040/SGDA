@@ -1,9 +1,7 @@
 package com.utez.edu.almacen.controllers.storage;
 
-import com.google.gson.Gson;
 import com.utez.edu.almacen.models.storage.BeanEntry;
 import com.utez.edu.almacen.models.storage.BeanExit;
-import com.utez.edu.almacen.models.storage.DaoEntry;
 import com.utez.edu.almacen.models.storage.DaoExit;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,11 +26,11 @@ public class ServletGetExit extends HttpServlet {
             for (BeanExit salida : exit) {
                 out.println("<tr>");
                 out.println("<th scope='row'>" + count + "</th>");
-                out.println("<td><input class='form-control w-100' value='" + salida.getProductName() + "' readonly disabled></td>");
-                out.println("<td><input class='form-control w-100' value='" + salida.getMetricName() + "' readonly disabled></td>");
-                out.println("<td><input class='form-control' type='number' value='" + salida.getUnitPrice() + "' readonly disabled></td>");
-                out.println("<td><input class='form-control' type='number' value='" + salida.getQuantity() + "' readonly disabled></td>");
-                out.println("<td><input class='form-control' type='number' value='" + salida.getTotalPrice() + "' readonly disabled></td>");
+                out.println("<td><input class='form-control w-100' value='" + salida.getProductName() + "' readonly></td>");
+                out.println("<td><input class='form-control w-100' value='" + salida.getMetricName() + "' readonly></td>");
+                out.println("<td><input class='form-control' type='number' value='" + salida.getUnitPrice() + "' readonly></td>");
+                out.println("<td><input class='form-control' type='number' value='" + salida.getQuantity() + "' readonly></td>");
+                out.println("<td><input class='form-control' type='number' value='" + salida.getTotalPrice() + "' readonly></td>");
                 out.println("</tr>");
                 count++;
             }

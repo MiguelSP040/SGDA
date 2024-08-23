@@ -45,32 +45,28 @@ public class DaoExit {
     // Método para listar una salida específica
     public List<BeanExit> listOne(String id) {
         List<BeanExit> exits = new ArrayList<>();
-        String sql = "SELECT e.id_exit, e.changeDate, e.invoiceNumber, e.folioNumber, u.name as userName, e.totalAllPrices," +
-                "p.name as providerName, ep.id_exit_product, ep.id_product, ep.quantity, ep.unitPrice, ep.total_price, " +
-                "pr.name as productName, m.name as metricName, a.name " +
+        String sql = "SELECT e.id_exit, e.changeDate, e.invoiceNumber, e.folioNumber, e.buyerName, a.name as areaName, u.name as userName, e.totalAllPrices, " +
+                "ep.id_exit_product, ep.id_product, ep.quantity, ep.unitPrice, ep.total_price, " +
+                "pr.name as productName, m.name as metricName " +
                 "FROM exits e " +
-                "JOIN areas a ON e.id_area = a.id_area " +
                 "JOIN users u ON e.id_user = u.id_user " +
-                "JOIN providers p ON e.id_provider = p.id_provider " +
                 "JOIN exit_products ep ON e.id_exit = ep.id_exit " +
                 "JOIN products pr ON ep.id_product = pr.id_product " +
                 "JOIN metrics m ON pr.id_metric = m.id_metric " +
-                "WHERE e.id_exit = ?";
-
+                "JOIN areas a ON e.id_area = a.id_area " +
+                "WHERE e.folioNumber = ?";
         try {
             ps = conn.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 BeanExit exit = new BeanExit();
-                // Crear un BeanExitProducts para cada producto asociado
-                BeanExitProducts exitProduct = new BeanExitProducts();
-                exitProduct.setIdProductExit(rs.getLong("ep.id_exit_product"));
-                exitProduct.setIdExit(rs.getLong("e.id_exit"));
-                exitProduct.setIdProduct(rs.getLong("ep.id_product"));
-                exitProduct.setQuantity(rs.getInt("ep.quantity"));
-                exitProduct.setUnitPrice(rs.getDouble("ep.unitPrice"));
-                exitProduct.setTotalPrice(rs.getDouble("ep.total_price"));
+                exit.setProductName(rs.getString("productName"));
+                exit.setMetricName(rs.getString("metricName"));
+                exit.setUnitPrice(rs.getDouble("ep.unitPrice"));
+                exit.setQuantity(rs.getInt("ep.quantity"));
+                exit.setTotalPrice(rs.getDouble("ep.total_price"));
+                exits.add(exit);
             }
         } catch (SQLException e) {
             Logger.getLogger(DaoExit.class.getName()).log(Level.SEVERE, "ERROR. Function listOne failed: " + e.getMessage());

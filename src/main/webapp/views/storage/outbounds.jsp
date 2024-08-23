@@ -37,6 +37,8 @@
     <title>Salidas de almacén</title>
     <link href="../../assets/css/estilos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <jsp:include page="../../layouts/header.jsp"/>
@@ -264,35 +266,15 @@
                                     <thead class="thead-dark">
                                     <tr>
                                         <th scope="col" style="width: 3%" class="tableTitle">#</th>
-                                        <th scope="col" style="width: 25%" class="tableTitle"><label for="r_idProduct">Producto*</label></th>
-                                        <th scope="col" style="width: 18%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
+                                        <th scope="col" style="width: 25%" class="tableTitle"><label for="r_id_product">Producto*</label></th>
+                                        <th scope="col" style="width: 10%" class="tableTitle"><label for="r_id_metric">Medida*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_unitPrice">Precio*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_quantity">Cantidad*</label></th>
                                         <th scope="col" style="width: 10%" class="tableTitle"><label for="r_total_price">Precio total*</label></th>
                                     </tr>
                                     </thead>
-                                    <tbody class="align-middle">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>
-                                            <input class="form-control w-100 metric" type="text" name="id_product" id="r_idProduct" readonly/>
-                                        </td>
-                                        <td>
-                                            <input class="form-control product-metric" type="text" name="id_metric" placeholder="Automático" readonly>
-                                        </td>
-                                        <td>
-                                            <input class="form-control stock-id_provider" type="text" name="id_provider" placeholder="Automático" readonly>
-                                        </td>
-                                        <td>
-                                            <input class="form-control unit-price" type="number" name="unitPrice" placeholder="$0.00" readonly>
-                                        </td>
-                                        <td>
-                                            <input class="form-control quantity" type="number" name="quantity" placeholder="0">
-                                        </td>
-                                        <td>
-                                            <input class="form-control total-price" type="number" name="total_price" placeholder="$0.00" readonly>
-                                        </td>
-                                    </tr>
+                                    <tbody class="align-middle" id="reviewEntryTableBody">
+
                                     </tbody>
                                 </table>
                             </div>
@@ -384,7 +366,7 @@
                             <td><c:out value="${exit.totalAllPrices}"/></td>
                             <!--Columna de Botones de acción-->
                             <td>
-                                <button class="btn btn-lg botonVerMas" onclick="showProducts('${exit.folioNumber}','${exit.invoiceNumber}','${exit.buyerName}','${exit.userName}',${exit.idExit},'${exit.productName}','${exit.metricName}',${exit.unitPrice},${exit.quantity},${exit.totalPrice})" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal">
+                                <button class="btn btn-lg botonVerMas" data-bs-toggle="modal" data-bs-target="#reviewOutboundModal" onclick="loadProductDetails('${exit.folioNumber}','${exit.invoiceNumber}','${exit.areaName}','${exit.userName}','${exit.buyerName}','${exit.totalAllPrices}')" data-id="${exit.idExit}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                          fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
@@ -820,6 +802,30 @@
             }
         });
     });
+    });
+</script>
+<script>
+    function loadProductDetails(folio, facturacion, area, almacenista, receptor, totalAll) {
+        document.getElementById("r_folioNumber").value = folio;
+        document.getElementById("r_invoiceNumber").value = facturacion;
+        document.getElementById("r_id_area").value = area;
+        document.getElementById("r_id_user").value = almacenista;
+        document.getElementById("r_buyerName").value = receptor;
+        document.getElementById("r_totalAllPrices").value = totalAll;
+        var contextPath = '${pageContext.request.contextPath}';
+        $.ajax({
+            url: contextPath + '/ServletGetExit',
+            type: 'GET',
+            data: { id: folio },
+            success: function(response) {
+                console.log("Datos recibidos del servidor:", response);
+                $('#reviewEntryTableBody').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", status, error);
+            }
+        });
+    }
 </script>
 <jsp:include page="../../layouts/footer.jsp"/>
 </body>
