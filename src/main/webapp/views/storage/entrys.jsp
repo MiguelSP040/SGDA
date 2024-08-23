@@ -293,7 +293,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="newProductForm" method="post" action="/product/saveout" novalidate>
+                            <form id="newProductForm" method="post" action="<%=context%>/product/saveout" novalidate>
                                 <h5>Datos de Producto</h5>
 
                                 <div>
